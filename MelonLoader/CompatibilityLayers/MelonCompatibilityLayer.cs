@@ -8,7 +8,7 @@ namespace MelonLoader
 {
     public static class MelonCompatibilityLayer
     {
-        public static string baseDirectory = $"{MelonEnvironment.GameRootDirectory}{Path.DirectorySeparatorChar}MelonLoader{Path.DirectorySeparatorChar}Dependencies{Path.DirectorySeparatorChar}CompatibilityLayers";
+        public static string baseDirectory = $"{MelonEnvironment.MelonBaseDirectory}{Path.DirectorySeparatorChar}MelonLoader{Path.DirectorySeparatorChar}Dependencies{Path.DirectorySeparatorChar}CompatibilityLayers";
 
         private static List<MelonModule.Info> layers = new List<MelonModule.Info>()
         {

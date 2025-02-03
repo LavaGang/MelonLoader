@@ -18,14 +18,12 @@ using AssetsTools.NET.Extra;
 using MelonLoader.Lemons.Cryptography;
 using MelonLoader.Utils;
 
-#pragma warning disable 0618
-
 namespace MelonLoader
 {
     public static class MelonUtils
     {
         private static NativeLibrary.StringDelegate WineGetVersion;
-        private static readonly Random RandomNumGen = new();
+        //private static readonly Random RandomNumGen = new();
         private static readonly MethodInfo StackFrameGetMethod = typeof(StackFrame).GetMethod("GetMethod", BindingFlags.Instance | BindingFlags.Public);
         private static readonly LemonSHA256 sha256 = new();
         private static readonly LemonSHA512 sha512 = new();
@@ -55,15 +53,15 @@ namespace MelonLoader
             CurrentDomain = IsGameIl2Cpp() ? MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP : MelonPlatformDomainAttribute.CompatibleDomains.MONO;
         }
 
-        [Obsolete("Use MelonEnvironment.MelonBaseDirectory instead")]
+        [Obsolete("Use MelonEnvironment.MelonBaseDirectory instead. This will be removed in a future update.", true)]
         public static string BaseDirectory => MelonEnvironment.MelonBaseDirectory;
-        [Obsolete("Use MelonEnvironment.GameRootDirectory instead")]
+        [Obsolete("Use MelonEnvironment.GameRootDirectory instead. This will be removed in a future update.", true)]
         public static string GameDirectory => MelonEnvironment.GameRootDirectory;
-        [Obsolete("Use MelonEnvironment.MelonLoaderDirectory instead")]
+        [Obsolete("Use MelonEnvironment.MelonLoaderDirectory instead. This will be removed in a future update.", true)]
         public static string MelonLoaderDirectory => MelonEnvironment.MelonLoaderDirectory;
-        [Obsolete("Use MelonEnvironment.UserDataDirectory instead")]
+        [Obsolete("Use MelonEnvironment.UserDataDirectory instead. This will be removed in a future update.", true)]
         public static string UserDataDirectory => MelonEnvironment.UserDataDirectory;
-        [Obsolete("Use MelonEnvironment.UserLibsDirectory instead")]
+        [Obsolete("Use MelonEnvironment.UserLibsDirectory instead. This will be removed in a future update.", true)]
         public static string UserLibsDirectory => MelonEnvironment.UserLibsDirectory;
         public static MelonPlatformAttribute.CompatiblePlatforms CurrentPlatform { get; private set; }
         public static MelonPlatformDomainAttribute.CompatibleDomains CurrentDomain { get; private set; }
@@ -71,37 +69,37 @@ namespace MelonLoader
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T> { if (value.CompareTo(min) < 0) return min; if (value.CompareTo(max) > 0) return max; return value; }
         public static string HashCode { get; private set; }
 
-        public static int RandomInt()
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.Next();
-        }
-
-        public static int RandomInt(int max)
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.Next(max);
-        }
-
-        public static int RandomInt(int min, int max)
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.Next(min, max);
-        }
-
-        public static double RandomDouble()
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.NextDouble();
-        }
-
-        public static string RandomString(int length)
-        {
-            StringBuilder builder = new();
-            for (int i = 0; i < length; i++)
-                builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * RandomDouble())) + 65));
-            return builder.ToString();
-        }
+        // public static int RandomInt()
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.Next();
+        // }
+        //
+        // public static int RandomInt(int max)
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.Next(max);
+        // }
+        //
+        // public static int RandomInt(int min, int max)
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.Next(min, max);
+        // }
+        //
+        // public static double RandomDouble()
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.NextDouble();
+        // }
+        //
+        // public static string RandomString(int length)
+        // {
+        //     StringBuilder builder = new();
+        //     for (int i = 0; i < length; i++)
+        //         builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * RandomDouble())) + 65));
+        //     return builder.ToString();
+        // }
 
         public static PlatformID GetPlatform => Environment.OSVersion.Platform;
 
@@ -172,7 +170,7 @@ namespace MelonLoader
             => GetMelonFromAssembly(((MethodBase)StackFrameGetMethod.Invoke(sf, new object[0]))?.DeclaringType?.Assembly);
 
         private static MelonBase GetMelonFromAssembly(Assembly asm)
-            => asm == null ? null : MelonHandler.Plugins.Cast<MelonBase>().FirstOrDefault(x => x.Assembly == asm) ?? MelonHandler.Mods.FirstOrDefault(x => x.Assembly == asm);
+            => asm == null ? null : MelonPlugin.RegisteredMelons.Cast<MelonBase>().FirstOrDefault(x => x.MelonAssembly.Assembly == asm) ?? MelonMod.RegisteredMelons.FirstOrDefault(x => x.MelonAssembly.Assembly == asm);
 
         public static string ComputeSimpleSHA256Hash(string filePath)
         {
@@ -230,6 +228,7 @@ namespace MelonLoader
             return result.ToString();
         }
 
+        [Obsolete("Please use Newtonsoft.Json or System.Text.Json instead. This will be removed in a future version.", true)]
         public static T ParseJSONStringtoStruct<T>(string jsonstr)
         {
             if (string.IsNullOrEmpty(jsonstr))
@@ -452,27 +451,39 @@ namespace MelonLoader
 
         public static ClassPackageFile LoadIncludedClassPackage(this AssetsManager assetsManager)
         {
+			var asm = typeof(MelonUtils).Assembly;
+            var names = asm.GetManifestResourceNames();
+            string resourceName = null;
+            foreach (var name in names)
+                if (name.Contains("classdata"))
+                {
+                    resourceName = name;
+                    break;
+                }
+            if (string.IsNullOrEmpty(resourceName))
+                return null;
+
             ClassPackageFile classPackage = null;
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MelonLoader.Resources.classdata.tpk"))
+            using (var stream = asm.GetManifestResourceStream(resourceName))
                 classPackage = assetsManager.LoadClassPackage(stream);
             return classPackage;
         }
 
-        [Obsolete("MelonLoader.MelonUtils.GetUnityVersion() is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion instead.")]
+        [Obsolete("MelonLoader.MelonUtils.GetUnityVersion() is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion instead. This will be removed in a future update.", true)]
         public static string GetUnityVersion() => UnityInformationHandler.EngineVersion.ToStringWithoutType();
-        [Obsolete("MelonLoader.MelonUtils.GameDeveloper is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameDeveloper instead.")]
+        [Obsolete("MelonLoader.MelonUtils.GameDeveloper is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameDeveloper instead. This will be removed in a future update.", true)]
         public static string GameDeveloper { get => UnityInformationHandler.GameDeveloper; }
-        [Obsolete("MelonLoader.MelonUtils.GameName is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameName instead.")]
+        [Obsolete("MelonLoader.MelonUtils.GameName is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameName instead. This will be removed in a future update.", true)]
         public static string GameName { get => UnityInformationHandler.GameName; }
-        [Obsolete("MelonLoader.MelonUtils.GameVersion is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameVersion instead.")]
+        [Obsolete("MelonLoader.MelonUtils.GameVersion is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameVersion instead. This will be removed in a future update.", true)]
         public static string GameVersion { get => UnityInformationHandler.GameVersion; }
 
 
-        #if !NET6_0
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static bool IsGame32Bit();
+        public static unsafe bool IsGame32Bit() =>
+#if X64
+            false;
 #else
-        public static bool IsGame32Bit() => !Environment.Is64BitProcess;
+            true;
 #endif
 
 
@@ -483,21 +494,22 @@ namespace MelonLoader
 
         public static bool IsUnderWineOrSteamProton() => WineGetVersion is not null;
 
-        [Obsolete("Use MelonEnvironment.GameExecutablePath instead")]
+        [Obsolete("Use MelonEnvironment.GameExecutablePath instead. This will be removed in a future update.", true)]
         public static string GetApplicationPath() => MelonEnvironment.GameExecutablePath;
 
-        [Obsolete("Use MelonEnvironment.UnityGameDataDirectory instead")]
+        [Obsolete("Use MelonEnvironment.UnityGameDataDirectory instead. This will be removed in a future update.", true)]
         public static string GetGameDataDirectory() => MelonEnvironment.UnityGameDataDirectory;
 
-        [Obsolete("Use MelonEnvironment.MelonManagedDirectory instead")]
+        [Obsolete("Use MelonEnvironment.MelonManagedDirectory instead. This will be removed in a future update.", true)]
         public static string GetManagedDirectory() => MelonEnvironment.MelonManagedDirectory;
 
         public static void SetConsoleTitle(string title)
         {
-            if (!MelonLaunchOptions.Console.ShouldSetTitle || MelonLaunchOptions.Console.ShouldHide)
+            if (LoaderConfig.Current.Console.DontSetTitle || !BootstrapInterop.Library.IsConsoleOpen())
                 return;
 
-            Console.Title = title;
+            // Using reflection to avoid resolver errors
+            AccessTools.Property(typeof(Console), "Title")?.SetValue(null, title, null);
         }
 
         public static string GetFileProductName(string filepath)
@@ -611,17 +623,13 @@ namespace MelonLoader
             return $"{versionString}";
         }
 
-        [Obsolete("Use NativeUtils.NativeHook instead")]
+        [Obsolete("Use NativeUtils.NativeHook instead. This will be removed in a future update.", true)]
         public static void NativeHookAttach(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttach(target, detour);
 
-        [Obsolete("Use NativeUtils.NativeHook instead")]
-#if NET6_0_OR_GREATER
+        [Obsolete("Use NativeUtils.NativeHook instead. This will be removed in a future update.", true)]
         internal static void NativeHookAttachDirect(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttachDirect(target, detour);
-#else
-        //On mono, NativeHookAttach *is* direct.
-        internal static void NativeHookAttachDirect(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttach(target, detour);
-#endif
-        [Obsolete("Use NativeUtils.NativeHook instead")]
+
+        [Obsolete("Use NativeUtils.NativeHook instead. This will be removed in a future update.", true)]
         public static void NativeHookDetach(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookDetach(target, detour);
 
 

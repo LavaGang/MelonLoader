@@ -7,6 +7,8 @@ using System.Threading;
 using MelonLoader.Resolver;
 using MelonLoader.Utils;
 using MelonLoader.InternalUtils;
+using MelonLoader.Properties;
+using MelonLoader.Melons;
 
 [assembly: MelonLoader.PatchShield]
 
@@ -23,13 +25,13 @@ namespace MelonLoader
 
         internal static int Initialize()
         {
-            var runtimeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-            var runtimeDirInfo = new DirectoryInfo(runtimeFolder);
-            MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(MelonEnvironment.GameExecutablePath);
-            MelonEnvironment.MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
+            // The config should be set before running anything else due to static constructors depending on it
+            // Don't ask me how this works, because I don't know either. -slxdy
+            var config = new LoaderConfig();
+            BootstrapInterop.Library.GetLoaderConfig(ref config);
+            LoaderConfig.Current = config;
 
             MelonLaunchOptions.Load();
-            MelonLogger.Setup();
 
 #if NET35
             // Disabled for now because of issues
@@ -37,24 +39,27 @@ namespace MelonLoader
 #endif
 
             MelonUtils.SetupWineCheck();
-            Utils.MelonConsole.Init();
 
             if (MelonUtils.IsUnderWineOrSteamProton())
                 Pastel.ConsoleExtensions.Disable();
 
             Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
+
+#if NET35
             Fixes.ServerCertificateValidation.Install();
+#endif
+
+
             Assertions.LemonAssertMapping.Setup();
 
             MelonUtils.Setup(AppDomain.CurrentDomain);
+            MelonAssemblyResolver.Setup();
             BootstrapInterop.SetDefaultConsoleTitleWithGameName(UnityInformationHandler.GameName, 
                 UnityInformationHandler.GameVersion);
 
-            MelonAssemblyResolver.Setup();
-
 #if NET6_0_OR_GREATER
 
-            if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
+            if (LoaderConfig.Current.Loader.LaunchDebugger && MelonEnvironment.IsDotnetRuntime)
             {
                 MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
                 Debugger.Launch();
@@ -97,6 +102,7 @@ namespace MelonLoader
             Fixes.ProcessFix.Install();
 
 #if NET6_0_OR_GREATER
+            Fixes.AsmResolverFix.Install();
             Fixes.Il2CppInteropFixes.Install();
             Fixes.Il2CppICallInjector.Install();
 #endif
@@ -108,20 +114,15 @@ namespace MelonLoader
             MelonCompatibilityLayer.LoadModules();
 
             bHapticsManager.Connect(BuildInfo.Name, UnityInformationHandler.GameName);
-            
-            MelonHandler.LoadUserlibs(MelonEnvironment.UserLibsDirectory);
-            MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonEnvironment.PluginsDirectory);
+
+            MelonFolderHandler.ScanForFolders();
+            MelonFolderHandler.LoadMelons(MelonFolderHandler.eScanType.UserLibs);
+            MelonFolderHandler.LoadMelons(MelonFolderHandler.eScanType.Plugins);
 
             MelonEvents.MelonHarmonyEarlyInit.Invoke();
             MelonEvents.OnPreInitialization.Invoke();
 
             return 0;
-        }
-
-        internal static int PreStart()
-        {
-            MelonEvents.OnApplicationEarlyStart.Invoke();
-            return MelonStartScreen.LoadAndRun(PreSetup);
         }
 
         private static int PreSetup()
@@ -134,17 +135,20 @@ namespace MelonLoader
             return _success ? 0 : 1;
         }
 
-        internal static int Start()
+        internal static bool Start()
         {
+            MelonEvents.OnApplicationEarlyStart.Invoke();
+            MelonStartScreen.LoadAndRun(PreSetup);
+
             if (!_success)
-                return 1;
+                return false;
 
             MelonEvents.OnPreModsLoaded.Invoke();
-            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonEnvironment.ModsDirectory);
+            MelonFolderHandler.LoadMelons(MelonFolderHandler.eScanType.Mods);
 
             MelonEvents.OnPreSupportModule.Invoke();
             if (!SupportModule.Setup())
-                return 1;
+                return false;
 
             AddUnityDebugLog();
 
@@ -156,12 +160,12 @@ namespace MelonLoader
             MelonEvents.MelonHarmonyInit.Invoke();
             MelonEvents.OnApplicationStart.Invoke();
 
-            return 0;
+            return true;
         }
         
         internal static string GetVersionString()
         {
-            var lemon = MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON;
+            var lemon = LoaderConfig.Current.Loader.Theme == LoaderConfig.CoreConfig.LoaderTheme.Lemon;
             var versionStr = $"{(lemon ? "Lemon" : "Melon")}Loader " +
                              $"v{BuildInfo.Version} " +
                              $"{(Is_ALPHA_PreRelease ? "ALPHA Pre-Release" : "Open-Beta")}";
@@ -171,7 +175,7 @@ namespace MelonLoader
         internal static void WelcomeMessage()
         {
             //if (MelonDebug.IsEnabled())
-            //    MelonLogger.WriteSpacer();
+                MelonLogger.WriteSpacer();
 
             MelonLogger.MsgDirect("------------------------------");
             MelonLogger.MsgDirect(GetVersionString());
@@ -207,12 +211,9 @@ namespace MelonLoader
             Fixes.Il2CppICallInjector.Shutdown();
 #endif
 
-            MelonLogger.Flush();
-            //MelonLogger.Close();
-
             Thread.Sleep(200);
 
-            if (MelonLaunchOptions.Core.QuitFix)
+            if (LoaderConfig.Current.Loader.ForceQuit)
                 Process.GetCurrentProcess().Kill();
         }
 

@@ -4,7 +4,7 @@ using MonoMod.Utils;
 
 namespace Harmony
 {
-	[Obsolete("Harmony.PatchInfoSerialization is Only Here for Compatibility Reasons. Please use HarmonyLib.PatchInfoSerialization instead.")]
+	[Obsolete("Harmony.PatchInfoSerialization is Only Here for Compatibility Reasons. Please use HarmonyLib.PatchInfoSerialization instead. This will be removed in a future update.", true)]
 	public static class PatchInfoSerialization
 	{
 		private delegate HarmonyLib.PatchInfo HarmonyLib_PatchInfoSerialization_Deserialize_Delegate(byte[] bytes);
@@ -15,23 +15,23 @@ namespace Harmony
 		private static HarmonyLib_PatchInfoSerialization_PriorityComparer_Delegate HarmonyLib_PatchInfoSerialization_PriorityComparer
 			= HarmonyLib.AccessTools.Method("HarmonyLib.PatchInfoSerialization:PriorityComparer").CreateDelegate<HarmonyLib_PatchInfoSerialization_PriorityComparer_Delegate>();
 
-		[Obsolete("Harmony.PatchInfoSerialization.Deserialize is Only Here for Compatibility Reasons. Please use HarmonyLib.PatchInfoSerialization.Deserialize instead.")]
+		[Obsolete("Harmony.PatchInfoSerialization.Deserialize is Only Here for Compatibility Reasons. Please use HarmonyLib.PatchInfoSerialization.Deserialize instead. This will be removed in a future update.", true)]
 		public static PatchInfo Deserialize(byte[] bytes) => (PatchInfo)HarmonyLib_PatchInfoSerialization_Deserialize(bytes);
-		[Obsolete("Harmony.PatchInfoSerialization.PriorityComparer is Only Here for Compatibility Reasons. Please use HarmonyLib.PatchInfoSerialization.PriorityComparer instead.")]
+		[Obsolete("Harmony.PatchInfoSerialization.PriorityComparer is Only Here for Compatibility Reasons. Please use HarmonyLib.PatchInfoSerialization.PriorityComparer instead. This will be removed in a future update.", true)]
 		public static int PriorityComparer(object obj, int index, int priority, string[] before, string[] after) => HarmonyLib_PatchInfoSerialization_PriorityComparer(obj, index, priority);
 	}
 
-	[Obsolete("Harmony.PatchInfo is Only Here for Compatibility Reasons. Please use HarmonyLib.PatchInfo instead.")]
+	[Obsolete("Harmony.PatchInfo is Only Here for Compatibility Reasons. Please use HarmonyLib.PatchInfo instead. This will be removed in a future update.", true)]
 	[Serializable]
 	public class PatchInfo : HarmonyLib.PatchInfo { }
 
-	[Obsolete("Harmony.Patch is Only Here for Compatibility Reasons. Please use HarmonyLib.Patch instead.")]
+	[Obsolete("Harmony.Patch is Only Here for Compatibility Reasons. Please use HarmonyLib.Patch instead. This will be removed in a future update.", true)]
 	[Serializable]
 	public class Patch : IComparable
 	{
 		readonly public MethodInfo patch;
 		private HarmonyLib.Patch patchWrapper;
-		[Obsolete("Harmony.Patch is Only Here for Compatibility Reasons. Please use HarmonyLib.Patch instead.")]
+		[Obsolete("Harmony.Patch is Only Here for Compatibility Reasons. Please use HarmonyLib.Patch instead. This will be removed in a future update.", true)]
 		public Patch(MethodInfo patch, int index, string owner, int priority, string[] before, string[] after) 
 		{
 			this.patch = patch;

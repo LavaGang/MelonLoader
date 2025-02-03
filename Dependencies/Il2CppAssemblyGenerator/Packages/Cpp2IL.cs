@@ -16,21 +16,24 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 		
         internal Cpp2IL()
         {
-            Version = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceVersion_Dumper;
+            Version = LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion;
 #if !DEBUG
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = RemoteAPI.Info.ForceDumperVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = $"2022.1.0-pre-release.18";
+                Version = $"2022.1.0-pre-release.19";
             VersionSem = SemVersion.Parse(Version);
 
             Name = nameof(Cpp2IL);
-            string filename = $"{Name}.exe";
+            
+            var filename = Name;
+#if WINDOWS
+            filename += ".exe";
+#endif
 
             BaseFolder = Path.Combine(Core.BasePath, Name);
-            if (!Directory.Exists(BaseFolder))
-                Directory.CreateDirectory(BaseFolder);
+            Directory.CreateDirectory(BaseFolder);
 
             FilePath =
                 ExeFilePath =
@@ -39,7 +42,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
             OutputFolder = Path.Combine(BaseFolder, "cpp2il_out");
 
-            URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}.exe";
+            URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}";
+#if WINDOWS
+            URL += ".exe";
+#endif
         }
 
         internal override bool ShouldSetup() 
@@ -67,14 +73,13 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 "--use-processor",
                 "attributeanalyzer",
                 "attributeinjector",
-                MelonLaunchOptions.Cpp2IL.CallAnalyzer ? "callanalyzer" : string.Empty,
-                MelonLaunchOptions.Cpp2IL.NativeMethodDetector ? "nativemethoddetector" : string.Empty,
+                LoaderConfig.Current.UnityEngine.EnableCpp2ILCallAnalyzer ? "callanalyzer" : string.Empty,
+                LoaderConfig.Current.UnityEngine.EnableCpp2ILNativeMethodDetector ? "nativemethoddetector" : string.Empty,
                 //"deobfmap",
                 //"stablenamer",
 
             ], false, new Dictionary<string, string>() {
                 {"NO_COLOR", "1"},
-                {"DOTNET_BUNDLE_EXTRACT_BASE_DIR", BaseFolder }
             });
     }
 }

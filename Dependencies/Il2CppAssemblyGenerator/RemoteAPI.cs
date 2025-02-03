@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Semver;
-
-#pragma warning disable 0649
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
@@ -122,27 +122,40 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
                 internal static InfoStruct Contact(string response_str)
                 {
-                    ResponseStruct responseobj = MelonUtils.ParseJSONStringtoStruct<ResponseStruct>(response_str);
+                    ResponseStruct responseobj = JsonSerializer.Deserialize<ResponseStruct>(response_str);
                     if (responseobj == null)
                         return null;
 
                     InfoStruct returninfo = new InfoStruct();
-                    returninfo.ForceDumperVersion = responseobj.forceCpp2IlVersion;
-                    returninfo.ObfuscationRegex = responseobj.obfuscationRegex;
-                    returninfo.MappingURL = responseobj.mappingUrl;
-                    returninfo.MappingFileSHA512 = responseobj.mappingFileSHA512;
+                    returninfo.ForceDumperVersion = responseobj.ForceCpp2IlVersion;
+                    returninfo.ObfuscationRegex = responseobj.ObfuscationRegex;
+                    returninfo.MappingURL = responseobj.MappingUrl;
+                    returninfo.MappingFileSHA512 = responseobj.MappingFileSHA512;
                     return returninfo;
                 }
 
                 internal class ResponseStruct
                 {
-                    public string gameSlug = null;
-                    public string gameName = null;
-                    public string mappingUrl = null;
-                    public string mappingFileSHA512 = null;
-                    public string forceCpp2IlVersion = null;
-                    public string forceUnhollowerVersion = null; //TODO: Remove this from the API
-                    public string obfuscationRegex = null;
+                    [JsonPropertyName("gameSlug")]
+                    public string GameSlug { get; set; }
+
+                    [JsonPropertyName("gameName")]
+                    public string GameName { get; set; }
+
+                    [JsonPropertyName("mappingUrl")]
+                    public string MappingUrl { get; set; }
+
+                    [JsonPropertyName("mappingFileSHA512")]
+                    public string MappingFileSHA512 { get; set; }
+
+                    [JsonPropertyName("forceCpp2IlVersion")]
+                    public string ForceCpp2IlVersion { get; set; }
+
+                    [JsonPropertyName("forceUnhollowerVersion")]
+                    public string ForceUnhollowerVersion { get; set; } //TODO: Remove this from the API
+
+                    [JsonPropertyName("obfuscationRegex")]
+                    public string ObfuscationRegex { get; set; }
                 }
             }
         }

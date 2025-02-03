@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using MelonLoader.Utils;
 
 namespace MelonLoader
@@ -11,7 +10,7 @@ namespace MelonLoader
         {
             if (!IsEnabled())
                 return;
-            MelonLogger.Internal_Msg(Color.CornflowerBlue, MelonLogger.DefaultTextColor, "DEBUG", obj.ToString());
+            MelonLogger.PassLogMsg(MelonLogger.DefaultTextColor, obj.ToString(), Color.CornflowerBlue, "DEBUG");
             MsgCallbackHandler?.Invoke(LoggerUtils.DrawingColorToConsoleColor(MelonLogger.DefaultTextColor), obj.ToString());
         }
 
@@ -19,7 +18,7 @@ namespace MelonLoader
         {
             if (!IsEnabled())
                 return;
-            MelonLogger.Internal_Msg(Color.CornflowerBlue, MelonLogger.DefaultTextColor, "DEBUG", txt);
+            MelonLogger.PassLogMsg(MelonLogger.DefaultTextColor, txt, Color.CornflowerBlue, "DEBUG");
             MsgCallbackHandler?.Invoke(LoggerUtils.DrawingColorToConsoleColor(MelonLogger.DefaultTextColor), txt);
         }
 
@@ -27,7 +26,7 @@ namespace MelonLoader
         {
             if (!IsEnabled())
                 return;
-            MelonLogger.Internal_Msg(Color.CornflowerBlue, MelonLogger.DefaultTextColor, "DEBUG", string.Format(txt, args));
+            MelonLogger.PassLogMsg(MelonLogger.DefaultTextColor, string.Format(txt, args), Color.CornflowerBlue, "DEBUG");
             MsgCallbackHandler?.Invoke(LoggerUtils.DrawingColorToConsoleColor(MelonLogger.DefaultTextColor), string.Format(txt, args));
         }
 
@@ -35,22 +34,15 @@ namespace MelonLoader
         {
             if (!IsEnabled())
                 return;
-            MelonLogger.Internal_Error("DEBUG", txt);
+            MelonLogger.PassLogError(txt, "DEBUG", false);
             ErrorCallbackHandler?.Invoke(txt);
         }
 
         public static event Action<ConsoleColor, string> MsgCallbackHandler;
 
         public static event Action<string> ErrorCallbackHandler;
-        //public static bool IsEnabled() => MelonLaunchOptions.Core.DebugMode;
 
         public static bool IsEnabled()
-        {
-#if DEBUG
-            return true;
-#else
-            return MelonLaunchOptions.Core.IsDebug;
-#endif
-        }
+            => LoaderConfig.Current.Loader.DebugMode;
     }
 }

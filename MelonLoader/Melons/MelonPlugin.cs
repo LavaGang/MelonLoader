@@ -18,9 +18,19 @@ namespace MelonLoader
             MelonEvents.OnPreInitialization.Subscribe(OnPreInitialization, Priority);
             MelonEvents.OnApplicationEarlyStart.Subscribe(OnApplicationEarlyStart, Priority);
             MelonEvents.OnPreModsLoaded.Subscribe(OnPreModsLoaded, Priority);
-            MelonEvents.OnPreModsLoaded.Subscribe(OnApplicationStart, Priority);
+
+#pragma warning disable CS0612 // Type or member is obsolete
+            RegisterObsoleteCallbacks();
+#pragma warning restore CS0612 // Type or member is obsolete
+
             MelonEvents.OnApplicationStart.Subscribe(OnApplicationStarted, Priority);
             MelonEvents.OnPreSupportModule.Subscribe(OnPreSupportModule, Priority);
+        }
+
+        [Obsolete]
+        private void RegisterObsoleteCallbacks()
+        {
+            MelonEvents.OnPreModsLoaded.Subscribe(OnApplicationStart, Priority);
         }
 
         protected private override bool RegisterInternal()
@@ -69,11 +79,11 @@ namespace MelonLoader
 
         [Obsolete()]
         private MelonPluginInfoAttribute _LegacyInfoAttribute = null;
-        [Obsolete("MelonPlugin.InfoAttribute is obsolete. Please use MelonBase.Info instead.")]
+        [Obsolete("MelonPlugin.InfoAttribute is obsolete. Please use MelonBase.Info instead. This will be removed in a future update.", true)]
         public MelonPluginInfoAttribute InfoAttribute { get { if (_LegacyInfoAttribute == null) _LegacyInfoAttribute = new MelonPluginInfoAttribute(Info.SystemType, Info.Name, Info.Version, Info.Author, Info.DownloadLink); return _LegacyInfoAttribute; } }
         [Obsolete()]
         private MelonPluginGameAttribute[] _LegacyGameAttributes = null;
-        [Obsolete("MelonPlugin.GameAttributes is obsolete. Please use MelonBase.Games instead.")]
+        [Obsolete("MelonPlugin.GameAttributes is obsolete. Please use MelonBase.Games instead. This will be removed in a future update.", true)]
         public MelonPluginGameAttribute[] GameAttributes
         {
             get

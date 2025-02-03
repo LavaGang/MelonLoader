@@ -20,8 +20,7 @@ namespace MelonLoader.Utils
 
             ShouldContinue = false;
 
-            var timestamp = LoggerUtils.GetTimeStamp();
-            MelonLogger.WriteLogToFile($"[{timestamp}] [INTERNAL FAILURE] {msg}");
+            MelonLogger.PassLogError(msg, "INTERNAL FAILURE", false);
 
             string caption = "INTERNAL FAILURE!";
             var result = MessageBox(0, msg, caption, 0);

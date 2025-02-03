@@ -4,7 +4,7 @@ using System;
 
 namespace MelonLoader.MonoInternals
 {
-    [Obsolete("MelonLoader.MonoInternals.MonoLibrary is Only Here for Compatibility Reasons. Please use MelonLoader.Utils.MonoLibrary instead.")]
+    [Obsolete("MelonLoader.MonoInternals.MonoLibrary is Only Here for Compatibility Reasons. Please use MelonLoader.Utils.MonoLibrary instead. This will be removed in a future update.", true)]
     public class MonoLibrary : Utils.MonoLibrary { }
 }
 

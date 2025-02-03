@@ -31,15 +31,6 @@ namespace MelonLoader
             }
         }
 
-        static MelonLaunchOptions()
-        {
-            Core.Setup();
-            Console.Setup();
-            Cpp2IL.Setup();
-            Il2CppAssemblyGenerator.Setup();
-            Logger.Setup();
-        }
-
         internal static void Load()
         {
             string[] args = CommandLineArgs;
@@ -104,10 +95,12 @@ namespace MelonLoader
             }
         }
 
-        #region Args
+        #region Obsolete
 
+        [Obsolete("Use LoaderConfig.Current.Loader instead. This will be removed in a future update.", true)]
         public static class Core
         {
+            [Obsolete("This option isn't used anymore. This will be removed in a future update.", true)]
             public enum LoadModeEnum
             {
                 NORMAL,
@@ -115,36 +108,32 @@ namespace MelonLoader
                 BOTH
             }
 
-            public static LoadModeEnum LoadMode_Plugins { get; internal set; }
-            public static LoadModeEnum LoadMode_Mods { get; internal set; }
-            public static bool QuitFix { get; internal set; }
-            public static bool StartScreen { get; internal set; } = true;
-            public static string UnityVersion { get; internal set; }
-            public static bool IsDebug { get; internal set; }
-            public static bool UserWantsDebugger { get; internal set; }
+            [Obsolete("This option isn't used anymore. It will always return NORMAL. This will be removed in a future update.", true)]
+            public static LoadModeEnum LoadMode_Plugins => LoadModeEnum.NORMAL;
 
-            internal static void Setup()
-            {
-                WithoutArg["quitfix"] = () => QuitFix = true;
-                WithoutArg["melonloader.disablestartscreen"] = () => StartScreen = false;
-                WithArg["melonloader.loadmodeplugins"] = (string arg) =>
-                {
-                    if (int.TryParse(arg, out int valueint))
-                        LoadMode_Plugins = (LoadModeEnum)MelonUtils.Clamp(valueint, (int)LoadModeEnum.NORMAL, (int)LoadModeEnum.BOTH);
-                };
-                WithArg["melonloader.loadmodemods"] = (string arg) =>
-                {
-                    if (int.TryParse(arg, out int valueint))
-                        LoadMode_Mods = (LoadModeEnum)MelonUtils.Clamp(valueint, (int)LoadModeEnum.NORMAL, (int)LoadModeEnum.BOTH);
-                };
-                WithArg["melonloader.unityversion"] = (string arg) => UnityVersion = arg;
-                WithoutArg["melonloader.debug"] = () => IsDebug = true;
-                WithoutArg["melonloader.launchdebugger"] = () => UserWantsDebugger = true;
-            }
+            [Obsolete("This option isn't used anymore. It will always return NORMAL. This will be removed in a future update.", true)]
+            public static LoadModeEnum LoadMode_Mods => LoadModeEnum.NORMAL;
+
+            [Obsolete("Use LoaderConfig.Current.Loader.ForceQuit instead. This will be removed in a future update.", true)]
+            public static bool QuitFix => LoaderConfig.Current.Loader.ForceQuit;
+
+            [Obsolete("Use LoaderConfig.Current.Loader.DisableStartScreen instead. This will be removed in a future update.", true)]
+            public static bool StartScreen => !LoaderConfig.Current.Loader.DisableStartScreen;
+
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.VersionOverride instead. This will be removed in a future update.", true)]
+            public static string UnityVersion => LoaderConfig.Current.UnityEngine.VersionOverride;
+
+            [Obsolete("Use LoaderConfig.Current.Loader.DebugMode instead. This will be removed in a future update.", true)]
+            public static bool IsDebug => LoaderConfig.Current.Loader.DebugMode;
+
+            [Obsolete("Use LoaderConfig.Current.Loader.LaunchDebugger instead. This will be removed in a future update.", true)]
+            public static bool UserWantsDebugger => LoaderConfig.Current.Loader.LaunchDebugger;
         }
 
+        [Obsolete("Use LoaderConfig.Current.Console instead. This will be removed in a future update.", true)]
         public static class Console
         {
+            [Obsolete("Use LoaderConfig.CoreConfig.LoaderTheme instead. This will be removed in a future update.", true)]
             public enum DisplayMode
             {
                 NORMAL,
@@ -154,83 +143,64 @@ namespace MelonLoader
                 LEMON
             };
 
-            public static DisplayMode Mode { get; internal set; }
-            public static bool CleanUnityLogs { get; internal set; } = true;
-            public static bool ShouldSetTitle { get; internal set; } = true;
-            public static bool AlwaysOnTop { get; internal set; }
-            public static bool ShouldHide { get; internal set; }
-            public static bool HideWarnings { get; internal set; }
+            [Obsolete("Use LoaderConfig.Current.Loader.Theme instead. This will be removed in a future update.", true)]
+            public static DisplayMode Mode => (DisplayMode)LoaderConfig.Current.Loader.Theme;
 
-            internal static void Setup()
-            {
-                WithoutArg["melonloader.disableunityclc"] = () => CleanUnityLogs = false;
-                WithoutArg["melonloader.consoledst"] = () => ShouldSetTitle = false;
-                WithoutArg["melonloader.consoleontop"] = () => AlwaysOnTop = true;
-                WithoutArg["melonloader.hideconsole"] = () => ShouldHide = true;
-                WithoutArg["melonloader.hidewarnings"] = () => HideWarnings = true;
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.DisableConsoleLogCleaner instead. This will be removed in a future update.", true)]
+            public static bool CleanUnityLogs => !LoaderConfig.Current.UnityEngine.DisableConsoleLogCleaner;
 
-                WithArg["melonloader.consolemode"] = (string arg) =>
-                {
-                    if (int.TryParse(arg, out int valueint))
-                        Mode = (DisplayMode)MelonUtils.Clamp(valueint, (int)DisplayMode.NORMAL, (int)DisplayMode.LEMON);
-                };
-            }
+            [Obsolete("Use LoaderConfig.Current.Console.DontSetTitle instead. This will be removed in a future update.", true)]
+            public static bool ShouldSetTitle => !LoaderConfig.Current.Console.DontSetTitle;
+
+            [Obsolete("Use LoaderConfig.Current.Console.AlwaysOnTop instead. This will be removed in a future update.", true)]
+            public static bool AlwaysOnTop => LoaderConfig.Current.Console.AlwaysOnTop;
+
+            [Obsolete("Use LoaderConfig.Current.Console.Hide instead. This will be removed in a future update.", true)]
+            public static bool ShouldHide => LoaderConfig.Current.Console.Hide;
+
+            [Obsolete("Use LoaderConfig.Current.Console.HideWarnings instead. This will be removed in a future update.", true)]
+            public static bool HideWarnings => LoaderConfig.Current.Console.HideWarnings;
         }
 
+        [Obsolete("Use LoaderConfig.Current.UnityEngine instead. This will be removed in a future update.", true)]
         public static class Cpp2IL
         {
-            public static bool CallAnalyzer { get; internal set; }
-            public static bool NativeMethodDetector { get; internal set; }
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.EnableCpp2ILCallAnalyzer instead. This will be removed in a future update.", true)]
+            public static bool CallAnalyzer => LoaderConfig.Current.UnityEngine.EnableCpp2ILCallAnalyzer;
 
-            internal static void Setup()
-            {
-                WithoutArg["cpp2il.callanalyzer"] = () => CallAnalyzer = true;
-                WithoutArg["cpp2il.nativemethoddetector"] = () => NativeMethodDetector = true;
-            }
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.EnableCpp2ILNativeMethodDetector instead. This will be removed in a future update.", true)]
+            public static bool NativeMethodDetector => LoaderConfig.Current.UnityEngine.EnableCpp2ILNativeMethodDetector;
         }
 
+        [Obsolete("Use LoaderConfig.Current.UnityEngine instead. This will be removed in a future update.", true)]
         public static class Il2CppAssemblyGenerator
         {
-            public static bool ForceRegeneration { get; internal set; }
-            public static bool OfflineMode { get; internal set; }
-            public static string ForceVersion_Dumper { get; internal set; }
-            public static string ForceRegex { get; internal set; }
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceRegeneration instead. This will be removed in a future update.", true)]
+            public static bool ForceRegeneration => LoaderConfig.Current.UnityEngine.ForceRegeneration;
 
-            internal static void Setup()
-            {
-                WithoutArg["melonloader.agfoffline"] = () => OfflineMode = true;
-                WithoutArg["melonloader.agfregenerate"] = () => ForceRegeneration = true;
-                WithArg["melonloader.agfvdumper"] = (string arg) => ForceVersion_Dumper = arg;
-                WithArg["melonloader.agfregex"] = (string arg) => ForceRegex = arg;
-            }
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceOfflineGeneration instead. This will be removed in a future update.", true)]
+            public static bool OfflineMode => LoaderConfig.Current.UnityEngine.ForceOfflineGeneration;
+
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion instead. This will be removed in a future update.", true)]
+            public static string ForceVersion_Dumper => LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion;
+
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceGeneratorRegex instead. This will be removed in a future update.", true)]
+            public static string ForceRegex => LoaderConfig.Current.UnityEngine.ForceGeneratorRegex;
         }
 
+        [Obsolete("Use LoaderConfig.Logs instead. This will be removed in a future update.", true)]
         public static class Logger
         {
-            public static int MaxLogs { get; internal set; } = 10;
-            public static int MaxWarnings { get; internal set; } = 10;
-            public static int MaxErrors { get; internal set; } = 10;
+            [Obsolete("Use LoaderConfig.Current.Logs.MaxLogs instead. This will be removed in a future update.", true)]
+            public static int MaxLogs => (int)LoaderConfig.Current.Logs.MaxLogs;
 
-            internal static void Setup()
-            {
-                WithArg["melonloader.maxlogs"] = (string arg) =>
-                {
-                    if (int.TryParse(arg, out int valueint))
-                        MaxLogs = valueint;
-                };
-                WithArg["melonloader.maxwarnings"] = (string arg) =>
-                {
-                    if (int.TryParse(arg, out int valueint))
-                        MaxWarnings = valueint;
-                };
-                WithArg["melonloader.maxerrors"] = (string arg) =>
-                {
-                    if (int.TryParse(arg, out int valueint))
-                        MaxErrors = valueint;
-                };
-            }
+            [Obsolete("This option isn't used anymore. It will always return 10. This will be removed in a future update.", true)]
+            public static int MaxWarnings => 10;
+
+            [Obsolete("This option isn't used anymore. It will always return 10. This will be removed in a future update.", true)]
+            public static int MaxErrors => 10;
         }
 
-        #endregion Args
+        #endregion Obsolete
     }
 }
