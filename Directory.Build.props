@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <Version>0.7.0</Version>
+        <Version>0.7.1</Version>
         <Il2CppInteropVersion>1.4.6-ci.579</Il2CppInteropVersion>
 
         <Authors>Lava Gang</Authors>
