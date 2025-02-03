@@ -12,8 +12,6 @@ public static class Core
     public static nint LibraryHandle { get; private set; }
 
     internal static InternalLogger Logger { get; private set; } = new(Color.BlueViolet, "MelonLoader.Bootstrap");
-    public static string DataDir { get; private set; } = null!;
-    public static string GameDir { get; private set; } = null!;
 
 #if LINUX
     [System.Runtime.InteropServices.UnmanagedCallersOnly(EntryPoint = "Init")]
@@ -24,10 +22,8 @@ public static class Core
         LibraryHandle = moduleHandle;
 
         var exePath = Environment.ProcessPath!;
-        GameDir = Path.GetDirectoryName(exePath)!;
-
-        DataDir = Path.Combine(GameDir, Path.GetFileNameWithoutExtension(exePath) + "_Data");
-        if (!Directory.Exists(DataDir))
+        string exeName = Path.GetFileName(exePath);
+        if (exeName.ToLower().Contains("unitycrashhandler"))
             return;
 
         InitConfig();
