@@ -16,6 +16,15 @@ internal unsafe delegate void LogErrorFn(char* msg, int msgLength, char* section
 internal unsafe delegate void LogMelonInfoFn(ColorRGB* nameColor, char* name, int nameLength, char* info, int infoLength);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+internal delegate nint PtrRetFn();
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+internal delegate nint CastManagedAssemblyPtrFn(nint ptr);
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+internal delegate void ActionFn();
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 [return: MarshalAs(UnmanagedType.U1)]
 internal delegate bool BoolRetFn();
 
