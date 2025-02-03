@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.Engine.Unity</RootNamespace>
+        <TargetFramework>net6</TargetFramework>
+        <LangVersion>Latest</LangVersion>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <OutputPath>$(MLOutDir)/MelonLoader/Dependencies/Engines/Unity/</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+        <AssemblyName>MelonLoader.Engine.Unity</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+      <PackageReference Include="AssetRipper.Primitives" Version="3.1.4" ExcludeAssets="Runtime" />
+      <ProjectReference Include="$(SolutionDir)\MelonLoader\MelonLoader.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+	  <ProjectReference Include="..\..\..\Runtimes\Il2Cpp\Runtime.Il2Cpp\Runtime.Il2Cpp.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+	  <ProjectReference Include="..\Il2Cpp\Unity.Il2Cpp.AssemblyGenerator\Unity.Il2Cpp.AssemblyGenerator.csproj">
+	    <Private>False</Private>
+	    <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+	    <ExcludeAssets>all</ExcludeAssets>
+	  </ProjectReference>
+      <ProjectReference Include="..\Engine.Unity.Shared\Engine.Unity.Shared.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+      <ProjectReference Include="..\Il2Cpp\Unity.Il2Cpp.Shared\Unity.Il2Cpp.Shared.csproj">
+        <ExcludeAssets>all</ExcludeAssets>
+        <Private>False</Private>
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+    </ItemGroup>
+</Project>

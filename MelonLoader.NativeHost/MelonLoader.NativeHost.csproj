@@ -4,14 +4,14 @@
         <TargetFramework>net6</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <OutputPath>$(MLOutDir)/MelonLoader</OutputPath>
+        <OutputPath>$(MLOutDir)/MelonLoader/Dependencies</OutputPath>
         <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
         <DebugType>embedded</DebugType>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\MelonLoader\MelonLoader.csproj" />
+      <ProjectReference Include="..\MelonLoader\MelonLoader.csproj" />
     </ItemGroup>
 
 </Project>

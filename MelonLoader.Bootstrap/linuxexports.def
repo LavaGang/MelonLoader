@@ -7,9 +7,6 @@ V1.0 {
         LogMsg;
         LogError;
         LogMelonInfo;
-        MonoInstallHooks;
-        MonoGetDomainPtr;
-        MonoGetRuntimeHandle;
         IsConsoleOpen;
         GetLoaderConfig;
     local: *;

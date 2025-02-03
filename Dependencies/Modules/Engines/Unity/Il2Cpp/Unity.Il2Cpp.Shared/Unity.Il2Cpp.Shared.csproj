@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.Unity.Il2Cpp</RootNamespace>
+        <TargetFramework>net6</TargetFramework>
+        <LangVersion>Latest</LangVersion>
+        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+        <OutputPath>$(MLOutDir)/MelonLoader/Dependencies/Engines/Unity/</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <AssemblyName>MelonLoader.Unity.Il2Cpp.Shared</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="MelonLoader.Unity.Il2Cpp" />
+        <InternalsVisibleTo Include="MelonLoader.Engine.Unity" />
+    </ItemGroup>
+	<ItemGroup>
+        <Reference Include="Il2Cppmscorlib">
+            <HintPath>..\Libs\Il2Cppmscorlib.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="Il2CppSystem">
+            <HintPath>..\Libs\Il2CppSystem.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>..\Libs\UnityEngine.CoreModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+		<ProjectReference Include="$(SolutionDir)\MelonLoader\MelonLoader.csproj" ExcludeAssets="all" Private="False">
+			<CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+		</ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AsmResolver.DotNet" Version="6.0.0-beta.1" ExcludeAssets="Runtime" />
+        <PackageReference Include="Iced" Version="1.21.0" ExcludeAssets="Runtime" />
+        <PackageReference Include="Mono.Cecil" Version="0.11.6" ExcludeAssets="Runtime" />
+        <PackageReference Include="Il2CppInterop.Common" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
+        <PackageReference Include="Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
+        <PackageReference Include="Il2CppInterop.Generator" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
+        <PackageReference Include="Il2CppInterop.HarmonySupport" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
+    </ItemGroup>
+</Project> 

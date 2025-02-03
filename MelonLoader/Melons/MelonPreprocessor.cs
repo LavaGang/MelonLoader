@@ -14,7 +14,7 @@ namespace MelonLoader.Melons
             ref List<MelonAssembly> melonAssemblies)
         {
             // Find All Assemblies
-            Dictionary<string, (Version, string)> foundAssemblies = new();
+            Dictionary<string, LemonTuple<Version, string>> foundAssemblies = new();
             foreach (string path in directoryPaths)
                 PreprocessFolder(path, ref foundAssemblies);
 
@@ -40,7 +40,7 @@ namespace MelonLoader.Melons
         }
 
         private static void PreprocessFolder(string path,
-            ref Dictionary<string, (Version, string)> foundAssemblies)
+            ref Dictionary<string, LemonTuple<Version, string>> foundAssemblies)
         {
             // Validate Path
             if (!Directory.Exists(path))
@@ -67,12 +67,12 @@ namespace MelonLoader.Melons
                 asmDef.Dispose();
 
                 // Check for Existing Version
-                if (foundAssemblies.TryGetValue(name, out (Version, string) existingVersion)
+                if (foundAssemblies.TryGetValue(name, out LemonTuple<Version, string> existingVersion)
                     && (existingVersion.Item1 >= version))
                     continue;
 
                 // Add File to List
-                foundAssemblies[name] = (version, f);
+                foundAssemblies[name] = new LemonTuple<Version, string>(version, f);
             }
         }
 

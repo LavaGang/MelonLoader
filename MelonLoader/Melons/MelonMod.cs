@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-#pragma warning disable 0618 // Disabling the obsolete references warning to prevent the IDE going crazy when subscribing deprecated methods to some events in RegisterCallbacks
 
 namespace MelonLoader
 {
@@ -34,75 +32,11 @@ namespace MelonLoader
 
             return true;
         }
+
         private void HarmonyInit()
         {
             if (!MelonAssembly.HarmonyDontPatchAll)
                 HarmonyInstance.PatchAll(MelonAssembly.Assembly);
         }
-
-        protected private override void RegisterCallbacks()
-        {
-            base.RegisterCallbacks();
-
-            MelonEvents.OnSceneWasLoaded.Subscribe(OnSceneWasLoaded, Priority);
-            MelonEvents.OnSceneWasInitialized.Subscribe(OnSceneWasInitialized, Priority);
-            MelonEvents.OnSceneWasUnloaded.Subscribe(OnSceneWasUnloaded, Priority);
-
-#pragma warning disable CS0612 // Type or member is obsolete
-            RegisterObsoleteCallbacks();
-#pragma warning restore CS0612 // Type or member is obsolete
-        }
-
-        [Obsolete]
-        private void RegisterObsoleteCallbacks()
-        {
-            MelonEvents.OnSceneWasLoaded.Subscribe((idx, name) => OnLevelWasLoaded(idx), Priority);
-            MelonEvents.OnSceneWasInitialized.Subscribe((idx, name) => OnLevelWasInitialized(idx), Priority);
-            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart, Priority);
-        }
-
-        #region Callbacks
-
-        /// <summary>
-        /// Runs when a new Scene is loaded.
-        /// </summary>
-        public virtual void OnSceneWasLoaded(int buildIndex, string sceneName) { }
-
-        /// <summary>
-        /// Runs once a Scene is initialized.
-        /// </summary>
-        public virtual void OnSceneWasInitialized(int buildIndex, string sceneName) { }
-
-        /// <summary>
-        /// Runs once a Scene unloads.
-        /// </summary>
-        public virtual void OnSceneWasUnloaded(int buildIndex, string sceneName) { }
-
-        #endregion
-
-        #region Obsolete Members
-        [Obsolete("Override OnSceneWasLoaded instead. This will be removed in a future update.", true)]
-        public virtual void OnLevelWasLoaded(int level) { }
-        [Obsolete("Override OnSceneWasInitialized instead. This will be removed in a future update.", true)]
-        public virtual void OnLevelWasInitialized(int level) { }
-
-        [Obsolete()]
-        private MelonModInfoAttribute _LegacyInfoAttribute = null;
-        [Obsolete("Use MelonBase.Info instead. This will be removed in a future update.", true)]
-        public MelonModInfoAttribute InfoAttribute { get { if (_LegacyInfoAttribute == null) _LegacyInfoAttribute = new MelonModInfoAttribute(Info.SystemType, Info.Name, Info.Version, Info.Author, Info.DownloadLink); return _LegacyInfoAttribute; } }
-        [Obsolete()]
-        private MelonModGameAttribute[] _LegacyGameAttributes = null;
-        [Obsolete("Use MelonBase.Games instead. This will be removed in a future update.", true)]
-        public MelonModGameAttribute[] GameAttributes { get {
-                if (_LegacyGameAttributes != null)
-                    return _LegacyGameAttributes;
-                List<MelonModGameAttribute> newatts = new();
-                foreach (MelonGameAttribute att in Games)
-                    newatts.Add(new MelonModGameAttribute(att.Developer, att.Name));
-                _LegacyGameAttributes = newatts.ToArray();
-                return _LegacyGameAttributes;
-            } }
-
-        #endregion
     }
 }

@@ -1,4 +1,6 @@
 ﻿using MelonLoader.Bootstrap;
+using System;
+using System.Runtime.InteropServices;
 
 namespace MelonLoader.InternalUtils;
 
@@ -9,9 +11,6 @@ internal class BootstrapLibrary
     internal LogMsgFn LogMsg { get; private set; }
     internal LogErrorFn LogError { get; private set; }
     internal LogMelonInfoFn LogMelonInfo { get; private set; }
-    internal ActionFn MonoInstallHooks { get; private set; }
-    internal PtrRetFn MonoGetDomainPtr { get; private set; }
-    internal PtrRetFn MonoGetRuntimeHandle { get; private set; }
     internal BoolRetFn IsConsoleOpen { get; private set; }
     internal GetLoaderConfigFn GetLoaderConfig { get; private set; }
 }

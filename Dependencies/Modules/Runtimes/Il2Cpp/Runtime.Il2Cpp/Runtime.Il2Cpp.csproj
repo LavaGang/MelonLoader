@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.Runtime.Il2Cpp</RootNamespace>
+        <TargetFramework>net6</TargetFramework>
+        <LangVersion>Latest</LangVersion>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <OutputPath>$(MLOutDir)/MelonLoader/Dependencies/Runtimes/Il2Cpp/</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+        <AssemblyName>MelonLoader.Runtime.Il2Cpp</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+      <ProjectReference Include="$(SolutionDir)\MelonLoader\MelonLoader.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+	  <ProjectReference Include="..\Runtime.Il2Cpp.Shared\Runtime.Il2Cpp.Shared.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+    </ItemGroup>
+</Project>

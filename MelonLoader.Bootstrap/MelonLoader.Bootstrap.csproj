@@ -31,7 +31,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="../BaseLibs/NetStandardPatches/*" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Dependencies/NetStandardPatches/%(RecursiveDir)%(Filename)%(Extension)" />
+        <None Include="$(SolutionDir)/Dependencies/NetStandardPatches/*" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Dependencies/NetStandardPatches/%(RecursiveDir)%(Filename)%(Extension)" />
         <None Include="$(SolutionDir)/NOTICE.txt" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Documentation/%(Filename)%(Extension)" />
         <None Include="$(SolutionDir)/LICENSE.md" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Documentation/%(Filename)%(Extension)" />
         <None Include="$(SolutionDir)/CHANGELOG.md" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Documentation/%(Filename)%(Extension)" />
@@ -56,7 +56,7 @@
     </ItemGroup>
     
     <ItemGroup>
-        <Compile Include="$(SolutionDir)/MelonLoader/LoaderConfig.cs" />
+        <Compile Include="$(SolutionDir)/MelonLoader/Preferences/LoaderConfig.cs" />
     </ItemGroup>
 
     <ItemGroup>

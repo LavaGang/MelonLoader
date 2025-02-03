@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MelonLoader.Utils;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -111,7 +112,7 @@ namespace MelonLoader.Pastel
 
         static ConsoleExtensions()
         {
-            if (MelonUtils.IsUnix || MelonUtils.IsMac)
+            if (OsUtils.IsUnix || OsUtils.IsMac)
             {
                 Enable();
                 return;
