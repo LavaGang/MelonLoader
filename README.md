@@ -13,6 +13,14 @@
 	<a href="https://discord.gg/2Wn3N2P"><img src="https://img.shields.io/discord/663449315876012052?label=discord&style=for-the-badge&color=blueviolet"></a>
 </p>
 
+<p align="center">
+	<a href="https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.exe"><img src="https://img.shields.io/github/downloads/LavaGang/MelonLoader.Installer/latest/MelonLoader.Installer.exe?style=for-the-badge&label=Windows%20Installer"></a>
+</p>
+
+<p align="center">
+	<a href="https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.Linux"><img src="https://img.shields.io/github/downloads/LavaGang/MelonLoader.Installer/latest/MelonLoader.Installer.Linux?style=for-the-badge&label=Linux%20Installer"></a>
+</p>
+
 ---
 
 ## GENERAL INFORMATION:
@@ -114,31 +122,58 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ---
 
-## START SCREEN CUSTOMIZATION:
+## CONFIG:
 
-> The start screen is temporarily disabled due to instabilities
+MelonLoader has its own config file at `./UserData/Loader.cfg` (you need to run MelonLoader at least once for it to appear).
 
-- After Initial Launch the Start Screen will create a folder under `UserData/MelonStartScreen`
-- Inside this folder it will create a `Themes` folder and a `Config.cfg` file for Customization Settings.
-- You can also place Custom Themes in the created `Themes` folder.
-- Inside `Config.cfg` you can set what Theme folder you would like to use.  
-- If you set your Theme folder to `Random` it will randomly pick and load from existing Themes.  
+Here is a list of the current config options (and their default values):
+```toml
+[loader]
+# Disables MelonLoader. Equivalent to the '--no-mods' launch option
+disable = false
+# Equivalent to the '--melonloader.debug' launch option
+debug_mode = true
+# Only use this if the game freezes when trying to quit. Equivalent to the '--quitfix' launch option
+force_quit = false
+# Disables the start screen. Equivalent to the '--melonloader.disablestartscreen' launch option
+disable_start_screen = false
+# Starts the dotnet debugger (only for Il2Cpp games). Equivalent to the '--melonloader.launchdebugger' launch option
+launch_debugger = false
+# Sets the loader theme. Currently, the only available themes are "Normal" and "Lemon". Equivalent to the '--melonloader.consolemode' launch option (0 for Normal, 4 for Lemon)
+theme = "Normal"
 
-- For Custom Themes you can place Custom Images in their Theme folder to further customize it.
-- Listed below are the Compatible File Names and Extensions for the Custom Images.
+[console]
+# Hides warnings from displaying. Equivalent to the '--melonloader.hidewarnings' launch option
+hide_warnings = false
+# Hides the console. Equivalent to the '--melonloader.hideconsole' launch option
+hide_console = false
+# Forces the console to always stay on-top of all other applications. Equivalent to the '--melonloader.consoleontop' launch option
+console_on_top = false
+# Keeps the console title as original. Equivalent to the '--melonloader.consoledst' launch option
+dont_set_title = false
 
-| Compatible File Names |
-| - |
-| Background |
-| Loading |
-| Logo |
+[logs]
+# Sets the maximum amount of log files in the Logs folder (Default: 10). Equivalent to the '--melonloader.maxlogs' launch option
+max_logs = 10
 
-| Compatible Extensions |
-| - |
-| .gif |
-| .png |
-| .jpg |
-| .jpeg |
+[unityengine]
+# Overrides the detected UnityEngine version. Equivalent to the '--melonloader.unityversion' launch option
+version_override = ""
+# Disables the console log cleaner (only applies to Il2Cpp games). Equivalent to the '--melonloader.disableunityclc' launch option
+disable_console_log_cleaner = false
+# Forces the Il2Cpp Assembly Generator to run without contacting the remote API. Equivalent to the '--melonloader.agfoffline' launch option
+force_offline_generation = false
+# Forces the Il2Cpp Assembly Generator to use the specified regex. Equivalent to the '--melonloader.agfregex' launch option
+force_generator_regex = ""
+# Forces the Il2Cpp Assembly Generator to use the specified Il2Cpp dumper version. Equivalent to the '--melonloader.agfvdumper' launch option
+force_il2cpp_dumper_version = ""
+# Forces the Il2Cpp Assembly Generator to always regenerate assemblies. Equivalent to the '--melonloader.agfregenerate' launch option
+force_regeneration = false
+# Enables the CallAnalyzer processor for Cpp2IL. Equivalent to the '--cpp2il.callanalyzer' launch option
+enable_cpp2il_call_analyzer = false
+# Enables the NativeMethodDetector processor for Cpp2IL. Equivalent to the '--cpp2il.nativemethoddetector' launch option
+enable_cpp2il_native_method_detector = false
+```
 
 ---
 
