@@ -1,5 +1,5 @@
 ﻿using MelonLoader.Bootstrap.Logging;
-using MelonLoader.Bootstrap.RuntimeHandlers.Mono;
+using MelonLoader.Bootstrap.Proxy;
 using MelonLoader.Bootstrap.Utils;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
@@ -79,24 +79,6 @@ internal static class Exports
     public static unsafe void LogMelonInfo(ColorRGB* nameColor, char* name, int nameLength, char* info, int infoLength)
     {
         MelonLogger.LogMelonInfo(*nameColor, new(name, nameLength), new(info, infoLength));
-    }
-
-    [UnmanagedCallersOnly(EntryPoint = "MonoInstallHooks")]
-    public static void MonoInstallHooks()
-    {
-        MonoHandler.InstallHooks();
-    }
-
-    [UnmanagedCallersOnly(EntryPoint = "MonoGetDomainPtr")]
-    public static nint MonoGetDomainPtr()
-    {
-        return MonoHandler.Domain;
-    }
-
-    [UnmanagedCallersOnly(EntryPoint = "MonoGetRuntimeHandle")]
-    public static nint MonoGetRuntimeHandle()
-    {
-        return MonoHandler.Mono.Handle;
     }
 
     [UnmanagedCallersOnly(EntryPoint = "IsConsoleOpen")]

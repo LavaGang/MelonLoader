@@ -1,15 +1,15 @@
 name: Build MelonLoader
 
-run-name: 0.7.0${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }} | ${{ github.event_name != 'workflow_dispatch' && (github.event.head_commit.message || format('`[PR]` {0}', github.event.pull_request.title)) || 'Manual Build' }}
+run-name: 1.0.0${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }} | ${{ github.event_name != 'workflow_dispatch' && (github.event.head_commit.message || format('`[PR]` {0}', github.event.pull_request.title)) || 'Manual Build' }}
 
 env:
-  DEVVERSION: "0.7.0"
+  DEVVERSION: "1.0.0"
 
 on:
   push:
-    branches: [ master, alpha-development, v0.6.0-rewrite ]
+    branches: [ master, alpha-development, universality ]
   pull_request:
-    branches: [ master, alpha-development, v0.6.0-rewrite ]
+    branches: [ master, alpha-development, universality ]
   workflow_dispatch:
 
 jobs:

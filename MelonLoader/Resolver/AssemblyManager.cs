@@ -74,18 +74,17 @@ namespace MelonLoader.Resolver
         }
 
         private static void InstallHooks()
-        {
+        {   
 #if NET6_0_OR_GREATER
             AssemblyLoadContext.Default.Resolving += Resolve;
 #else
-            InternalUtils.BootstrapInterop.Library.MonoInstallHooks();
+            MelonLogger.Error("[AssemblyManager] ASSEMBLY RESOLVER CURRENTLY UNSUPPORTED ON MONO!");
 #endif
         }
 
 #if NET6_0_OR_GREATER
         private static Assembly? Resolve(AssemblyLoadContext alc, AssemblyName name)
             => Resolve(name.Name, name.Version, true);
-
 #else
         private static Assembly Resolve(string requested_name, ushort major, ushort minor, ushort build, ushort revision, bool is_preload)
         {

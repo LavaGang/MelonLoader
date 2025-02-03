@@ -1,5 +1,6 @@
 ﻿using MelonLoader.InternalUtils;
 using MelonLoader.Properties;
+using MelonLoader.Utils;
 using Semver;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace MelonLoader
         /// <summary>
         /// Creates a new Melon instance for a Wrapper.
         /// </summary>
-        public static T CreateWrapper<T>(string name, string author, string version, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, Color? color = null, Color? authorColor = null, string id = null) where T : MelonBase, new()
+        public static T CreateWrapper<T>(string name, string author, string version, MelonApplicationAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, Color? color = null, Color? authorColor = null, string id = null) where T : MelonBase, new()
         {
             var melon = new T
             {
@@ -81,9 +82,9 @@ namespace MelonLoader
 
         #region Instance
 
-        private MelonGameAttribute[] _games = new MelonGameAttribute[0];
+        private MelonApplicationAttribute[] _games = new MelonApplicationAttribute[0];
         private MelonProcessAttribute[] _processes = new MelonProcessAttribute[0];
-        private MelonGameVersionAttribute[] _gameVersions = new MelonGameVersionAttribute[0];
+        private MelonApplicationVersionAttribute[] _gameVersions = new MelonApplicationVersionAttribute[0];
 
         public readonly MelonEvent OnRegister = new();
         public readonly MelonEvent OnUnregister = new();
@@ -130,19 +131,19 @@ namespace MelonLoader
         /// <summary>
         /// Game Attributes of the Melon.
         /// </summary>
-        public MelonGameAttribute[] Games
+        public MelonApplicationAttribute[] Games
         {
             get => _games;
-            internal set => _games = (value == null || value.Any(x => x.Universal)) ? new MelonGameAttribute[0] : value;
+            internal set => _games = (value == null || value.Any(x => x.Universal)) ? new MelonApplicationAttribute[0] : value;
         }
 
         /// <summary>
         /// Game Version Attributes of the Melon.
         /// </summary>
-        public MelonGameVersionAttribute[] SupportedGameVersions
+        public MelonApplicationVersionAttribute[] SupportedGameVersions
         {
             get => _gameVersions;
-            internal set => _gameVersions = (value == null || value.Any(x => x.Universal)) ? new MelonGameVersionAttribute[0] : value;
+            internal set => _gameVersions = (value == null || value.Any(x => x.Universal)) ? new MelonApplicationVersionAttribute[0] : value;
         }
 
         /// <summary>
@@ -198,29 +199,9 @@ namespace MelonLoader
         #region Callbacks
 
         /// <summary>
-        /// Runs before Support Module Initialization and after Assembly Generation for Il2Cpp Games.
+        /// Runs before Engine Module Initialization.
         /// </summary>
         public virtual void OnPreSupportModule() { }
-
-        /// <summary>
-        /// Runs once per frame.
-        /// </summary>
-        public virtual void OnUpdate() { }
-
-        /// <summary>
-        /// Can run multiple times per frame. Mostly used for Physics.
-        /// </summary>
-        public virtual void OnFixedUpdate() { }
-
-        /// <summary>
-        /// Runs once per frame, after <see cref="OnUpdate"/>.
-        /// </summary>
-        public virtual void OnLateUpdate() { }
-
-        /// <summary>
-        /// Can run multiple times per frame. Mostly used for Unity's IMGUI.
-        /// </summary>
-        public virtual void OnGUI() { }
 
         /// <summary>
         /// Runs on a quit request. It is possible to abort the request in this callback.
@@ -273,12 +254,12 @@ namespace MelonLoader
 
         #endregion
 
-        public Incompatibility[] FindIncompatiblities(MelonGameAttribute game, string processName, string gameVersion,
+        public Incompatibility[] FindIncompatiblities(MelonApplicationAttribute game, string processName, string gameVersion,
             string mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform,
             MelonPlatformDomainAttribute.CompatibleDomains domain)
             => FindIncompatiblities(game, processName, gameVersion, SemVersion.Parse(mlVersion), mlBuildHashCode, platform, domain);
 
-        public Incompatibility[] FindIncompatiblities(MelonGameAttribute game, string processName, string gameVersion,
+        public Incompatibility[] FindIncompatiblities(MelonApplicationAttribute game, string processName, string gameVersion,
             SemVersion mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform,
             MelonPlatformDomainAttribute.CompatibleDomains domain)
         {
@@ -312,7 +293,13 @@ namespace MelonLoader
 
         public Incompatibility[] FindIncompatiblitiesFromContext()
         {
-            return FindIncompatiblities(MelonUtils.CurrentGameAttribute, Process.GetCurrentProcess().ProcessName, UnityInformationHandler.GameVersion, BuildInfo.VersionNumber, MelonUtils.HashCode, MelonUtils.CurrentPlatform, MelonUtils.CurrentDomain);
+            return FindIncompatiblities(MelonEnvironment.CurrentApplicationAttribute,
+                Process.GetCurrentProcess().ProcessName,
+                MelonEnvironment.CurrentApplicationInfo.Version, 
+                BuildInfo.VersionNumber,
+                MelonEnvironment.HashCode,
+                MelonEnvironment.CurrentPlatform,
+                MelonEnvironment.CurrentDomain);
         }
 
         public static void PrintIncompatibilities(Incompatibility[] incompatibilities, MelonBase melon)
@@ -459,42 +446,18 @@ namespace MelonLoader
 
         protected private virtual void UnregisterInternal() { }
 
-        protected private virtual void RegisterCallbacks()
+        public virtual void RegisterCallbacks()
         {
             MelonEvents.OnApplicationQuit.Subscribe(OnApplicationQuit, Priority);
-            MelonEvents.OnUpdate.Subscribe(OnUpdate, Priority);
-            MelonEvents.OnLateUpdate.Subscribe(OnLateUpdate, Priority);
-            MelonEvents.OnGUI.Subscribe(OnGUI, Priority);
-            MelonEvents.OnFixedUpdate.Subscribe(OnFixedUpdate, Priority);
-
-#pragma warning disable CS0612 // Type or member is obsolete
-            RegisterObsoleteCallbacks();
-#pragma warning restore CS0612 // Type or member is obsolete
 
             MelonPreferences.OnPreferencesLoaded.Subscribe(PrefsLoaded, Priority);
             MelonPreferences.OnPreferencesSaved.Subscribe(PrefsSaved, Priority);
-        }
-
-        [Obsolete]
-        private void RegisterObsoleteCallbacks()
-        {
-            MelonEvents.OnApplicationLateStart.Subscribe(OnApplicationLateStart, Priority);
         }
 
         private void PrefsSaved(string path)
         {
             OnPreferencesSaved(path);
             OnPreferencesSaved();
-
-#pragma warning disable CS0612 // Type or member is obsolete
-            PrefsSavedObsoleteCallback();
-#pragma warning restore CS0612 // Type or member is obsolete
-        }
-
-        [Obsolete]
-        private void PrefsSavedObsoleteCallback()
-        {
-            OnModSettingsApplied();
         }
 
         private void PrefsLoaded(string path)
@@ -632,42 +595,6 @@ namespace MelonLoader
 
             return msg.Invoke(msg.IsStatic ? null : this, arguments);
         }
-        #endregion
-
-        #region Obsolete Members
-
-        [Obsolete]
-        private Harmony.HarmonyInstance _OldHarmonyInstance;
-
-        [Obsolete("Please use either the OnLateInitializeMelon callback, or the 'MelonEvents::OnApplicationLateStart' event instead. This will be removed in a future update.", true)]
-        public virtual void OnApplicationLateStart() { }
-
-        [Obsolete("For mods, use OnInitializeMelon instead. For plugins, use OnPreModsLoaded instead. This will be removed in a future update.", true)]
-        public virtual void OnApplicationStart() { }
-
-        [Obsolete("Please use OnPreferencesSaved instead. This will be removed in a future update.", true)]
-        public virtual void OnModSettingsApplied() { }
-
-        [Obsolete("Please use HarmonyInstance instead. This will be removed in a future update.", true)]
-#pragma warning disable IDE1006 // Naming Styles
-        public Harmony.HarmonyInstance harmonyInstance { get { _OldHarmonyInstance ??= new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
-#pragma warning restore IDE1006 // Naming Styles
-
-        [Obsolete("Please use HarmonyInstance instead. This will be removed in a future update.", true)]
-        public Harmony.HarmonyInstance Harmony { get { _OldHarmonyInstance ??= new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
-
-        [Obsolete("Please use MelonAssembly.Assembly instead. This will be removed in a future update.", true)]
-        public Assembly Assembly => MelonAssembly.Assembly;
-
-        [Obsolete("Please use MelonAssembly.HarmonyDontPatchAll instead. This will be removed in a future update.", true)]
-        public bool HarmonyDontPatchAll => MelonAssembly.HarmonyDontPatchAll;
-
-        [Obsolete("Please use MelonAssembly.Hash instead. This will be removed in a future update.", true)]
-        public string Hash => MelonAssembly.Hash;
-
-        [Obsolete("Please use MelonAssembly.Location instead. This will be removed in a future update.", true)]
-        public string Location => MelonAssembly.Location;
-
         #endregion
 
 

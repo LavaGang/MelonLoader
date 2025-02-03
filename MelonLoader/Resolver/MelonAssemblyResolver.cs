@@ -18,17 +18,30 @@ namespace MelonLoader.Resolver
             if (!AssemblyManager.Setup())
                 return;
 
+            // Add All Folders in Modules Directory as Searchable
+            AddSearchDirectories(MelonEnvironment.LoadersDirectory,
+                Path.Combine(MelonEnvironment.LoadersDirectory, MelonEnvironment.OurRuntimeName));
+            foreach (string directory in Directory.GetDirectories(MelonEnvironment.LoadersDirectory, "*", SearchOption.TopDirectoryOnly))
+                AddSearchDirectories(directory, Path.Combine(directory, MelonEnvironment.OurRuntimeName));
+
+            AddSearchDirectories(MelonEnvironment.RuntimeModulesDirectory,
+                Path.Combine(MelonEnvironment.RuntimeModulesDirectory, MelonEnvironment.OurRuntimeName));
+            foreach (string directory in Directory.GetDirectories(MelonEnvironment.RuntimeModulesDirectory, "*", SearchOption.TopDirectoryOnly))
+                AddSearchDirectories(directory, Path.Combine(directory, MelonEnvironment.OurRuntimeName));
+
+            AddSearchDirectories(MelonEnvironment.EngineModulesDirectory,
+                Path.Combine(MelonEnvironment.EngineModulesDirectory, MelonEnvironment.OurRuntimeName));
+            foreach (string directory in Directory.GetDirectories(MelonEnvironment.EngineModulesDirectory, "*", SearchOption.TopDirectoryOnly))
+                AddSearchDirectories(directory, Path.Combine(directory, MelonEnvironment.OurRuntimeName));
+
             // Setup Search Directories
             AddSearchDirectories(
                 MelonEnvironment.UserLibsDirectory,
                 MelonEnvironment.PluginsDirectory,
                 MelonEnvironment.ModsDirectory,
-                (MelonUtils.IsGameIl2Cpp()
-                    ? MelonEnvironment.Il2CppAssembliesDirectory
-                    : MelonEnvironment.UnityGameManagedDirectory),
                 MelonEnvironment.OurRuntimeDirectory,
                 MelonEnvironment.MelonBaseDirectory,
-                MelonEnvironment.GameRootDirectory);
+                MelonEnvironment.ApplicationRootDirectory);
 
             // Setup Redirections
             OverrideBaseAssembly();
@@ -65,7 +78,7 @@ namespace MelonLoader.Resolver
 #if NET6_0_OR_GREATER
                     assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(filePath);
 #else
-                assembly = Assembly.LoadFrom(filePath);
+                    assembly = Assembly.LoadFrom(filePath);
 #endif
                 }
                 catch { assembly = null; }
@@ -91,7 +104,7 @@ namespace MelonLoader.Resolver
                 AddSearchDirectory(directory, priority);
         }
 
-        public static void AddSearchDirectories(params (string, int)[] directories)
+        public static void AddSearchDirectories(params LemonTuple<string, int>[] directories)
         {
             foreach (var pair in directories)
                 AddSearchDirectory(pair.Item1, pair.Item2);
@@ -107,52 +120,15 @@ namespace MelonLoader.Resolver
         public static event OnAssemblyLoadHandler OnAssemblyLoad;
         internal static void SafeInvoke_OnAssemblyLoad(Assembly assembly)
         {
-#if !NET6_0_OR_GREATER
-            // Backwards Compatibility
-#pragma warning disable CS0612 // Type or member is obsolete
-            InvokeObsoleteOnAssemblyLoad(assembly);
-#pragma warning restore CS0612 // Type or member is obsolete
-#endif
             OnAssemblyLoad?.Invoke(assembly);
         }
-
-#if !NET6_0_OR_GREATER
-        [Obsolete]
-        private static void InvokeObsoleteOnAssemblyLoad(Assembly assembly)
-        {
-            MonoInternals.MonoResolveManager.SafeInvoke_OnAssemblyLoad(assembly);
-        }
-#endif
 
         public delegate Assembly OnAssemblyResolveHandler(string name, Version version);
         public static event OnAssemblyResolveHandler OnAssemblyResolve;
         internal static Assembly SafeInvoke_OnAssemblyResolve(string name, Version version)
         {
-#if NET6_0_OR_GREATER
-
             return OnAssemblyResolve?.Invoke(name, version);
-
-#else
-
-            // Backwards Compatibility
-#pragma warning disable CS0612 // Type or member is obsolete
-            var assembly = InvokeObsoleteOnAssemblyResolve(name, version);
-#pragma warning restore CS0612 // Type or member is obsolete
-
-            if (assembly == null)
-                assembly = OnAssemblyResolve?.Invoke(name, version);
-            return assembly;
-
-#endif
         }
-
-#if !NET6_0_OR_GREATER
-        [Obsolete]
-        private static Assembly InvokeObsoleteOnAssemblyResolve(string name, Version version)
-        {
-            return MonoInternals.MonoResolveManager.SafeInvoke_OnAssemblyResolve(name, version);
-        }
-#endif
 
         public static AssemblyResolveInfo GetAssemblyResolveInfo(string name)
             => AssemblyManager.GetInfo(name);

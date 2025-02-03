@@ -256,10 +256,10 @@ namespace MelonLoader
                     var authorColorAttr = MelonUtils.PullAttributeFromAssembly<MelonAuthorColorAttribute>(Assembly);
                     var additionalCreditsAttr = MelonUtils.PullAttributeFromAssembly<MelonAdditionalCreditsAttribute>(Assembly);
                     var procAttrs = MelonUtils.PullAttributesFromAssembly<MelonProcessAttribute>(Assembly);
-                    var gameAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameAttribute>(Assembly);
+                    var gameAttrs = MelonUtils.PullAttributesFromAssembly<MelonApplicationAttribute>(Assembly);
                     var optionalDependenciesAttr = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(Assembly);
                     var idAttr = MelonUtils.PullAttributeFromAssembly<MelonIDAttribute>(Assembly);
-                    var gameVersionAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameVersionAttribute>(Assembly);
+                    var gameVersionAttrs = MelonUtils.PullAttributesFromAssembly<MelonApplicationVersionAttribute>(Assembly);
                     var platformAttr = MelonUtils.PullAttributeFromAssembly<MelonPlatformAttribute>(Assembly);
                     var domainAttr = MelonUtils.PullAttributeFromAssembly<MelonPlatformDomainAttribute>(Assembly);
                     var mlVersionAttr = MelonUtils.PullAttributeFromAssembly<VerifyLoaderVersionAttribute>(Assembly);
@@ -289,11 +289,6 @@ namespace MelonLoader
                         MelonLogger.Warning($"==Normal users can ignore this warning==\nMelon '{info.Name}' by '{info.Author}' has version '{info.Version}' which does not use the Semantic Versioning format. Versions using formats other than the Semantic Versioning format will not be supported in the future versions of MelonLoader.\nFor more details, see: https://semver.org");
                 }
             }
-
-#if NET6_0_OR_GREATER
-            RegisterTypeInIl2Cpp.RegisterAssembly(Assembly);
-            RegisterTypeInIl2CppWithInterfaces.RegisterAssembly(Assembly);
-#endif
 
             if (rottenMelons.Count != 0)
             {

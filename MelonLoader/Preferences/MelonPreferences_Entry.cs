@@ -38,11 +38,7 @@ namespace MelonLoader
         protected void FireUntypedValueChanged(object old, object neew)
         {
             OnEntryValueChangedUntyped.Invoke(old, neew);
-            OnValueChangedUntyped?.Invoke();
         }
-
-        [Obsolete("Please use the OnEntryValueChangedUntyped MelonEvent instead. This will be removed in a future update.", true)]
-        public event Action OnValueChangedUntyped;
     }
 
     public class MelonPreferences_Entry<T> : MelonPreferences_Entry

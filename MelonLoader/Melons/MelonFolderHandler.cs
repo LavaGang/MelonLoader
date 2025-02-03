@@ -6,7 +6,7 @@ using System.IO;
 
 namespace MelonLoader.Melons
 {
-    internal class MelonFolderHandler
+    internal class ModuleFolderHandler
     {
         private static bool firstSpacer = false;
         private static List<string> userLibDirs = new();
@@ -35,7 +35,7 @@ namespace MelonLoader.Melons
             // Add Directories to Resolver
             foreach (string directory in userLibDirs)
             {
-                MelonUtils.AddNativeDLLDirectory(directory);
+                OsUtils.AddNativeDLLDirectory(directory);
                 Resolver.MelonAssemblyResolver.AddSearchDirectory(directory);
             }
             foreach (string directory in pluginDirs)
@@ -139,11 +139,6 @@ namespace MelonLoader.Melons
             {
                 // Validate Path
                 if (!Directory.Exists(dir))
-                    continue;
-
-                // Validate Manifest
-                string manifestPath = Path.Combine(dir, "manifest.json");
-                if (!File.Exists(manifestPath))
                     continue;
 
                 // Check for Deeper UserLibs

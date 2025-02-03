@@ -1,6 +1,5 @@
 ﻿using MelonLoader.Bootstrap.Logging;
-using MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
-using MelonLoader.Bootstrap.RuntimeHandlers.Mono;
+using MelonLoader.Bootstrap.Runtime;
 using MelonLoader.Bootstrap.Utils;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -40,8 +39,7 @@ public static class Core
 
         MelonDebug.Log("Starting probe for runtime");
 
-        if (Il2CppHandler.TryInitialize()
-            || MonoHandler.TryInitialize())
+        if (Dotnet.Initialize())
         {
             ConsoleHandler.NullHandles();
             return;
@@ -118,32 +116,5 @@ public static class Core
 
         if (uint.TryParse(ArgParser.GetValue("melonloader.maxlogs"), out var maxLogs))
             LoaderConfig.Current.Logs.MaxLogs = maxLogs;
-
-        var unityVersionOverride = ArgParser.GetValue("melonloader.unityversion");
-        if (unityVersionOverride != null)
-            LoaderConfig.Current.UnityEngine.VersionOverride = unityVersionOverride;
-
-        if (ArgParser.IsDefined("melonloader.disableunityclc"))
-            LoaderConfig.Current.UnityEngine.DisableConsoleLogCleaner = true;
-
-        if (ArgParser.IsDefined("melonloader.agfregenerate"))
-            LoaderConfig.Current.UnityEngine.ForceRegeneration = true;
-
-        if (ArgParser.IsDefined("melonloader.agfoffline"))
-            LoaderConfig.Current.UnityEngine.ForceOfflineGeneration = true;
-
-        var forceRegex = ArgParser.GetValue("melonloader.agfregex");
-        if (forceRegex != null)
-            LoaderConfig.Current.UnityEngine.ForceGeneratorRegex = forceRegex;
-
-        var forceDumperVersion = ArgParser.GetValue("melonloader.agfvdumper");
-        if (forceDumperVersion != null)
-            LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion = forceDumperVersion;
-
-        if (ArgParser.IsDefined("cpp2il.callanalyzer"))
-            LoaderConfig.Current.UnityEngine.EnableCpp2ILCallAnalyzer = true;
-
-        if (ArgParser.IsDefined("cpp2il.nativemethoddetector"))
-            LoaderConfig.Current.UnityEngine.EnableCpp2ILNativeMethodDetector = true;
     }
 }

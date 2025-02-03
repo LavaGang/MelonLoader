@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-
 #if NET6_0_OR_GREATER
 using MelonLoader.CoreClrUtils;
-using MelonLoader.InternalUtils;
+using MelonLoader.Utils;
 #endif
 
 namespace MelonLoader.InternalUtils;
 
 internal static unsafe class BootstrapInterop
 {
+    internal static nint _handle { get; private set; }
     internal static BootstrapLibrary Library { get; private set; }
-
-    internal static void SetDefaultConsoleTitleWithGameName(string gameName, string gameVersion = null)
-    {
-        var versionStr = $"{Core.GetVersionString()} - {gameName} {gameVersion ?? ""}";
-
-        MelonUtils.SetConsoleTitle(versionStr);
-    }
 
 #if WINDOWS
     private const int MF_BYCOMMAND = 0x00000000;
@@ -49,7 +42,8 @@ internal static unsafe class BootstrapInterop
     {
 #if NET6_0_OR_GREATER
         //SanityCheckDetour is able to wrap and fix the bad method in a delegate where possible, so we pass the detour by ref.
-        if (!MelonUtils.IsUnderWineOrSteamProton() && !CoreClrDelegateFixer.SanityCheckDetour(ref detour))
+        if (!OsUtils.IsWineOrProton()
+            && !CoreClrDelegateFixer.SanityCheckDetour(ref detour))
             return;
 #endif
 
@@ -74,35 +68,20 @@ internal static unsafe class BootstrapInterop
 #endif
     }
 
-    internal static void Initialize(nint bootstrapHandle)
+    internal static void Stage1(nint bootstrapHandle)
     {
-        Library = new NativeLibrary<BootstrapLibrary>(bootstrapHandle).Instance;
+        _handle = bootstrapHandle;
+        Library = new MelonNativeLibrary<BootstrapLibrary>(bootstrapHandle).Instance;
 
         try
         {
-            Core.Initialize();
+            Core.Stage1();
         }
         catch (Exception ex)
         {
-            MelonLogger.Error("Failed to initialize MelonLoader");
+            MelonLogger.Error("Failed to run Stage1 of MelonLoader");
             MelonLogger.Error(ex);
-
-            throw new("Error at init");
-        }
-    }
-
-    internal static void Start()
-    {
-        try
-        {
-            Core.Start();
-        }
-        catch (Exception ex)
-        {
-            MelonLogger.Error("Failed to start MelonLoader");
-            MelonLogger.Error(ex);
-
-            throw new("Error at start");
+            throw new("Error at Stage1");
         }
     }
 }

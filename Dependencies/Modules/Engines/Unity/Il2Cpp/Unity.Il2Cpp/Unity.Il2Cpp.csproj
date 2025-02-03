@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.Unity.Il2Cpp</RootNamespace>
+        <TargetFramework>net6</TargetFramework>
+        <LangVersion>Latest</LangVersion>
+        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+        <OutputPath>$(MLOutDir)/MelonLoader/Dependencies/Engines/Unity/</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+        <AssemblyName>MelonLoader.Unity.Il2Cpp</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+      <ProjectReference Include="$(SolutionDir)\MelonLoader\MelonLoader.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+	  <ProjectReference Include="..\..\Engine.Unity.Shared\Engine.Unity.Shared.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+	  <ProjectReference Include="..\Unity.Il2Cpp.Shared\Unity.Il2Cpp.Shared.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+    </ItemGroup>
+	<ItemGroup>
+        <Reference Include="Il2Cppmscorlib">
+            <HintPath>..\Libs\Il2Cppmscorlib.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="Il2CppSystem">
+            <HintPath>..\Libs\Il2CppSystem.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>..\Libs\UnityEngine.CoreModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+	<ItemGroup>
+        <PackageReference Include="HarmonyX" Version="2.10.2" ExcludeAssets="Runtime" />
+        <PackageReference Include="AssetRipper.Primitives" Version="3.1.4" ExcludeAssets="Runtime" />
+        <PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" ExcludeAssets="Runtime" />
+        <PackageReference Include="Iced" Version="1.21.0" ExcludeAssets="Runtime" />
+        <PackageReference Include="Il2CppInterop.Common" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
+        <PackageReference Include="Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
+        <PackageReference Include="Il2CppInterop.HarmonySupport" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
+        <PackageReference Include="Mono.Cecil" Version="0.11.6" ExcludeAssets="Runtime" />
+        <PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" ExcludeAssets="Runtime" />
+        <PackageReference Include="MonoMod.Utils" Version="22.7.31.1" ExcludeAssets="Runtime" />
+        <PackageReference Include="Samboy063.Tomlet" Version="5.4.0" ExcludeAssets="Runtime" />
+    </ItemGroup>
+</Project>

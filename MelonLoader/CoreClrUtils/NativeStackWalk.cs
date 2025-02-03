@@ -415,7 +415,7 @@ public static unsafe class NativeStackWalk
         if (!Directory.Exists(cacheDir))
             Directory.CreateDirectory(cacheDir);
 
-        var userPath = $"cache*{cacheDir};srv*https://msdl.microsoft.com/download/symbols;srv*https://symbolserver.unity3d.com;{MelonEnvironment.GameRootDirectory}";
+        var userPath = $"cache*{cacheDir};srv*https://msdl.microsoft.com/download/symbols;srv*https://symbolserver.unity3d.com;{MelonEnvironment.ApplicationRootDirectory}";
 
         SymSetOptions(SymOptions.SYMOPT_UNDNAME | SymOptions.SYMOPT_DEFERRED_LOADS);
 

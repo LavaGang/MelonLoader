@@ -54,7 +54,7 @@ public static partial class ProxyResolver
         return LoadModule(filePath, ref handle);
     }
 
-    private static bool LoadModule(string filePath, ref nint handle)
+    internal static bool LoadModule(string filePath, ref nint handle)
     {
         if (!File.Exists(filePath))
             return false;

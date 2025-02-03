@@ -9,8 +9,8 @@ namespace MelonLoader.Utils
     {
         public static string GetInstallPathFromAppId(string appid)
         {
-            if (!MelonUtils.IsWindows
-                || MelonUtils.IsUnderWineOrSteamProton())
+            if (!OsUtils.IsWindows
+                || OsUtils.IsWineOrProton())
                 return null;
 
             if (string.IsNullOrEmpty(appid))
@@ -39,8 +39,8 @@ namespace MelonLoader.Utils
 
         private static string ReadAppManifestInstallDir(string appmanifestpath)
         {
-            if (!MelonUtils.IsWindows
-                || MelonUtils.IsUnderWineOrSteamProton())
+            if (!OsUtils.IsWindows
+                || OsUtils.IsWineOrProton())
                 return null;
 
             if (!File.Exists(appmanifestpath))
@@ -65,8 +65,8 @@ namespace MelonLoader.Utils
 
         private static string ReadLibraryFolders(string appmanifestfilename, ref string steamappspath)
         {
-            if (!MelonUtils.IsWindows
-                || MelonUtils.IsUnderWineOrSteamProton())
+            if (!OsUtils.IsWindows
+                || OsUtils.IsWineOrProton())
                 return null;
 
             string libraryfoldersfilepath = Path.Combine(steamappspath, "libraryfolders.vdf");
@@ -98,8 +98,8 @@ namespace MelonLoader.Utils
 
         private static string GetSteamInstallPath()
         {
-            if (!MelonUtils.IsWindows
-                || MelonUtils.IsUnderWineOrSteamProton())
+            if (!OsUtils.IsWindows
+                || OsUtils.IsWineOrProton())
                 return null;
 
             RegistryKey key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Valve\\Steam");

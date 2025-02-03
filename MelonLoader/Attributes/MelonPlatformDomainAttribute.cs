@@ -12,7 +12,7 @@ namespace MelonLoader
         {
             UNIVERSAL,
             MONO,
-            IL2CPP
+            DOTNET
         };
 
         // <summary>Platform Domain Compatibility of the Melon.</summary>

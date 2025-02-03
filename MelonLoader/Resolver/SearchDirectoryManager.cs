@@ -88,23 +88,9 @@ namespace MelonLoader.Resolver
                 return AssemblyLoadContext.Default.LoadFromAssemblyPath(filepath);
 
 #else
-                IntPtr filePathPtr = Marshal.StringToHGlobalAnsi(filepath);
-                if (filePathPtr == IntPtr.Zero)
-                    continue;
 
-                IntPtr rootPtr = InternalUtils.BootstrapInterop.Library.MonoGetDomainPtr();
-                if (rootPtr == IntPtr.Zero)
-                    continue;
 
-                IntPtr assemblyPtr = MonoLibrary.Instance.mono_assembly_open_full(filePathPtr, IntPtr.Zero, false);
-                if (assemblyPtr == IntPtr.Zero)
-                    continue;
 
-                IntPtr assemblyReflectionPtr = MonoLibrary.Instance.mono_assembly_get_object(rootPtr, assemblyPtr);
-                if (assemblyReflectionPtr == IntPtr.Zero)
-                    continue;
-
-                return MonoLibrary.CastManagedAssemblyPtr(assemblyReflectionPtr);
 #endif
             }
 

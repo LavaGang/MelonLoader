@@ -140,12 +140,8 @@ namespace MelonLoader
 
         internal static void RunMsgCallbacks(Color namesection_color, Color txt_color, string namesection, string txt)
         {
-            MsgCallbackHandler?.Invoke(DrawingColorToConsoleColor(namesection_color), DrawingColorToConsoleColor(txt_color), namesection, txt);
             MsgDrawingCallbackHandler?.Invoke(namesection_color, txt_color, namesection, txt);
         }
-
-        [Obsolete("MsgCallbackHandler is obsolete. Please use MsgDrawingCallbackHandler for full Color support. This will be removed in a future update.", true)]
-        public static event Action<ConsoleColor, ConsoleColor, string, string> MsgCallbackHandler;
 
         public static event Action<Color, Color, string, string> MsgDrawingCallbackHandler;
 
@@ -249,9 +245,9 @@ namespace MelonLoader
             PassLogError(txt, namesection, true);
         }
 
-        internal static void ThrowInternalFailure(string txt) => Assertion.ThrowInternalFailure(txt);
+        public static void ThrowInternalFailure(string txt) => MelonAssertion.ThrowInternalFailure(txt);
 
-        internal static unsafe void WriteSpacer()
+        public static unsafe void WriteSpacer()
         {
             BootstrapInterop.Library.LogMsg(null, null, 0, null, null, 0);
         }
