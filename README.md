@@ -13,11 +13,13 @@
 	<a href="https://discord.gg/2Wn3N2P"><img src="https://img.shields.io/discord/663449315876012052?label=discord&style=for-the-badge&color=blueviolet"></a>
 </p>
 
----
+<p align="center">
+	<a href="https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.exe"><img src="https://img.shields.io/github/downloads/LavaGang/MelonLoader.Installer/latest/MelonLoader.Installer.exe?style=for-the-badge&label=Windows%20Installer"></a>
+</p>
 
-<a href="https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.exe"><img src="https://img.shields.io/github/downloads/LavaGang/MelonLoader.Installer/latest/MelonLoader.Installer.exe?style=for-the-badge&label=Windows%20Installer"></a>
-
-<a href="https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.Linux"><img src="https://img.shields.io/github/downloads/LavaGang/MelonLoader.Installer/latest/MelonLoader.Installer.Linux?style=for-the-badge&label=Linux%20Installer"></a>
+<p align="center">
+	<a href="https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.Linux"><img src="https://img.shields.io/github/downloads/LavaGang/MelonLoader.Installer/latest/MelonLoader.Installer.Linux?style=for-the-badge&label=Linux%20Installer"></a>
+</p>
 
 ---
 
