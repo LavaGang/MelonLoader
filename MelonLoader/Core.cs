@@ -44,7 +44,12 @@ namespace MelonLoader
                 Pastel.ConsoleExtensions.Disable();
 
             Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
+
+#if NET35
             Fixes.ServerCertificateValidation.Install();
+#endif
+
+
             Assertions.LemonAssertMapping.Setup();
 
             MelonUtils.Setup(AppDomain.CurrentDomain);
