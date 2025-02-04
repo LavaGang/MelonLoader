@@ -50,7 +50,7 @@ public static class Core
         var customBaseDir = ArgParser.GetValue("melonloader.basedir");
         var baseDir = Directory.Exists(customBaseDir) ? Path.GetFullPath(customBaseDir) : LoaderConfig.Current.Loader.BaseDirectory;
 
-        var path = Path.Combine(baseDir, "UserData", "Loader.cfg");
+        var path = Path.Combine(baseDir, "MelonLoader", "UserData", "Loader.cfg");
 
         if (File.Exists(path))
         {
