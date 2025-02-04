@@ -129,8 +129,8 @@ namespace MelonLoader.Utils
             CurrentPlatform = OsUtils.Is32Bit ? MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X86 : MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64;
             CurrentDomain = IsDotnetRuntime ? MelonPlatformDomainAttribute.CompatibleDomains.DOTNET : MelonPlatformDomainAttribute.CompatibleDomains.MONO;
 
-            SetEngineInfo("UNKNOWN", "0.0.0");
-            SetApplicationInfo("UNKNOWN", "UNKNOWN", "0.0.0");
+            SetEngineInfo(ApplicationExecutableName, "0.0.0");
+            SetApplicationInfo(ApplicationExecutableName, ApplicationExecutableName, "0.0.0");
         }
 
         internal static void WelcomeMessage()

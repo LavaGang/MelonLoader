@@ -5,7 +5,6 @@ using MelonLoader.Runtime.Il2Cpp;
 using System;
 using MelonLoader.Resolver;
 using System.Runtime.Loader;
-using System.Reflection;
 using MelonLoader.Engine.Unity.Il2Cpp;
 
 namespace MelonLoader.Engine.Unity
