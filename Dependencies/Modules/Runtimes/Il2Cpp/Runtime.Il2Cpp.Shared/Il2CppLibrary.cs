@@ -1,8 +1,7 @@
-﻿using MelonLoader.NativeUtils;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MelonLoader.Il2Cpp
+namespace MelonLoader.Runtime.Il2Cpp
 {
     public class Il2CppLibrary
     {

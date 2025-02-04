@@ -4,39 +4,39 @@ using MelonLoader.Modules;
 using MelonLoader.NativeUtils;
 #pragma warning disable 0649
 
-namespace MelonLoader.Runtime.Il2Cpp
+namespace MelonLoader.Runtime.Mono
 {
-    public unsafe static class Il2CppLoader
+    public unsafe static class MonoLoader
     {
         #region Private Members
 
-        private static Il2CppLibrary _lib;
+        private static MonoLibrary _lib;
 
-        private static MelonNativeDetour<Il2CppLibrary.d_il2cpp_runtime_invoke> il2cpp_runtime_invoke_detour;
+        private static MelonNativeDetour<MonoLibrary.d_mono_runtime_invoke> mono_runtime_invoke_detour;
 
         #endregion
 
         #region Public Members
 
         public static MelonEngineModule EngineModule { get; private set; }
-        public static Il2CppRuntimeInfo RuntimeInfo { get; private set; }
+        public static MonoRuntimeInfo RuntimeInfo { get; private set; }
 
         #endregion
 
         #region Loader
 
         public static void Initialize(MelonEngineModule engineModule,
-            Il2CppRuntimeInfo runtimeInfo)
+            MonoRuntimeInfo runtimeInfo)
         {
             // Apply the information
             EngineModule = engineModule;
             RuntimeInfo = runtimeInfo;
 
-            // Check if it found any Il2Cpp variant library
+            // Check if it found any Mono variant library
             if (RuntimeInfo == null
                 || string.IsNullOrEmpty(RuntimeInfo.LibPath))
             {
-                MelonLogger.ThrowInternalFailure("Failed to find Il2Cpp Library!");
+                MelonLogger.ThrowInternalFailure("Failed to find Mono Library!");
                 return;
             }
 
@@ -48,19 +48,19 @@ namespace MelonLoader.Runtime.Il2Cpp
             if (!CheckExports())
                 return;
 
-            // Create il2cpp_runtime_invoke Detour
-            il2cpp_runtime_invoke_detour = new(_lib.il2cpp_runtime_invoke, h_il2cpp_runtime_invoke, false);
+            // Create mono_runtime_invoke Detour
+            mono_runtime_invoke_detour = new(_lib.mono_runtime_invoke, h_mono_runtime_invoke, false);
 
-            // Attach il2cpp_runtime_invoke Detour
-            MelonDebug.Msg($"Attaching il2cpp_runtime_invoke Detour...");
-            il2cpp_runtime_invoke_detour.Attach();
+            // Attach mono_runtime_invoke Detour
+            MelonDebug.Msg($"Attaching mono_runtime_invoke Detour...");
+            mono_runtime_invoke_detour.Attach();
         }
 
         private static bool LoadLib()
         {
-            // Load the Il2Cpp variant library
-            MelonDebug.Msg($"Loading Il2Cpp Library...");
-            _lib = new MelonNativeLibrary<Il2CppLibrary>(MelonNativeLibrary.LoadLib(RuntimeInfo.LibPath)).Instance;
+            // Load the Mono variant library
+            MelonDebug.Msg($"Loading Mono Library...");
+            _lib = new MelonNativeLibrary<MonoLibrary>(MelonNativeLibrary.LoadLib(RuntimeInfo.LibPath)).Instance;
 
             // Check for Failure
             if (_lib == null)
@@ -76,8 +76,8 @@ namespace MelonLoader.Runtime.Il2Cpp
         {
             Dictionary<string, Delegate> listOfExports = new();
 
-            listOfExports[nameof(_lib.il2cpp_method_get_name)] = _lib.il2cpp_method_get_name;
-            listOfExports[nameof(_lib.il2cpp_runtime_invoke)] = _lib.il2cpp_runtime_invoke;
+            listOfExports[nameof(_lib.mono_method_get_name)] = _lib.mono_method_get_name;
+            listOfExports[nameof(_lib.mono_runtime_invoke)] = _lib.mono_runtime_invoke;
 
             foreach (var exportPair in listOfExports)
             {
@@ -95,10 +95,10 @@ namespace MelonLoader.Runtime.Il2Cpp
 
         #region Hooks
 
-        private static IntPtr h_il2cpp_runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc)
+        private static IntPtr h_mono_runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc)
         {
             // Get Method Name
-            string methodName = _lib.il2cpp_method_get_name(method).ToAnsiString();
+            string methodName = _lib.mono_method_get_name(method).ToAnsiString();
 
             // Check for Trigger Method
             foreach (string triggerMethod in RuntimeInfo.TriggerMethods)
@@ -106,18 +106,18 @@ namespace MelonLoader.Runtime.Il2Cpp
                 if (!methodName.Contains(triggerMethod))
                     continue;
 
-                // Detach il2cpp_runtime_invoke Detour
-                il2cpp_runtime_invoke_detour.Detach();
+                // Detach mono_runtime_invoke Detour
+                mono_runtime_invoke_detour.Detach();
 
                 // Initiate Stage2
                 EngineModule.Stage2();
 
                 // Return original Invoke without Trampoline
-                return _lib.il2cpp_runtime_invoke(method, obj, param, ref exc);
+                return _lib.mono_runtime_invoke(method, obj, param, ref exc);
             }
 
             // Return original Invoke
-            return il2cpp_runtime_invoke_detour.Trampoline(method, obj, param, ref exc);
+            return mono_runtime_invoke_detour.Trampoline(method, obj, param, ref exc);
         }
 
         #endregion

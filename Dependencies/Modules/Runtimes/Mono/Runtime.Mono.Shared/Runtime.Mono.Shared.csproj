@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.Runtime.Mono</RootNamespace>
+        <TargetFrameworks>net35;net6</TargetFrameworks>
+        <LangVersion>Latest</LangVersion>
+        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+        <OutputPath>$(MLOutDir)/MelonLoader/Dependencies/Runtimes/Mono/</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+        <AssemblyName>MelonLoader.Runtime.Mono.Shared</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+      <ProjectReference Include="$(SolutionDir)\MelonLoader\MelonLoader.csproj" ExcludeAssets="all" Private="False">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+    </ItemGroup>
+</Project> 
