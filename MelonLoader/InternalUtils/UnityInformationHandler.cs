@@ -122,6 +122,10 @@ namespace MelonLoader.InternalUtils
                         if (productName != null)
                             GameName = productName.AsString;
                     }
+                    else
+                    {
+                        MelonLogger.Warning("Unable to find PlayerSettings in globalgamemanagers. Possible out-dated classdata.tpk present. Using fallback method.");
+                    }
                 }
             }
             catch(Exception ex)
