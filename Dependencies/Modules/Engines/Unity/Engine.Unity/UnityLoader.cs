@@ -34,6 +34,64 @@ namespace MelonLoader.Engine.Unity
             return false;
         }
 
+        public override void Initialize()
+        {
+            MelonDebug.Msg("Initializing Unity Engine Module...");
+            LoaderPath = Path.GetDirectoryName(typeof(UnityLoaderModule).Assembly.Location);
+
+            UnityInformationHandler.Setup(GameDataPath, UnityPlayerPath);
+
+            string gameAssemblyName = "GameAssembly";
+            if (OsUtils.IsAndroid)
+                gameAssemblyName = "libil2cpp";
+            gameAssemblyName += OsUtils.NativeFileExtension;
+
+            GameAssemblyPath = Path.Combine(MelonEnvironment.ApplicationRootDirectory, gameAssemblyName);
+            IsIl2Cpp = File.Exists(GameAssemblyPath);
+
+            // Load Library
+            if (IsIl2Cpp)
+                Il2CppLibrary.Load(GameAssemblyPath);
+            else
+            {
+                // Attempt to find Library
+
+                // Load Library
+                //MonoLibrary.Load(MonoLibPath);
+
+                MelonLogger.Error("UNITY MONO SUPPORT NOT IMPLEMENTED!");
+            }
+
+            string indentifier = IsIl2Cpp ? "Il2Cpp" : (MonoLibrary.IsBleedingEdge ? "MonoBleedingEdge" : "Mono");
+            SupportModulePath = Path.Combine(
+                LoaderPath,
+                IsIl2Cpp ? "net6" : "net35",
+                $"MelonLoader.Unity.{indentifier}.dll");
+
+            SetEngineInfo("Unity", UnityInformationHandler.EngineVersion.ToStringWithoutType(), indentifier);
+            SetApplicationInfo(UnityInformationHandler.GameDeveloper, UnityInformationHandler.GameName, UnityInformationHandler.GameVersion);
+            PrintAppInfo();
+
+            if (IsIl2Cpp)
+            {
+                // Run Stage2
+                Stage2();
+
+                // Initialize Il2Cpp Loader
+                Il2CppLoader.Initialize(this, new(SupportModulePath,
+                    [
+                        "Internal_ActiveSceneChanged",
+                        "UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize"
+                    ]));
+            }
+            else
+            {
+                MelonLogger.Error("UNITY MONO SUPPORT NOT IMPLEMENTED!");
+                Stage2();
+                Stage3(null);
+            }
+        }
+
         public override void Stage3(string supportModulePath)
         {
             if (!IsIl2Cpp)
@@ -82,59 +140,6 @@ namespace MelonLoader.Engine.Unity
 
             // Run Stage3 after Assembly Generation
             base.Stage3(supportModulePath);
-        }
-
-        public override void Initialize()
-        {
-            MelonDebug.Msg("Initializing Unity Engine Module...");
-            LoaderPath = Path.GetDirectoryName(typeof(UnityLoaderModule).Assembly.Location);
-
-            UnityInformationHandler.Setup(GameDataPath, UnityPlayerPath);
-
-            string gameAssemblyName = "GameAssembly";
-            if (OsUtils.IsAndroid)
-                gameAssemblyName = "libil2cpp";
-            gameAssemblyName += OsUtils.NativeFileExtension;
-
-            GameAssemblyPath = Path.Combine(MelonEnvironment.ApplicationRootDirectory, gameAssemblyName);
-            IsIl2Cpp = File.Exists(GameAssemblyPath);
-
-            // Load Library
-            if (IsIl2Cpp)
-                Il2CppLibrary.Load(GameAssemblyPath);
-            else
-            {
-                MelonLogger.Error("UNITY MONO SUPPORT NOT IMPLEMENTED!");
-            }
-
-            string indentifier = IsIl2Cpp ? "Il2Cpp" : (MonoLibrary.IsBleedingEdge ? "MonoBleedingEdge" : "Mono");
-            SupportModulePath = Path.Combine(
-                LoaderPath,
-                IsIl2Cpp ? "net6" : "net35",
-                $"MelonLoader.Unity.{indentifier}.dll");
-
-            SetEngineInfo("Unity", UnityInformationHandler.EngineVersion.ToStringWithoutType(), indentifier);
-            SetApplicationInfo(UnityInformationHandler.GameDeveloper, UnityInformationHandler.GameName, UnityInformationHandler.GameVersion);
-            PrintAppInfo();
-
-            if (IsIl2Cpp)
-            {
-                // Run Stage2
-                Stage2();
-
-                // Initialize Il2Cpp Loader
-                Il2CppLoader.Initialize(this, new(SupportModulePath,
-                    [
-                        "Internal_ActiveSceneChanged",
-                        "UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize"
-                    ]));
-            }
-            else
-            {
-                MelonLogger.Error("UNITY MONO SUPPORT NOT IMPLEMENTED!");
-                Stage2();
-                Stage3(null);
-            }
         }
     }   
 }
