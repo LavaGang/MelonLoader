@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System;
 using MelonLoader.Properties;
+using System.Drawing;
 
 namespace MelonLoader.Utils
 {
@@ -133,35 +134,42 @@ namespace MelonLoader.Utils
             SetApplicationInfo(ApplicationExecutableName, ApplicationExecutableName, "0.0.0");
         }
 
-        internal static void WelcomeMessage()
+        internal static void PrintBuild()
         {
-            MelonUtils.SetConsoleTitle($"{GetVersionString()} - {CurrentApplicationInfo.Name} {CurrentApplicationInfo.Version ?? ""}");
-
             MelonLogger.WriteSpacer();
-            MelonLogger.MsgDirect("------------------------------");
+            MelonLogger.MsgDirect(Color.Pink, "------------------------------");
             MelonLogger.MsgDirect(GetVersionString());
-            MelonLogger.MsgDirect("------------------------------");
+            MelonLogger.MsgDirect(Color.Pink, "------------------------------");
             MelonLogger.MsgDirect($"OS: {OsUtils.GetOSVersion()}");
             MelonLogger.MsgDirect($"Arch: {(OsUtils.Is32Bit ? "x86" : "x64")}");
-            MelonLogger.MsgDirect($"Runtime: {OurRuntimeName}");
             MelonLogger.MsgDirect($"Hash Code: {HashCode}");
-            MelonLogger.MsgDirect("------------------------------");
-            MelonLogger.MsgDirect($"Engine: {CurrentEngineInfo.Name} {CurrentEngineInfo.Version}");
-            MelonLogger.MsgDirect($"Engine Version: {CurrentEngineInfo.Version}");
-            if (!string.IsNullOrEmpty(CurrentEngineInfo.Variant))
-                MelonLogger.MsgDirect($"Engine Variant: {CurrentEngineInfo.Variant}");
-            MelonLogger.MsgDirect("------------------------------");
-            MelonLogger.MsgDirect($"Application Name: {CurrentApplicationInfo.Name}");
-            MelonLogger.MsgDirect($"Application Developer: {CurrentApplicationInfo.Name}");
-            MelonLogger.MsgDirect($"Application Version: {CurrentApplicationInfo.Version}");
-            MelonLogger.MsgDirect("------------------------------");
+            MelonLogger.MsgDirect(Color.Pink, "------------------------------");
             MelonLogger.MsgDirect("Command-Line: ");
             foreach (var pair in MelonLaunchOptions.InternalArguments)
                 if (string.IsNullOrEmpty(pair.Value))
                     MelonLogger.MsgDirect($"   {pair.Key}");
                 else
                     MelonLogger.MsgDirect($"   {pair.Key} = {pair.Value}");
-            MelonLogger.MsgDirect("------------------------------");
+            MelonLogger.MsgDirect(Color.Pink, "------------------------------");
+            MelonLogger.WriteSpacer();
+        }
+
+        internal static void PrintAppInfo()
+        {
+            MelonUtils.SetConsoleTitle($"{GetVersionString()} - {CurrentApplicationInfo.Name} {CurrentApplicationInfo.Version ?? ""}");
+            MelonLogger.WriteSpacer();
+            MelonLogger.MsgDirect(Color.Pink, "------------------------------");
+            MelonLogger.MsgDirect($"Runtime: {OurRuntimeName}");
+            MelonLogger.MsgDirect(Color.Pink, "------------------------------");
+            MelonLogger.MsgDirect($"Engine: {CurrentEngineInfo.Name}");
+            MelonLogger.MsgDirect($"Engine Version: {CurrentEngineInfo.Version}");
+            if (!string.IsNullOrEmpty(CurrentEngineInfo.Variant))
+                MelonLogger.MsgDirect($"Engine Variant: {CurrentEngineInfo.Variant}");
+            MelonLogger.MsgDirect(Color.Pink, "------------------------------");
+            MelonLogger.MsgDirect($"Application Name: {CurrentApplicationInfo.Name}");
+            MelonLogger.MsgDirect($"Application Developer: {CurrentApplicationInfo.Name}");
+            MelonLogger.MsgDirect($"Application Version: {CurrentApplicationInfo.Version}");
+            MelonLogger.MsgDirect(Color.Pink, "------------------------------");
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace MelonLoader.Modules
+﻿using MelonLoader.Utils;
+using System;
+
+namespace MelonLoader.Modules
 {
     internal static class ModuleInterop
     {
@@ -11,8 +14,9 @@
             if (Engine == null)
             {
                 MelonLogger.Warning("No Engine Module Found! Using Fallback Environment...");
-                Core.Stage2();
-                Core.Stage3(null);
+                MelonEnvironment.PrintAppInfo();
+                Stage2();
+                Stage3(null);
                 return;
             }
 
@@ -28,6 +32,34 @@
 
             MelonLogger.Msg($"Support Module Found: {path}");
             Support.Initialize();
+        }
+
+        public static void Stage2()
+        {
+            try
+            {
+                Core.Stage2();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error("Failed to run Stage2 of MelonLoader");
+                MelonLogger.Error(ex);
+                throw new("Error at Stage2");
+            }
+        }
+
+        public static void Stage3(string supportModulePath)
+        {
+            try
+            {
+                Core.Stage3(supportModulePath);
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error("Failed to run Stage3 of MelonLoader");
+                MelonLogger.Error(ex);
+                throw new("Error at Stage3");
+            }
         }
     }
 }

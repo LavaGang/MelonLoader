@@ -75,7 +75,7 @@ internal static unsafe class BootstrapInterop
 
         try
         {
-            Core.Stage1();
+            Core.Stage1(true);
         }
         catch (Exception ex)
         {

@@ -20,7 +20,7 @@ namespace MelonLoader
         internal static HarmonyLib.Harmony HarmonyInstance;
 
         // Runtime Initialization
-        internal static void Stage1()
+        internal static void Stage1(bool isNativeHost)
         {
             ServicePointManager.DefaultConnectionLimit = int.MaxValue;
 
@@ -34,17 +34,16 @@ namespace MelonLoader
 
             MelonLaunchOptions.Load();
 
-#if NET35
-
-            // Disabled for now because of issues
-            //Net20Compatibility.TryInstall();
-
-#elif NET6_0_OR_GREATER
-
-            if (LoaderConfig.Current.Loader.LaunchDebugger && MelonEnvironment.IsDotnetRuntime)
+#if NET6_0_OR_GREATER
+            if (isNativeHost)
             {
-                MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
-                Debugger.Launch();
+                MelonEnvironment.PrintBuild();
+
+                if (LoaderConfig.Current.Loader.LaunchDebugger && MelonEnvironment.IsDotnetRuntime)
+                {
+                    MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
+                    Debugger.Launch();
+                }
             }
 
             // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -52,7 +51,7 @@ namespace MelonLoader
 
 #endif
 
-            if (OsUtils.IsWineOrProton())
+            if (isNativeHost && OsUtils.IsWineOrProton())
                 Pastel.ConsoleExtensions.Disable();
 
             Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
@@ -63,16 +62,23 @@ namespace MelonLoader
 
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
 
+#if NET35
+
+            // Disabled for now because of issues
+            Fixes.Net20Compatibility.TryInstall();
+
+#elif NET6_0_OR_GREATER
+
+            Fixes.AsmResolverFix.Install();
+            Fixes.DotnetAssemblyLoadContextFix.Install();
+            Fixes.DotnetModHandlerRedirectionFix.Install();
+
+#endif
+
             Fixes.DetourContextDisposeFix.Install();
             Fixes.ForcedCultureInfo.Install();
             Fixes.InstancePatchFix.Install();
             Fixes.ProcessFix.Install();
-
-#if NET6_0_OR_GREATER
-            Fixes.AsmResolverFix.Install();
-            Fixes.DotnetAssemblyLoadContextFix.Install();
-            Fixes.DotnetModHandlerRedirectionFix.Install();
-#endif
 
             PatchShield.Install();
             MelonPreferences.Load();
@@ -81,8 +87,6 @@ namespace MelonLoader
         // After Engine Module Initializes
         internal static void Stage2()
         {
-            MelonEnvironment.WelcomeMessage();
-
             ModuleFolderHandler.ScanForFolders();
             ModuleFolderHandler.LoadMelons(ModuleFolderHandler.eScanType.UserLibs);
             ModuleFolderHandler.LoadMelons(ModuleFolderHandler.eScanType.Plugins);

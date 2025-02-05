@@ -32,10 +32,14 @@ namespace MelonLoader.Engine.Unity
             return false;
         }
 
-        public override void Stage2()
+        public override void Stage3(string supportModulePath)
         {
             if (!IsIl2Cpp)
+            {
+                // Run Stage3
+                base.Stage3(supportModulePath);
                 return;
+            }
 
             string genBasePath = Path.Combine(LoaderPath, "Il2CppAssemblyGenerator");
             if (!Directory.Exists(genBasePath))
@@ -49,9 +53,6 @@ namespace MelonLoader.Engine.Unity
             // Apply Il2Cpp Fixes
             Il2CppInteropFixes.Install(genOutputPath);
             Il2CppICallInjector.Install();
-
-            // Run Stage2
-            base.Stage2();
 
             // Generate Il2Cpp Wrapper Assemblies
             try
@@ -77,8 +78,8 @@ namespace MelonLoader.Engine.Unity
                 return;
             }
 
-            // Il2Cpp Games just run Stage3 after Assembly Generation
-            Stage3(SupportModulePath);
+            // Run Stage3 after Assembly Generation
+            base.Stage3(supportModulePath);
         }
 
         public override void Initialize()
@@ -104,11 +105,15 @@ namespace MelonLoader.Engine.Unity
 
             SetEngineInfo("Unity", UnityInformationHandler.EngineVersion.ToStringWithoutType(), indentifier);
             SetApplicationInfo(UnityInformationHandler.GameDeveloper, UnityInformationHandler.GameName, UnityInformationHandler.GameVersion);
+            PrintAppInfo();
 
             if (IsIl2Cpp)
             {
+                // Run Stage2
+                Stage2();
+
                 // Initialize Il2Cpp Loader
-                Il2CppLoader.Initialize(this, new(GameAssemblyPath,
+                Il2CppLoader.Initialize(this, new(GameAssemblyPath, SupportModulePath,
                     [
                         "Internal_ActiveSceneChanged",
                         "UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize"

@@ -109,8 +109,8 @@ namespace MelonLoader.Runtime.Il2Cpp
                 // Detach il2cpp_runtime_invoke Detour
                 il2cpp_runtime_invoke_detour.Detach();
 
-                // Initiate Stage2
-                EngineModule.Stage2();
+                // Initiate Stage3
+                EngineModule.Stage3(RuntimeInfo.SupportModulePath);
 
                 // Return original Invoke without Trampoline
                 return _lib.il2cpp_runtime_invoke(method, obj, param, ref exc);
