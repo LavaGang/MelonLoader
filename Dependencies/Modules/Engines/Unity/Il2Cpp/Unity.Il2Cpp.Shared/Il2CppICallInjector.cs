@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Il2CppInterop.HarmonySupport;
 using HarmonyLib;
+using MelonLoader.Runtime.Il2Cpp;
 
 #pragma warning disable 0649
 
@@ -18,11 +19,7 @@ namespace MelonLoader.Engine.Unity.Il2Cpp
     {
         private static Dictionary<string, (object, DynamicMethodDefinition, MethodInfo, IntPtr)> _lookup = new();
 
-        private delegate IntPtr dil2cpp_resolve_icall(IntPtr signature);
-        private static MelonNativeHook<dil2cpp_resolve_icall> il2cpp_resolve_icall_hook;
-
-        private delegate void dil2cpp_add_internal_call(IntPtr signature, IntPtr funcPtr);
-        private static dil2cpp_add_internal_call il2cpp_add_internal_call;
+        private static MelonNativeHook<Il2CppLibrary.dil2cpp_resolve_icall> il2cpp_resolve_icall_hook;
 
         private static Type _il2CppDetourMethodPatcher;
         private static MethodInfo _generateNativeToManagedTrampoline;
@@ -44,22 +41,9 @@ namespace MelonLoader.Engine.Unity.Il2Cpp
                 if (_generateNativeToManagedTrampoline == null)
                     throw new Exception("Failed to get Il2CppDetourMethodPatcher.GenerateNativeToManagedTrampoline");
 
-                string gameAssemblyName = "GameAssembly";
-                IntPtr gameAssemblyLib = MelonNativeLibrary.LoadLib(gameAssemblyName);
-                if (gameAssemblyLib == IntPtr.Zero)
-                    throw new Exception($"Failed to load {gameAssemblyName} Native Library");
-
-                IntPtr il2cpp_resolve_icall = MelonNativeLibrary.GetExport(gameAssemblyLib, nameof(il2cpp_resolve_icall));
-                if (il2cpp_resolve_icall == IntPtr.Zero)
-                    throw new Exception($"Failed to get {nameof(il2cpp_resolve_icall)} Native Export");
-
-                il2cpp_add_internal_call = MelonNativeLibrary.GetExport(gameAssemblyLib, nameof(il2cpp_add_internal_call)).GetDelegate<dil2cpp_add_internal_call>();
-                if (il2cpp_add_internal_call == null)
-                    throw new Exception($"Failed to get {nameof(il2cpp_add_internal_call)} Native Export");
-
                 MelonDebug.Msg("Patching il2cpp_resolve_icall...");
-                IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate((dil2cpp_resolve_icall)il2cpp_resolve_icall_Detour);
-                il2cpp_resolve_icall_hook = new MelonNativeHook<dil2cpp_resolve_icall>(il2cpp_resolve_icall, detourPtr);
+                IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate((Il2CppLibrary.dil2cpp_resolve_icall)il2cpp_resolve_icall_Detour);
+                il2cpp_resolve_icall_hook = new MelonNativeHook<Il2CppLibrary.dil2cpp_resolve_icall>(Marshal.GetFunctionPointerForDelegate(Il2CppLibrary.Instance.il2cpp_resolve_icall), detourPtr);
                 il2cpp_resolve_icall_hook.Attach();
             }
             catch (Exception e)
@@ -146,7 +130,7 @@ namespace MelonLoader.Engine.Unity.Il2Cpp
 
             // Add New ICall to Il2Cpp Domain
             _lookup[signatureStr] = pair;
-            il2cpp_add_internal_call(signature, pair.Item4);
+            Il2CppLibrary.Instance.il2cpp_add_internal_call(signature, pair.Item4);
             LogMsg($"Registered mono icall {signatureStr} in il2cpp domain");
 
             // Return New Function Pointer

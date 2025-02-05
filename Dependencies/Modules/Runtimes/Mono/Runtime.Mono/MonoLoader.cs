@@ -10,8 +10,6 @@ namespace MelonLoader.Runtime.Mono
     {
         #region Private Members
 
-        private static MonoLibrary _lib;
-
         private static MelonNativeDetour<MonoLibrary.d_mono_runtime_invoke> mono_runtime_invoke_detour;
 
         #endregion
@@ -33,58 +31,37 @@ namespace MelonLoader.Runtime.Mono
             RuntimeInfo = runtimeInfo;
 
             // Check if it found any Mono variant library
-            if (RuntimeInfo == null
-                || string.IsNullOrEmpty(RuntimeInfo.LibPath))
+            if (RuntimeInfo == null)
             {
-                MelonLogger.ThrowInternalFailure("Failed to find Mono Library!");
+                MelonLogger.ThrowInternalFailure("Invalid Runtime Info Passed!");
                 return;
             }
-
-            // Load Library
-            if (!LoadLib())
-                return;
 
             // Check Exports
             if (!CheckExports())
                 return;
 
             // Create mono_runtime_invoke Detour
-            mono_runtime_invoke_detour = new(_lib.mono_runtime_invoke, h_mono_runtime_invoke, false);
+            mono_runtime_invoke_detour = new(MonoLibrary.Instance.mono_runtime_invoke, h_mono_runtime_invoke, false);
 
             // Attach mono_runtime_invoke Detour
             MelonDebug.Msg($"Attaching mono_runtime_invoke Detour...");
             mono_runtime_invoke_detour.Attach();
         }
 
-        private static bool LoadLib()
-        {
-            // Load the Mono variant library
-            MelonDebug.Msg($"Loading Mono Library...");
-            _lib = new MelonNativeLibrary<MonoLibrary>(MelonNativeLibrary.LoadLib(RuntimeInfo.LibPath)).Instance;
-
-            // Check for Failure
-            if (_lib == null)
-            {
-                MelonLogger.ThrowInternalFailure($"Failed to load Il2Cpp Library from {RuntimeInfo.LibPath}!");
-                return false;
-            }
-
-            return true;
-        }
-
         private static bool CheckExports()
         {
             Dictionary<string, Delegate> listOfExports = new();
 
-            listOfExports[nameof(_lib.mono_method_get_name)] = _lib.mono_method_get_name;
-            listOfExports[nameof(_lib.mono_runtime_invoke)] = _lib.mono_runtime_invoke;
+            listOfExports[nameof(MonoLibrary.Instance.mono_method_get_name)] = MonoLibrary.Instance.mono_method_get_name;
+            listOfExports[nameof(MonoLibrary.Instance.mono_runtime_invoke)] = MonoLibrary.Instance.mono_runtime_invoke;
 
             foreach (var exportPair in listOfExports)
             {
                 if (exportPair.Value != null)
                     continue;
 
-                MelonLogger.ThrowInternalFailure($"Failed to find {exportPair.Key} Export in Il2Cpp Library!");
+                MelonLogger.ThrowInternalFailure($"Failed to find {exportPair.Key} Export in Mono Library!");
                 return false;
             }
 
@@ -98,7 +75,7 @@ namespace MelonLoader.Runtime.Mono
         private static IntPtr h_mono_runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc)
         {
             // Get Method Name
-            string methodName = _lib.mono_method_get_name(method).ToAnsiString();
+            string methodName = MonoLibrary.Instance.mono_method_get_name(method).ToAnsiString();
 
             // Check for Trigger Method
             foreach (string triggerMethod in RuntimeInfo.TriggerMethods)
@@ -109,11 +86,11 @@ namespace MelonLoader.Runtime.Mono
                 // Detach mono_runtime_invoke Detour
                 mono_runtime_invoke_detour.Detach();
 
-                // Initiate Stage2
-                EngineModule.Stage2();
+                // Initiate Stage3
+                EngineModule.Stage3(RuntimeInfo.SupportModulePath);
 
                 // Return original Invoke without Trampoline
-                return _lib.mono_runtime_invoke(method, obj, param, ref exc);
+                return MonoLibrary.Instance.mono_runtime_invoke(method, obj, param, ref exc);
             }
 
             // Return original Invoke

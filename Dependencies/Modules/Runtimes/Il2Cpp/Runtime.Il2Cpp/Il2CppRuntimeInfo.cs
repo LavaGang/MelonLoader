@@ -13,11 +13,9 @@ namespace MelonLoader.Runtime.Il2Cpp
         #region Constructors
 
         public Il2CppRuntimeInfo(
-            string libPath,
             string supportModulePath,
             string[] triggerMethods)
        {
-            LibPath = libPath;
             SupportModulePath = supportModulePath;
             TriggerMethods = triggerMethods;
         }

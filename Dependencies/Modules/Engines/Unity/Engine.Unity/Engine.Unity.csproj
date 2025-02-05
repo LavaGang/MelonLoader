@@ -17,6 +17,15 @@
 	  <ProjectReference Include="..\..\..\Runtimes\Il2Cpp\Runtime.Il2Cpp\Runtime.Il2Cpp.csproj" Private="false" ExcludeAssets="all">
         <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
       </ProjectReference>
+	  <ProjectReference Include="..\..\..\Runtimes\Il2Cpp\Runtime.Il2Cpp.Shared\Runtime.Il2Cpp.Shared.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+	  <ProjectReference Include="..\..\..\Runtimes\Mono\Runtime.Mono\Runtime.Mono.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+	  <ProjectReference Include="..\..\..\Runtimes\Mono\Runtime.Mono.Shared\Runtime.Mono.Shared.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
 	  <ProjectReference Include="..\Il2Cpp\Unity.Il2Cpp.AssemblyGenerator\Unity.Il2Cpp.AssemblyGenerator.csproj">
 	    <Private>False</Private>
 	    <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>

@@ -13,10 +13,10 @@ namespace MelonLoader.Runtime.Mono
         #region Constructors
 
         public MonoRuntimeInfo(
-            string libPath,
+            string supportModulePath,
             string[] triggerMethods)
-       {
-            LibPath = libPath;
+        {
+            SupportModulePath = supportModulePath;
             TriggerMethods = triggerMethods;
         }
 

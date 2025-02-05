@@ -6,17 +6,19 @@ using System;
 using MelonLoader.Resolver;
 using System.Runtime.Loader;
 using MelonLoader.Engine.Unity.Il2Cpp;
+using MelonLoader.Runtime.Mono;
 
 namespace MelonLoader.Engine.Unity
 {
     internal class UnityLoaderModule : MelonEngineModule
     {
         private static readonly string GameDataPath = Path.Combine(MelonEnvironment.ApplicationRootDirectory, $"{MelonEnvironment.ApplicationExecutableName}_Data");
-        private static string LoaderPath;
         private static string UnityPlayerPath;
         private static string GameAssemblyPath;
-        private static string SupportModulePath;
         private static bool IsIl2Cpp;
+
+        private static string LoaderPath;
+        private static string SupportModulePath;
 
         public override bool Validate()
         {
@@ -97,7 +99,15 @@ namespace MelonLoader.Engine.Unity
             GameAssemblyPath = Path.Combine(MelonEnvironment.ApplicationRootDirectory, gameAssemblyName);
             IsIl2Cpp = File.Exists(GameAssemblyPath);
 
-            string indentifier = IsIl2Cpp ? "Il2Cpp" : "Mono";
+            // Load Library
+            if (IsIl2Cpp)
+                Il2CppLibrary.Load(GameAssemblyPath);
+            else
+            {
+                MelonLogger.Error("UNITY MONO SUPPORT NOT IMPLEMENTED!");
+            }
+
+            string indentifier = IsIl2Cpp ? "Il2Cpp" : (MonoLibrary.IsBleedingEdge ? "MonoBleedingEdge" : "Mono");
             SupportModulePath = Path.Combine(
                 LoaderPath,
                 IsIl2Cpp ? "net6" : "net35",
@@ -113,7 +123,7 @@ namespace MelonLoader.Engine.Unity
                 Stage2();
 
                 // Initialize Il2Cpp Loader
-                Il2CppLoader.Initialize(this, new(GameAssemblyPath, SupportModulePath,
+                Il2CppLoader.Initialize(this, new(SupportModulePath,
                     [
                         "Internal_ActiveSceneChanged",
                         "UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize"

@@ -24,8 +24,6 @@ namespace MelonLoader
         {
             ServicePointManager.DefaultConnectionLimit = int.MaxValue;
 
-            MelonEnvironment.Initialize(AppDomain.CurrentDomain);
-
             // The config should be set before running anything else due to static constructors depending on it
             // Don't ask me how this works, because I don't know either. -slxdy
             var config = new LoaderConfig();
@@ -33,6 +31,8 @@ namespace MelonLoader
             LoaderConfig.Current = config;
 
             MelonLaunchOptions.Load();
+
+            MelonEnvironment.Initialize(AppDomain.CurrentDomain);
 
 #if NET6_0_OR_GREATER
             if (isNativeHost)
