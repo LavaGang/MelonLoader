@@ -1,9 +1,6 @@
 ﻿using MelonLoader.Resolver;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace MelonLoader.Runtime.Mono
 {
