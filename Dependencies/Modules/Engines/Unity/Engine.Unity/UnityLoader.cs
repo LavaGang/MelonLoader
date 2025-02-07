@@ -7,18 +7,44 @@ using MelonLoader.Resolver;
 using System.Runtime.Loader;
 using MelonLoader.Engine.Unity.Il2Cpp;
 using MelonLoader.Runtime.Mono;
+using System.Collections.Generic;
 
 namespace MelonLoader.Engine.Unity
 {
     internal class UnityLoaderModule : MelonEngineModule
     {
-        private static readonly string GameDataPath = Path.Combine(MelonEnvironment.ApplicationRootDirectory, $"{MelonEnvironment.ApplicationExecutableName}_Data");
-        private static string UnityPlayerPath;
-        private static string GameAssemblyPath;
-        private static bool IsIl2Cpp;
+        private readonly string GameDataPath = Path.Combine(MelonEnvironment.ApplicationRootDirectory, $"{MelonEnvironment.ApplicationExecutableName}_Data");
+        private string UnityPlayerPath;
+        private string GameAssemblyPath;
+        private bool IsIl2Cpp;
 
-        private static string LoaderPath;
-        private static string SupportModulePath;
+        private string LoaderPath;
+        private string SupportModulePath;
+
+        private MonoRuntimeInfo MonoInfo;
+
+        private static readonly string[] monoFolderNames =
+        [
+            "Mono",
+            "MonoBleedingEdge"
+        ];
+
+        private static readonly string[] monoLibNames =
+        [
+            "mono",
+#if WINDOWS
+            "mono-2.0-bdwgc",
+            "mono-2.0-sgen",
+            "mono-2.0-boehm"
+#elif LINUX
+            "monobdwgc-2.0"
+#endif
+        ];
+
+        private static readonly string[] monoPosixHelperNames =
+        [
+            "MonoPosixHelper",
+        ];
 
         public override bool Validate()
         {
@@ -48,35 +74,36 @@ namespace MelonLoader.Engine.Unity
 
             GameAssemblyPath = Path.Combine(MelonEnvironment.ApplicationRootDirectory, gameAssemblyName);
             IsIl2Cpp = File.Exists(GameAssemblyPath);
-
-            // Load Library
-            if (IsIl2Cpp)
-                Il2CppLibrary.Load(GameAssemblyPath);
-            else
+            if (!IsIl2Cpp)
             {
+                // Android only has Il2Cpp currently
+                if (OsUtils.IsAndroid)
+                {
+                    MelonLogger.ThrowInternalFailure($"Failed to find {gameAssemblyName}!");
+                    return;
+                }
+
                 // Attempt to find Library
-
-                // Load Library
-                //MonoLibrary.Load(MonoLibPath);
-
-                MelonLogger.Error("UNITY MONO SUPPORT NOT IMPLEMENTED!");
+                MonoInfo = GetMonoRuntimeInfo();
+                if (MonoInfo == null)
+                {
+                    MelonLogger.ThrowInternalFailure("Failed to get Mono Runtime Info!");
+                    return;
+                }
             }
 
-            string indentifier = IsIl2Cpp ? "Il2Cpp" : (MonoLibrary.IsBleedingEdge ? "MonoBleedingEdge" : "Mono");
+            string indentifier = IsIl2Cpp ? "Il2Cpp" : (MonoInfo.IsBleedingEdge ? "MonoBleedingEdge" : "Mono");
             SupportModulePath = Path.Combine(
                 LoaderPath,
                 IsIl2Cpp ? "net6" : "net35",
-                $"MelonLoader.Unity.{indentifier}.dll");
+                $"MelonLoader.Unity.{(IsIl2Cpp ? "Il2Cpp" : "Mono")}.dll");
 
-            SetEngineInfo("Unity", UnityInformationHandler.EngineVersion.ToStringWithoutType(), indentifier);
-            SetApplicationInfo(UnityInformationHandler.GameDeveloper, UnityInformationHandler.GameName, UnityInformationHandler.GameVersion);
+            SetEngineInfo("Unity", UnityInformationHandler.EngineVersion.ToStringWithoutType(), (IsIl2Cpp ? "Il2Cpp" : (MonoInfo.IsBleedingEdge ? "MonoBleedingEdge" : "Mono")));
+            SetApplicationInfo(UnityInformationHandler.GameName, UnityInformationHandler.GameDeveloper, UnityInformationHandler.GameVersion);
             PrintAppInfo();
 
             if (IsIl2Cpp)
             {
-                // Run Stage2
-                Stage2();
-
                 // Initialize Il2Cpp Loader
                 Il2CppLoader.Initialize(this, new(SupportModulePath,
                     [
@@ -86,9 +113,13 @@ namespace MelonLoader.Engine.Unity
             }
             else
             {
-                MelonLogger.Error("UNITY MONO SUPPORT NOT IMPLEMENTED!");
-                Stage2();
-                Stage3(null);
+                // Android only has Il2Cpp currently
+                if (OsUtils.IsAndroid)
+                    return;
+
+                // Initialize Mono Loader
+                MonoInfo.SupportModulePath = SupportModulePath;
+                MonoLoader.Initialize(this, MonoInfo);
             }
         }
 
@@ -140,6 +171,95 @@ namespace MelonLoader.Engine.Unity
 
             // Run Stage3 after Assembly Generation
             base.Stage3(supportModulePath);
+        }
+
+        private MonoRuntimeInfo GetMonoRuntimeInfo()
+        {
+            // Folders the Mono folders might be located in
+            string[] directoriesToSearch =
+            [
+                MelonEnvironment.ApplicationRootDirectory,
+                GameDataPath
+            ];
+
+            // Iterate through Variations in Mono types
+            (string, string, bool)? libPaths = null;
+            foreach (var folderName in monoFolderNames)
+            {
+                // Iterate through Variations in Mono Directory Positions
+                foreach (var dir in directoriesToSearch)
+                {
+                    // Iterate through Variations in Mono Lib Names
+                    string folderPath = Path.Combine(dir, folderName);
+                    foreach (var fileName in monoLibNames)
+                    {
+                        libPaths = SearchFolderForMonoLib(folderPath, fileName);
+                        if (libPaths != null)
+                            break;
+                    }
+                    if (libPaths != null)
+                        break;
+                }
+                if (libPaths != null)
+                    break;
+            }
+            if (libPaths == null)
+                return null;
+
+            // Attempt to find Posix Helper
+            string posixPath = null;
+            foreach (string fileName in monoPosixHelperNames)
+            {
+                string localFileName = fileName;
+                if (OsUtils.IsUnix)
+                    localFileName = $"lib{fileName}";
+                localFileName += OsUtils.NativeFileExtension;
+                string localFilePath = Path.Combine(libPaths.Value.Item1, localFileName);
+                if (File.Exists(localFilePath))
+                {
+                    posixPath = localFilePath;
+                    break;
+                }
+            }
+
+            bool isBleedingEdge = libPaths.Value.Item3;
+            return new MonoRuntimeInfo(libPaths.Value.Item2, posixPath, Path.Combine(GameDataPath, "Managed"), isBleedingEdge, null, [
+                (!isBleedingEdge ? "Awake" : string.Empty),
+                (!isBleedingEdge ? "DoSendMouseEvents" : string.Empty),
+                "Internal_ActiveSceneChanged",
+                "UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize",
+            ]);
+        }
+
+        private (string, string, bool)? SearchFolderForMonoLib(string folderPath, string fileName)
+        {
+            bool isBleedingEdge = (fileName != monoLibNames[0]);
+
+            if (OsUtils.IsUnix)
+                fileName = $"lib{fileName}";
+            fileName += OsUtils.NativeFileExtension;
+
+            string filePath = Path.Combine(folderPath, fileName);
+            if (File.Exists(filePath))
+                return (folderPath, filePath, isBleedingEdge);
+
+            string embedRuntimePath = Path.Combine(folderPath, "EmbedRuntime");
+            if (Directory.Exists(embedRuntimePath))
+            {
+                filePath = Path.Combine(embedRuntimePath, fileName);
+                if (File.Exists(filePath))
+                    return (embedRuntimePath, filePath, isBleedingEdge);
+
+                string x64Path = Path.Combine(embedRuntimePath, "x86_64");
+                if (Directory.Exists(x64Path))
+                {
+                    filePath = Path.Combine(x64Path, fileName);
+                    if (File.Exists(filePath))
+                        return (x64Path, filePath, isBleedingEdge);
+                }
+            }
+
+            return null;
         }
     }   
 }

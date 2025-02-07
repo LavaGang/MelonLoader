@@ -10,8 +10,8 @@ namespace MelonLoader.Modules
 
         public void SetEngineInfo(string name, string version, string variant = null)
             => MelonEnvironment.SetEngineInfo(name, version, variant);
-        public void SetApplicationInfo(string developer, string name, string version)
-            => MelonEnvironment.SetApplicationInfo(developer, name, version);
+        public void SetApplicationInfo(string name, string developer, string version)
+            => MelonEnvironment.SetApplicationInfo(name, developer, version);
         public void PrintAppInfo()
             => MelonEnvironment.PrintAppInfo();
         public virtual void Stage2()

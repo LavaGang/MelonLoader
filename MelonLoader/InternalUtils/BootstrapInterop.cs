@@ -8,9 +8,9 @@ using MelonLoader.Utils;
 
 namespace MelonLoader.InternalUtils;
 
-internal static unsafe class BootstrapInterop
+public static unsafe class BootstrapInterop
 {
-    internal static nint _handle { get; private set; }
+    public static nint _handle { get; private set; }
     internal static BootstrapLibrary Library { get; private set; }
 
 #if WINDOWS
@@ -68,14 +68,16 @@ internal static unsafe class BootstrapInterop
 #endif
     }
 
-    internal static void Stage1(nint bootstrapHandle)
+    public static void Stage1(nint bootstrapHandle)
+        => Stage1(bootstrapHandle, false);
+    internal static void Stage1(nint bootstrapHandle, bool isNativeHost)
     {
         _handle = bootstrapHandle;
         Library = new MelonNativeLibrary<BootstrapLibrary>(bootstrapHandle).Instance;
 
         try
         {
-            Core.Stage1(true);
+            Core.Stage1(isNativeHost);
         }
         catch (Exception ex)
         {

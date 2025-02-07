@@ -72,19 +72,28 @@ namespace MelonLoader.Utils
             return versionStr;
         }
 
-        internal static void SetEngineInfo(string name, string version, string variant = null)
+        public static void SetEngineInfo(string name, string version)
+            => SetEngineInfo(name, version, null);
+        public static void SetEngineInfo(string name, string version, string variant)
         {
+            if (CurrentEngineInfo == null)
+                CurrentEngineInfo = new();
             CurrentEngineInfo.Name = name;
             CurrentEngineInfo.Version = version;
             CurrentEngineInfo.Variant = variant;
         }
 
-        internal static void SetApplicationInfo(string developer, string name, string version)
+        public static void SetApplicationInfo(string name, string developer, string version)
         {
+            if (CurrentApplicationInfo == null)
+                CurrentApplicationInfo = new();
+
             CurrentApplicationInfo.Name = name;
             CurrentApplicationInfo.Developer = developer;
             CurrentApplicationInfo.Version = version;
 
+            if (CurrentApplicationAttribute == null)
+                CurrentApplicationAttribute = new();
             CurrentApplicationAttribute.Name = name;
             CurrentApplicationAttribute.Developer = developer;
         }
@@ -154,12 +163,10 @@ namespace MelonLoader.Utils
             MelonLogger.WriteSpacer();
         }
 
-        internal static void PrintAppInfo()
+        public static void PrintAppInfo()
         {
             MelonUtils.SetConsoleTitle($"{GetVersionString()} - {CurrentApplicationInfo.Name} {CurrentApplicationInfo.Version ?? ""}");
             MelonLogger.WriteSpacer();
-            MelonLogger.MsgDirect(Color.Pink, "------------------------------");
-            MelonLogger.MsgDirect($"Runtime: {OurRuntimeName}");
             MelonLogger.MsgDirect(Color.Pink, "------------------------------");
             MelonLogger.MsgDirect($"Engine: {CurrentEngineInfo.Name}");
             MelonLogger.MsgDirect($"Engine Version: {CurrentEngineInfo.Version}");
@@ -170,6 +177,7 @@ namespace MelonLoader.Utils
             MelonLogger.MsgDirect($"Application Developer: {CurrentApplicationInfo.Name}");
             MelonLogger.MsgDirect($"Application Version: {CurrentApplicationInfo.Version}");
             MelonLogger.MsgDirect(Color.Pink, "------------------------------");
+            MelonLogger.WriteSpacer();
         }
     }
 }

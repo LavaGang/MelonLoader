@@ -6,6 +6,9 @@ namespace MelonLoader.Runtime.Mono
     {
         #region Public Members
 
+        public string PosixPath { get; private set; }
+        public string ManagedPath { get; private set; }
+        public bool IsBleedingEdge { get; private set; }
         public string[] TriggerMethods { get; private set; }
 
         #endregion
@@ -13,9 +16,17 @@ namespace MelonLoader.Runtime.Mono
         #region Constructors
 
         public MonoRuntimeInfo(
+            string libraryPath,
+            string posixPath,
+            string managedPath,
+            bool isBleedingEdge,
             string supportModulePath,
             string[] triggerMethods)
         {
+            LibraryPath = libraryPath;
+            PosixPath = posixPath;
+            ManagedPath = managedPath;
+            IsBleedingEdge = isBleedingEdge;
             SupportModulePath = supportModulePath;
             TriggerMethods = triggerMethods;
         }

@@ -22,8 +22,6 @@ namespace MelonLoader
         // Runtime Initialization
         internal static void Stage1(bool isNativeHost)
         {
-            ServicePointManager.DefaultConnectionLimit = int.MaxValue;
-
             // The config should be set before running anything else due to static constructors depending on it
             // Don't ask me how this works, because I don't know either. -slxdy
             var config = new LoaderConfig();

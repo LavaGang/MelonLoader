@@ -119,7 +119,16 @@ namespace MelonLoader
     {
         public readonly T Instance;
 
-        public MelonNativeLibrary(IntPtr ptr) : base(ptr)
+        public static MelonNativeLibrary<T> Load(string libPath, bool throwOnError = true)
+        {
+            IntPtr libPtr = LoadLib(libPath);
+            if (libPtr == IntPtr.Zero)
+                throw new Exception($"Failed to load {libPath}");
+            
+            return new(libPtr, throwOnError);
+        }
+
+        public MelonNativeLibrary(IntPtr ptr, bool throwOnError = true) : base(ptr)
         {
             if (ptr == IntPtr.Zero)
                 throw new ArgumentNullException(nameof(ptr));
@@ -139,16 +148,43 @@ namespace MelonLoader
                 if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length == 0)
                     continue;
 
-                fieldInfo.SetValue(Instance, GetExport(fieldType, fieldInfo.Name));
+                Delegate export = null;
+                try
+                {
+                    export = GetExport(fieldType, fieldInfo.Name);
+                }
+                catch
+                {
+                    if (throwOnError)
+                        throw;
+                    continue;
+                }
+
+                fieldInfo.SetValue(Instance, export);
             }
 
             foreach (var propertyInfo in specifiedType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
+                if (propertyInfo.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length != 0)
+                    continue;
+
                 var fieldType = propertyInfo.PropertyType;
                 if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length == 0)
                     continue;
 
-                propertyInfo.SetValue(Instance, GetExport(fieldType, propertyInfo.Name), null);
+                Delegate export = null;
+                try
+                {
+                    export = GetExport(fieldType, propertyInfo.Name);
+                }
+                catch
+                {
+                    if (throwOnError)
+                        throw;
+                    continue;
+                }
+
+                propertyInfo.SetValue(Instance, export, null);
             }
         }
     }

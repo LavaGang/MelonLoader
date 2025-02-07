@@ -1,16 +1,13 @@
-﻿#if !NET6_0
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
-#endif
 
 namespace MelonLoader.Fixes
 {
     internal static class ServerCertificateValidation
     {
-#if !NET6_0
         internal static void Install()
         {
             try
@@ -22,7 +19,7 @@ namespace MelonLoader.Fixes
                 if (expectContinue != null)
                     expectContinue.SetValue(null, true);
 
-                //ServicePointManager.SecurityProtocol
+                // ServicePointManager.SecurityProtocol
                 FieldInfo _securityProtocol = SPMType.GetField(nameof(_securityProtocol), BindingFlags.NonPublic | BindingFlags.Static);
                 if (_securityProtocol != null)
                     _securityProtocol.SetValue(null,
@@ -31,7 +28,15 @@ namespace MelonLoader.Fixes
                         | (SecurityProtocolType)768 /* SecurityProtocolType.Tls11 */
                         | (SecurityProtocolType)3072 /* SecurityProtocolType.Tls12 */);
 
-                ServicePointManager.ServerCertificateValidationCallback += CertificateValidation;
+                // ServicePointManager.DefaultConnectionLimit = int.MaxValue;
+                FieldInfo s_ConnectionLimit = SPMType.GetField(nameof(s_ConnectionLimit), BindingFlags.NonPublic | BindingFlags.Static);
+                if (s_ConnectionLimit != null)
+                    s_ConnectionLimit.SetValue(null, int.MaxValue);
+
+                // ServicePointManager.ServerCertificateValidationCallback += CertificateValidation;
+                FieldInfo s_ServerCertValidationCallback = SPMType.GetField(nameof(s_ServerCertValidationCallback), BindingFlags.NonPublic | BindingFlags.Static);
+                if (s_ServerCertValidationCallback != null)
+                    s_ServerCertValidationCallback.SetValue(null, Activator.CreateInstance(s_ServerCertValidationCallback.FieldType, (RemoteCertificateValidationCallback)CertificateValidation));
             }
             catch (Exception ex) { MelonLogger.Warning($"ServerCertificateValidation Exception: {ex}"); }
         }
@@ -55,10 +60,5 @@ namespace MelonLoader.Fixes
             }
             return true;
         }
-#else
-        internal static void Install()
-        {
-        }
-#endif
     }
 }

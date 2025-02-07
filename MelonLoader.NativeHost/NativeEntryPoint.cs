@@ -33,7 +33,7 @@ internal static unsafe class NativeEntryPoint
     private static void CallInit(nint* startFunc)
     {
         var bootstrapHandle = *startFunc;
-        BootstrapInterop.Stage1(bootstrapHandle);
+        BootstrapInterop.Stage1(bootstrapHandle, true);
         ModuleInterop.StartEngine();
     }
 
