@@ -37,7 +37,7 @@ namespace MelonLoader.Engine.Unity
             return returnval;
         }
 
-        internal static void Setup(string gameDataPath, string unityPlayerPath)
+        public static void Setup(string gameDataPath, string unityPlayerPath)
         {
             //if (!string.IsNullOrEmpty(LoaderConfig.Current.UnityEngine.VersionOverride))
             //    EngineVersion = TryParse(LoaderConfig.Current.UnityEngine.VersionOverride);

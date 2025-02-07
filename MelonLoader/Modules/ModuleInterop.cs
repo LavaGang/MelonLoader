@@ -3,10 +3,10 @@ using System;
 
 namespace MelonLoader.Modules
 {
-    internal static class ModuleInterop
+    public static class ModuleInterop
     {
-        internal static MelonEngineModule Engine { get; private set; }
-        internal static MelonSupportModule Support { get; private set; }
+        public static MelonEngineModule Engine { get; private set; }
+        public static MelonSupportModule Support { get; private set; }
 
         internal static void StartEngine()
         {

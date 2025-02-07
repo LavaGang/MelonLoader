@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runtime.Mono", "Dependencie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runtime.Mono.Shared", "Dependencies\Modules\Runtimes\Mono\Runtime.Mono.Shared\Runtime.Mono.Shared.csproj", "{AF553B0E-A74D-4F1F-857C-18741FB255E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Mono", "Dependencies\Modules\Engines\Unity\Mono\Unity.Mono\Unity.Mono.csproj", "{27AD78CF-2EC4-4E02-8CEA-D2533D821C33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +108,10 @@ Global
 		{AF553B0E-A74D-4F1F-857C-18741FB255E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF553B0E-A74D-4F1F-857C-18741FB255E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF553B0E-A74D-4F1F-857C-18741FB255E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27AD78CF-2EC4-4E02-8CEA-D2533D821C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27AD78CF-2EC4-4E02-8CEA-D2533D821C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27AD78CF-2EC4-4E02-8CEA-D2533D821C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27AD78CF-2EC4-4E02-8CEA-D2533D821C33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,6 +133,7 @@ Global
 		{AEB11019-A160-4A8C-AB56-06E890AF1BA4} = {EFD62F17-3C48-4D77-8F19-1D4BCD62CEFB}
 		{CF071430-B106-4D7E-9AC5-D3E892479BD2} = {5B41B0FE-3B90-4F82-B1B0-061E39C27EBB}
 		{AF553B0E-A74D-4F1F-857C-18741FB255E8} = {5B41B0FE-3B90-4F82-B1B0-061E39C27EBB}
+		{27AD78CF-2EC4-4E02-8CEA-D2533D821C33} = {3B132718-3D60-44B5-AAF8-BDA2E8BBEDBE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4AB93B1D-1C52-4A80-809D-C28770140E0A}

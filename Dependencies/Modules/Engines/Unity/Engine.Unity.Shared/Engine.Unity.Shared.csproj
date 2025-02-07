@@ -10,10 +10,6 @@
         <AssemblyName>MelonLoader.Engine.Unity.Shared</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
-        <InternalsVisibleTo Include="MelonLoader.Engine.Unity" />
-        <InternalsVisibleTo Include="MelonLoader.Unity.Il2Cpp" />
-    </ItemGroup>
-    <ItemGroup>
       <EmbeddedResource Include="Resources\classdata.tpk" />
       <ProjectReference Include="$(SolutionDir)\MelonLoader\MelonLoader.csproj" ExcludeAssets="all" Private="False">
         <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
