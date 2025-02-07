@@ -12,17 +12,6 @@ namespace MelonLoader.Engine.Unity.Mono
 
         private MethodInfo SetAsLastSiblingMethod;
 
-        MonoSupportComponent()
-        {
-            try
-            {
-                SetAsLastSiblingMethod = typeof(Transform).GetMethod("SetAsLastSibling", BindingFlags.Public | BindingFlags.Instance);
-                if (SetAsLastSiblingMethod == null)
-                    throw new Exception("Unable to find UnityEngine.Transform::SetAsLastSibling");
-            }
-            catch (Exception ex) { LogError("Getting UnityEngine.Transform::SetAsLastSibling", ex); }
-        }
-
         private void LogError(string cat, Exception ex)
         {
             hadError = true;
@@ -48,6 +37,14 @@ namespace MelonLoader.Engine.Unity.Mono
 
         void Start()
         {
+            try
+            {
+                SetAsLastSiblingMethod = typeof(Transform).GetMethod("SetAsLastSibling", BindingFlags.Public | BindingFlags.Instance);
+                if (SetAsLastSiblingMethod == null)
+                    throw new Exception("Unable to find UnityEngine.Transform::SetAsLastSibling");
+            }
+            catch (Exception ex) { LogError("Getting UnityEngine.Transform::SetAsLastSibling", ex); }
+
             if ((ModuleInterop.Support == null) || (((MonoSupportModule)ModuleInterop.Support).component != this))
                 return;
 

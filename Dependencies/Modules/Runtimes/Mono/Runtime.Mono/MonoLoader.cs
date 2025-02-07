@@ -210,7 +210,8 @@ namespace MelonLoader.Runtime.Mono
             // Check for Trigger Method
             foreach (string triggerMethod in RuntimeInfo.TriggerMethods)
             {
-                if (!methodName.Contains(triggerMethod))
+                if (string.IsNullOrEmpty(triggerMethod)
+                    || !methodName.Contains(triggerMethod))
                     continue;
 
                 // Detach mono_runtime_invoke Detour

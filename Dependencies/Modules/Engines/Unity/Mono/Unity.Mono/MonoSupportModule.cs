@@ -31,7 +31,7 @@ namespace MelonLoader.Engine.Unity.Mono
             obj.hideFlags = HideFlags.DontSave;
 
             // Create Support Component
-            component = obj.AddComponent<MonoSupportComponent>();
+            component = (MonoSupportComponent)obj.AddComponent(typeof(MonoSupportComponent));
             component.SiblingFix();
 
             // Create Interop for Coroutine Management

@@ -11,18 +11,17 @@ namespace MelonLoader
 
     public static class MelonCoroutines
     {
-        private static List<IEnumerator> QueuedCoroutines = new List<IEnumerator>();
-        private static bool HasProcessedQueue;
+        public static List<IEnumerator> QueuedCoroutines { get; private set; } = new List<IEnumerator>();
         public static MelonCoroutineInterop Interop;
 
         public static void ProcessQueue()
         {
-            if (HasProcessedQueue)
+            if (QueuedCoroutines == null)
                 return;
-            HasProcessedQueue = true;
             foreach (var queuedCoroutine in QueuedCoroutines)
                 Start(queuedCoroutine);
             QueuedCoroutines.Clear();
+            QueuedCoroutines = null;
         }
 
         /// <summary>
@@ -46,6 +45,8 @@ namespace MelonLoader
         /// <returns>An object that can be passed to Stop to stop this coroutine</returns>
         public static object Queue(IEnumerator routine)
         {
+            if (QueuedCoroutines == null)
+                return routine;
             QueuedCoroutines.Add(routine);
             return routine;
         }
@@ -63,6 +64,8 @@ namespace MelonLoader
 
         public static void Dequeue(object coroutineToken)
         {
+            if (QueuedCoroutines == null)
+                return;
             IEnumerator routine = coroutineToken as IEnumerator;
             if (QueuedCoroutines.Contains(routine))
                 QueuedCoroutines.Remove(routine);

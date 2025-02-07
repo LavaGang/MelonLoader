@@ -14,6 +14,7 @@ namespace MelonLoader.Engine.Unity.Il2Cpp
         {
             if (Component != null)
                 return Component.StartCoroutine(new Il2CppSystem.Collections.IEnumerator(new Il2CppEnumeratorWrapper(coroutine).Pointer));
+
             MelonCoroutines.Queue(coroutine);
             return coroutine;
         }

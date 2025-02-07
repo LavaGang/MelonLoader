@@ -14,7 +14,8 @@ namespace MelonLoader.Engine.Unity.Mono
         {
             if (Component != null)
                 return Component.StartCoroutine(coroutine);
-            return MelonCoroutines.Start(coroutine);
+            MelonCoroutines.Queue(coroutine);
+            return coroutine;
         }
 
         public override void Stop(object coroutineToken)
@@ -22,7 +23,7 @@ namespace MelonLoader.Engine.Unity.Mono
             if (Component != null)
                 Component.StopCoroutine(coroutineToken as Coroutine);
             else
-                MelonCoroutines.Stop(coroutineToken);
+                MelonCoroutines.Dequeue(coroutineToken as IEnumerator);
         }
     }
 }

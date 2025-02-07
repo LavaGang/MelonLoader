@@ -19,22 +19,6 @@ namespace MelonLoader.Engine.Unity.Il2Cpp
 
         public Il2CppSupportComponent(IntPtr value) : base(value) { }
 
-        Il2CppSupportComponent()
-        {
-            try
-            {
-                SetAsLastSiblingMethod = typeof(Transform).GetMethod("SetAsLastSibling", BindingFlags.Public | BindingFlags.Instance);
-                if (SetAsLastSiblingMethod != null)
-                    return;
-
-                useGeneratedAssembly = false;
-                SetAsLastSiblingDelegateField = IL2CPP.ResolveICall<SetAsLastSiblingDelegate>("UnityEngine.Transform::SetAsLastSibling");
-                if (SetAsLastSiblingDelegateField == null)
-                    throw new Exception("Unable to find Internal Call for UnityEngine.Transform::SetAsLastSibling");
-            }
-            catch (Exception ex) { LogError("Getting UnityEngine.Transform::SetAsLastSibling", ex); }
-        }
-
         [HideFromIl2Cpp]
         private void LogError(string cat, Exception ex)
         {
@@ -80,6 +64,19 @@ namespace MelonLoader.Engine.Unity.Il2Cpp
 
         void Start()
         {
+            try
+            {
+                SetAsLastSiblingMethod = typeof(Transform).GetMethod("SetAsLastSibling", BindingFlags.Public | BindingFlags.Instance);
+                if (SetAsLastSiblingMethod != null)
+                    return;
+
+                useGeneratedAssembly = false;
+                SetAsLastSiblingDelegateField = IL2CPP.ResolveICall<SetAsLastSiblingDelegate>("UnityEngine.Transform::SetAsLastSibling");
+                if (SetAsLastSiblingDelegateField == null)
+                    throw new Exception("Unable to find Internal Call for UnityEngine.Transform::SetAsLastSibling");
+            }
+            catch (Exception ex) { LogError("Getting UnityEngine.Transform::SetAsLastSibling", ex); }
+
             if ((ModuleInterop.Support == null) || (((Il2CppSupportModule)ModuleInterop.Support).component != this))
                 return;
 
