@@ -3,7 +3,6 @@ using System.Net.Http;
 using MelonLoader.Il2CppAssemblyGenerator.Packages;
 using MelonLoader.Il2CppAssemblyGenerator.Packages.Models;
 using MelonLoader.Modules;
-using MelonLoader.Properties;
 using MelonLoader.Utils;
 
 namespace MelonLoader.Il2CppAssemblyGenerator

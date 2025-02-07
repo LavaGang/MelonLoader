@@ -7,7 +7,6 @@ using System.Threading;
 using MelonLoader.Resolver;
 using MelonLoader.Utils;
 using MelonLoader.InternalUtils;
-using MelonLoader.Properties;
 using MelonLoader.Melons;
 
 [assembly: MelonLoader.PatchShield]
