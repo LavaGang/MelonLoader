@@ -169,13 +169,19 @@ namespace MelonLoader
                     continue;
 
                 var fieldType = propertyInfo.PropertyType;
+                MelonNativeLibraryImportAttribute[] nativeImportAtt = (MelonNativeLibraryImportAttribute[])fieldType.GetCustomAttributes(typeof(MelonNativeLibraryImportAttribute), false);
                 if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length == 0)
                     continue;
+
+                string exportName = propertyInfo.Name;
+                if ((nativeImportAtt != null)
+                    && (nativeImportAtt.Length > 0))
+                    exportName = nativeImportAtt[0].Name;
 
                 Delegate export = null;
                 try
                 {
-                    export = GetExport(fieldType, propertyInfo.Name);
+                    export = GetExport(fieldType, exportName);
                 }
                 catch
                 {

@@ -41,7 +41,7 @@ namespace MelonLoader.Utils
         public static string EngineModulesDirectory { get; } = Path.Combine(DependenciesDirectory, "Engines");
         public static string RuntimeModulesDirectory { get; } = Path.Combine(DependenciesDirectory, "Runtimes");
 
-        public static string OurRuntimeDirectory { get; } = Path.Combine(MelonLoaderDirectory, OurRuntimeName);
+        public static string OurRuntimeDirectory { get; } = Path.Combine(DependenciesDirectory, OurRuntimeName);
 
         public static MelonPlatformAttribute.CompatiblePlatforms CurrentPlatform { get; private set; }
         public static MelonPlatformDomainAttribute.CompatibleDomains CurrentDomain { get; private set; }

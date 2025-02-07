@@ -27,6 +27,8 @@ namespace MelonLoader.Runtime.Mono
         private static IntPtr mlMonoLibraryAsmImage;
         private static IntPtr mlMonoLibraryType;
         private static IntPtr mlMonoLibraryLoad;
+        private static IntPtr mlMonoLibraryResolverType;
+        private static IntPtr mlMonoLibraryResolverInit;
 
         private static IntPtr mlInteropType;
         private static IntPtr mlStage1;
@@ -236,9 +238,6 @@ namespace MelonLoader.Runtime.Mono
             if (!SetupAssembly())
                 return;
 
-            // Patch Mono Assembly Resolver
-            MelonDebug.Msg("Patching Mono Assembly Resolver...");
-
             // Initiate Stage1
             MelonDebug.Msg("Initiating Stage1...");
             nint bootstrapHandle = BootstrapInterop._handle;
@@ -252,6 +251,11 @@ namespace MelonLoader.Runtime.Mono
             MelonDebug.Msg("Loading MonoLibrary in Mono Domain...");
             MonoLibrary.Instance.InvokeMethod(mlMonoLibraryLoad, IntPtr.Zero,
                 MonoLibrary.Instance.mono_string_new(monoDomain, RuntimeInfo.LibraryPath.ToAnsiPointer()));
+
+            // Patch Mono Assembly Resolver
+            MelonDebug.Msg("Patching Mono Assembly Resolver...");
+            MonoLibrary.Instance.InvokeMethod(mlMonoLibraryResolverInit, IntPtr.Zero,
+                MonoLibrary.Instance.mono_string_new(monoDomain, RuntimeInfo.ManagedPath.ToAnsiPointer()));
 
             // Apply Engine Info
             MelonDebug.Msg("Applying Engine Information...");
@@ -472,6 +476,24 @@ namespace MelonLoader.Runtime.Mono
             if (mlMonoLibraryLoad == IntPtr.Zero)
             {
                 MelonLogger.ThrowInternalFailure($"Failed to get Method {monoLibType.FullName}::{nameof(MonoLibrary.Load)} from {monoLibPath}!");
+                return false;
+            }
+
+            // Get MonoAssemblyResolver
+            MelonDebug.Msg($"Getting Class MelonLoader.Runtime.Mono.MonoAssemblyResolver ...");
+            mlMonoLibraryResolverType = MonoLibrary.Instance.mono_class_from_name(mlMonoLibraryAsmImage, "MelonLoader.Runtime.Mono".ToAnsiPointer(), "MonoAssemblyResolver".ToAnsiPointer());
+            if (mlMonoLibraryResolverType == IntPtr.Zero)
+            {
+                MelonLogger.ThrowInternalFailure($"Failed to get Class MelonLoader.Runtime.Mono.MonoAssemblyResolver from {monoLibPath}!");
+                return false;
+            }
+
+            // Get MonoLibrary::Initialize
+            MelonDebug.Msg($"Getting Method Initialize from MelonLoader.Runtime.Mono.MonoAssemblyResolver...");
+            mlMonoLibraryResolverInit = MonoLibrary.Instance.mono_class_get_method_from_name(mlMonoLibraryResolverType, "Initialize".ToAnsiPointer(), 1);
+            if (mlMonoLibraryResolverInit == IntPtr.Zero)
+            {
+                MelonLogger.ThrowInternalFailure($"Failed to get Method MelonLoader.Runtime.Mono.MonoAssemblyResolver::Initialize from {monoLibPath}!");
                 return false;
             }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace MelonLoader.Runtime.Mono
@@ -45,11 +46,11 @@ namespace MelonLoader.Runtime.Mono
         public d_mono_debug_domain_create mono_debug_domain_create { get; private set; }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr d_mono_domain_assembly_open(nint domain, IntPtr filepath);
+        public delegate IntPtr d_mono_domain_assembly_open(IntPtr domain, IntPtr filepath);
         public d_mono_domain_assembly_open mono_domain_assembly_open { get; private set; }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        public delegate void d_mono_domain_set_config(nint domain, string configPath, nint name);
+        public delegate void d_mono_domain_set_config(IntPtr domain, string configPath, IntPtr name);
         public d_mono_domain_set_config mono_domain_set_config { get; private set; }
 
         #endregion
@@ -67,6 +68,29 @@ namespace MelonLoader.Runtime.Mono
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public unsafe delegate IntPtr d_mono_assembly_get_image(IntPtr assembly);
         public d_mono_assembly_get_image mono_assembly_get_image { get; private set; }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate MonoReflectionAssembly* d_mono_assembly_get_object(IntPtr domain, IntPtr assembly);
+        public d_mono_assembly_get_object mono_assembly_get_object { get; private set; }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate IntPtr d_mono_install_assembly_preload_hook(AssemblyPreloadHookFn func, IntPtr userData);
+        public d_mono_install_assembly_preload_hook mono_install_assembly_preload_hook { get; private set; }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate IntPtr d_mono_install_assembly_search_hook(AssemblySearchHookFn func, IntPtr userData);
+        public d_mono_install_assembly_search_hook mono_install_assembly_search_hook { get; private set; }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate IntPtr d_mono_install_assembly_load_hook(AssemblyLoadHookFn func, IntPtr userData);
+        public d_mono_install_assembly_load_hook mono_install_assembly_load_hook { get; private set; }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate IntPtr AssemblyPreloadHookFn(ref MonoAssemblyName assemblyName, IntPtr assemblyPaths, IntPtr userData);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate IntPtr AssemblySearchHookFn(ref MonoAssemblyName assemblyName, IntPtr userData);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void AssemblyLoadHookFn(IntPtr monoAssembly, IntPtr userData);
 
         #endregion
 
@@ -105,24 +129,58 @@ namespace MelonLoader.Runtime.Mono
         #region Mono Thread
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate nint d_mono_thread_current();
+        public delegate IntPtr d_mono_thread_current();
         public d_mono_thread_current mono_thread_current { get; private set; }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void d_mono_thread_set_main(nint thread);
+        public delegate void d_mono_thread_set_main(IntPtr thread);
         public d_mono_thread_set_main mono_thread_set_main { get; private set; }
 
         #endregion
 
         #region Utility Methods
 
+        public unsafe IntPtr TryInvokeMethod(IntPtr method, IntPtr obj)
+        {
+            try { return InvokeMethod(method, obj, (void**)IntPtr.Zero); }
+            catch { }
+            return IntPtr.Zero;
+        }
+
         public unsafe IntPtr InvokeMethod(IntPtr method, IntPtr obj)
             => InvokeMethod(method, obj, (void**)IntPtr.Zero);
+
+        public unsafe IntPtr TryInvokeMethod(IntPtr method, IntPtr obj, params IntPtr[] parameters)
+        {
+            try { return InvokeMethod(method, obj, parameters); }
+            catch { }
+            return IntPtr.Zero;
+        }
 
         public unsafe IntPtr InvokeMethod(IntPtr method, IntPtr obj, params IntPtr[] parameters)
         {
             fixed (void* parameterF = &parameters[0])
                 return InvokeMethod(method, obj, (void**)parameterF);
+        }
+
+        public unsafe IntPtr TryInvokeMethod(IntPtr method, IntPtr obj, params void*[] parameters)
+        {
+            try { return InvokeMethod(method, obj, parameters); }
+            catch { }
+            return IntPtr.Zero;
+        }
+
+        public unsafe IntPtr InvokeMethod(IntPtr method, IntPtr obj, params void*[] parameters)
+        {
+            fixed (void** parameterF = &parameters[0])
+                return InvokeMethod(method, obj, parameterF);
+        }
+
+        public unsafe IntPtr TryInvokeMethod(IntPtr method, IntPtr obj, void** param)
+        {
+            try { return InvokeMethod(method, obj, param); }
+            catch { }
+            return IntPtr.Zero;
         }
 
         public unsafe IntPtr InvokeMethod(IntPtr method, IntPtr obj, void** param)

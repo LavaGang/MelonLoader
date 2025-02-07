@@ -5,10 +5,6 @@ using System.Reflection;
 
 #if NET6_0_OR_GREATER
 using System.Runtime.Loader;
-#else
-using System;
-using System.Runtime.InteropServices;
-using MelonLoader.Utils;
 #endif
 
 namespace MelonLoader.Resolver
@@ -81,16 +77,11 @@ namespace MelonLoader.Resolver
                 if (string.IsNullOrEmpty(filepath))
                     continue;
 
-                MelonDebug.Msg($"[MelonAssemblyResolver] Loading from {filepath}...");
-
+                //MelonDebug.Msg($"[MelonAssemblyResolver] Loading from {filepath}...");
 #if NET6_0_OR_GREATER
-
                 return AssemblyLoadContext.Default.LoadFromAssemblyPath(filepath);
-
 #else
-
-
-
+                return Assembly.LoadFrom(filepath);
 #endif
             }
 

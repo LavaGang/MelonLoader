@@ -2,12 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-#if NET6_0_OR_GREATER
-using System.Runtime.Loader;
-#endif
-
-#pragma warning disable CS8632
-
 namespace MelonLoader.Resolver
 {
     internal class AssemblyManager
@@ -16,8 +10,6 @@ namespace MelonLoader.Resolver
 
         internal static bool Setup()
         {
-            InstallHooks();
-
             // Setup all Loaded Assemblies
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                 LoadInfo(assembly);
@@ -34,7 +26,7 @@ namespace MelonLoader.Resolver
             return InfoDict[name];
         }
 
-        private static Assembly Resolve(string requested_name, Version requested_version, bool is_preload)
+        internal static Assembly Resolve(string requested_name, Version requested_version, bool is_preload)
         {
             // Get Resolve Information Object
             AssemblyResolveInfo resolveInfo = GetInfo(requested_name);
@@ -72,25 +64,5 @@ namespace MelonLoader.Resolver
             // Run Passthrough Events
             MelonAssemblyResolver.SafeInvoke_OnAssemblyLoad(assembly);
         }
-
-        private static void InstallHooks()
-        {   
-#if NET6_0_OR_GREATER
-            AssemblyLoadContext.Default.Resolving += Resolve;
-#else
-            MelonLogger.Error("[AssemblyManager] ASSEMBLY RESOLVER CURRENTLY UNSUPPORTED ON MONO!");
-#endif
-        }
-
-#if NET6_0_OR_GREATER
-        private static Assembly? Resolve(AssemblyLoadContext alc, AssemblyName name)
-            => Resolve(name.Name, name.Version, true);
-#else
-        private static Assembly Resolve(string requested_name, ushort major, ushort minor, ushort build, ushort revision, bool is_preload)
-        {
-            Version requested_version = new Version(major, minor, build, revision);
-            return Resolve(requested_name, requested_version, is_preload);
-        }
-#endif
     }
 }

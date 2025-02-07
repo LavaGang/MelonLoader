@@ -7,16 +7,19 @@ using MelonLoader.Utils;
 using System.Runtime.Loader;
 #endif
 
-#pragma warning disable CS0618 // Type or member is obsolete
-
 namespace MelonLoader.Resolver
 {
-    public class MelonAssemblyResolver
+    public static class MelonAssemblyResolver
     {
         internal static void Setup()
         {
-            if (!AssemblyManager.Setup())
-                return;
+#if NET6_0_OR_GREATER
+            AssemblyLoadContext.Default.Resolving += Resolve;
+#endif
+
+            // Setup all Loaded Assemblies
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                AssemblyManager.LoadInfo(assembly);
 
             // Add All Folders in Modules Directory as Searchable
             AddSearchDirectories(MelonEnvironment.LoadersDirectory,
@@ -119,20 +122,24 @@ namespace MelonLoader.Resolver
         public delegate void OnAssemblyLoadHandler(Assembly assembly);
         public static event OnAssemblyLoadHandler OnAssemblyLoad;
         internal static void SafeInvoke_OnAssemblyLoad(Assembly assembly)
-        {
-            OnAssemblyLoad?.Invoke(assembly);
-        }
+            => OnAssemblyLoad?.Invoke(assembly);
 
         public delegate Assembly OnAssemblyResolveHandler(string name, Version version);
         public static event OnAssemblyResolveHandler OnAssemblyResolve;
         internal static Assembly SafeInvoke_OnAssemblyResolve(string name, Version version)
-        {
-            return OnAssemblyResolve?.Invoke(name, version);
-        }
+            => OnAssemblyResolve?.Invoke(name, version);
 
         public static AssemblyResolveInfo GetAssemblyResolveInfo(string name)
             => AssemblyManager.GetInfo(name);
         public static void LoadInfoFromAssembly(Assembly assembly)
             => AssemblyManager.LoadInfo(assembly);
+
+        public static Assembly Resolve(string requested_name, Version requested_version, bool is_preload)
+            => AssemblyManager.Resolve(requested_name, requested_version, is_preload);
+
+#if NET6_0_OR_GREATER
+        private static Assembly? Resolve(AssemblyLoadContext alc, AssemblyName name)
+            => AssemblyManager.Resolve(name.Name, name.Version, true);
+#endif
     }
 }
