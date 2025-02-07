@@ -1,6 +1,6 @@
 ﻿using Semver;
 
-namespace MelonLoader.Properties;
+namespace MelonLoader;
 
 public static class BuildInfo
 {
