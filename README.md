@@ -253,7 +253,7 @@ MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](htt
 
 Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [.NET Runtime](https://github.com/dotnet/runtime) is licensed under the MIT License. See [LICENSE](https://github.com/dotnet/runtime/blob/main/LICENSE.TXT) for the full License.
-- [Dobby](https://github.com/jmpews/Dobby) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader.Bootstrap/Deps/LICENSE) for the full License.
+- [Dobby](https://github.com/LavaGang/Dobby) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/Dobby/LICENSE) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
 - [HarmonyX](https://github.com/BepInEx/HarmonyX) is licensed under the MIT License. See [LICENSE](https://github.com/BepInEx/HarmonyX/blob/master/LICENSE) for the full License.
 - [MonoMod](https://github.com/MonoMod/MonoMod) is licensed under the MIT License. See [LICENSE](https://github.com/MonoMod/MonoMod/blob/master/LICENSE) for the full License.
