@@ -1,5 +1,4 @@
 ﻿using MelonLoader.Bootstrap.Logging;
-using MelonLoader.Bootstrap.Runtime;
 using MelonLoader.Bootstrap.Utils;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -35,7 +34,7 @@ public static class Core
 
         MelonDebug.Log("Starting probe for runtime");
 
-        if (Dotnet.Initialize())
+        if (NativeHostLoader.Initialize())
         {
             ConsoleHandler.NullHandles();
             return;
