@@ -77,11 +77,12 @@ namespace MelonLoader.Resolver
                 if (string.IsNullOrEmpty(filepath))
                     continue;
 
-                //MelonDebug.Msg($"[MelonAssemblyResolver] Loading from {filepath}...");
+                MelonDebug.Msg($"[MelonAssemblyResolver] Loading from {filepath}...");
+
 #if NET6_0_OR_GREATER
                 return AssemblyLoadContext.Default.LoadFromAssemblyPath(filepath);
 #else
-                return Assembly.LoadFrom(filepath);
+                return Assembly.LoadFile(filepath);
 #endif
             }
 

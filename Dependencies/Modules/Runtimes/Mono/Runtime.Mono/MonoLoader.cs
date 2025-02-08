@@ -191,6 +191,7 @@ namespace MelonLoader.Runtime.Mono
 
             MelonDebug.Msg("Setting Mono Main Thread");
             MonoLibrary.Instance.mono_thread_set_main(MonoLibrary.Instance.mono_thread_current());
+            MonoLibrary.Instance.mono_domain_set(monoDomain, 1);
 
             if (RuntimeInfo.IsBleedingEdge && (MonoLibrary.Instance.mono_domain_set_config != null))
             {
@@ -347,7 +348,7 @@ namespace MelonLoader.Runtime.Mono
 
             // Load MelonLoader Assembly
             MelonDebug.Msg($"Loading Assembly {sharedPath}...");
-            mlAsm = MonoLibrary.Instance.mono_assembly_open_full(sharedPath.ToAnsiPointer(), IntPtr.Zero, false);
+            mlAsm = MonoLibrary.Instance.mono_domain_assembly_open(monoDomain, sharedPath.ToAnsiPointer());
             if (mlAsm == IntPtr.Zero)
             {
                 MelonLogger.ThrowInternalFailure($"Failed to load Assembly from {sharedPath}!");
@@ -449,7 +450,7 @@ namespace MelonLoader.Runtime.Mono
 
             // Load Mono.Shared Assembly
             MelonDebug.Msg($"Loading Assembly {monoLibPath}...");
-            mlMonoLibraryAsm = MonoLibrary.Instance.mono_assembly_open_full(monoLibPath.ToAnsiPointer(), IntPtr.Zero, false);
+            mlMonoLibraryAsm = MonoLibrary.Instance.mono_domain_assembly_open(monoDomain, monoLibPath.ToAnsiPointer());
             if (mlMonoLibraryAsm == IntPtr.Zero)
             {
                 MelonLogger.ThrowInternalFailure($"Failed to load Assembly from {monoLibPath}!");

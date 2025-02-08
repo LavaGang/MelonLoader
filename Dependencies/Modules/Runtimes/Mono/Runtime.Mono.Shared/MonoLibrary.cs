@@ -86,6 +86,15 @@ namespace MelonLoader.Runtime.Mono
         public d_mono_install_assembly_load_hook mono_install_assembly_load_hook { get; private set; }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [MelonNativeLibraryImport("mono_assembly_get_object")]
+        public unsafe delegate Assembly d_mono_assembly_get_object_managed(IntPtr domain, IntPtr assembly);
+        public d_mono_assembly_get_object_managed mono_assembly_get_object_managed { get; private set; }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void d_mono_domain_set(IntPtr domain, int force);
+        public d_mono_domain_set mono_domain_set { get; private set; }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public unsafe delegate IntPtr AssemblyPreloadHookFn(ref MonoAssemblyName assemblyName, IntPtr assemblyPaths, IntPtr userData);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public unsafe delegate IntPtr AssemblySearchHookFn(ref MonoAssemblyName assemblyName, IntPtr userData);
