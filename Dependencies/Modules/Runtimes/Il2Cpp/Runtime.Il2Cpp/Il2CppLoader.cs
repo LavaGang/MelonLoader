@@ -10,10 +10,7 @@ namespace MelonLoader.Runtime.Il2Cpp
     {
         #region Private Members
 
-        private static MelonNativeDetour<Il2CppLibrary.d_il2cpp_init_version> il2cpp_init_version_detour;
         private static MelonNativeDetour<Il2CppLibrary.d_il2cpp_runtime_invoke> il2cpp_runtime_invoke_detour;
-
-        private static IntPtr il2CppDomain;
 
         #endregion
 
@@ -48,22 +45,8 @@ namespace MelonLoader.Runtime.Il2Cpp
             if (!CheckExports())
                 return;
 
-            // Get Il2Cpp Domain
-            il2CppDomain = Il2CppLibrary.Instance.il2cpp_domain_get();
-
-            // Handle loading if Domain is already Created
-            if (il2CppDomain == IntPtr.Zero)
-            {
-                // Attach il2cpp_init_version Detour
-                MelonDebug.Msg($"Attaching il2cpp_init_version Detour...");
-                il2cpp_init_version_detour = new(Il2CppLibrary.Instance.il2cpp_init_version, h_il2cpp_init_version);
-                il2cpp_init_version_detour.Attach();
-            }
-            else
-            {
-                // Initiate Stage2
-                Stage2();
-            }
+            // Initiate Stage2
+            Stage2();
         }
 
         private static bool LoadLibrary()
@@ -88,8 +71,8 @@ namespace MelonLoader.Runtime.Il2Cpp
         {
             Dictionary<string, Delegate> listOfExports = new();
 
+            listOfExports[nameof(Il2CppLibrary.Instance.il2cpp_init)] = Il2CppLibrary.Instance.il2cpp_init;
             listOfExports[nameof(Il2CppLibrary.Instance.il2cpp_domain_get)] = Il2CppLibrary.Instance.il2cpp_domain_get;
-            listOfExports[nameof(Il2CppLibrary.Instance.il2cpp_init_version)] = Il2CppLibrary.Instance.il2cpp_init_version;
             listOfExports[nameof(Il2CppLibrary.Instance.il2cpp_method_get_name)] = Il2CppLibrary.Instance.il2cpp_method_get_name;
             listOfExports[nameof(Il2CppLibrary.Instance.il2cpp_runtime_invoke)] = Il2CppLibrary.Instance.il2cpp_runtime_invoke;
 
@@ -108,21 +91,6 @@ namespace MelonLoader.Runtime.Il2Cpp
         #endregion
 
         #region Hooks
-
-        private static IntPtr h_il2cpp_init_version(IntPtr name, IntPtr version)
-        {
-            // Invoke Domain Creation
-            il2CppDomain = il2cpp_init_version_detour.Trampoline(name, version);
-
-            // Detach il2cpp_init_version Detour
-            il2cpp_init_version_detour.Detach();
-
-            // Initiate Stage2
-            Stage2();
-
-            // Return Domain
-            return il2CppDomain;
-        }
 
         private static IntPtr h_il2cpp_runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc)
         {

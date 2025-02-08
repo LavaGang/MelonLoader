@@ -105,7 +105,7 @@ namespace MelonLoader.Engine.Unity
             if (IsIl2Cpp)
             {
                 // Initialize Il2Cpp Loader
-                Il2CppLoader.Initialize(this, new(SupportModulePath,
+                Il2CppLoader.Initialize(this, new(GameAssemblyPath, SupportModulePath,
                     [
                         "Internal_ActiveSceneChanged",
                         "UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize"

@@ -32,8 +32,8 @@ namespace MelonLoader.Runtime.Il2Cpp
         #region Il2Cpp Domain
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate IntPtr d_il2cpp_init_version(IntPtr name, IntPtr version);
-        public d_il2cpp_init_version il2cpp_init_version { get; private set; }
+        public unsafe delegate IntPtr d_il2cpp_init(IntPtr name);
+        public d_il2cpp_init il2cpp_init { get; private set; }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public unsafe delegate IntPtr d_il2cpp_domain_get();
