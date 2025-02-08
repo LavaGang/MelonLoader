@@ -241,9 +241,13 @@ namespace MelonLoader.Runtime.Mono
             // Initiate Stage1
             MelonDebug.Msg("Initiating Stage1...");
             nint bootstrapHandle = BootstrapInterop._handle;
+            nint loadLibFunc = BootstrapInterop.NativeLoadLibInteropPtr;
+            nint getExportFunc = BootstrapInterop.NativeGetExportInteropPtr;
             var stage1Args = stackalloc nint*[]
             {
-                &bootstrapHandle
+                &bootstrapHandle,
+                &loadLibFunc,
+                &getExportFunc
             };
             MonoLibrary.Instance.InvokeMethod(mlStage1, IntPtr.Zero, (void**)stage1Args);
 
@@ -371,7 +375,7 @@ namespace MelonLoader.Runtime.Mono
 
             // Get MelonLoader.BootstrapInterop::Stage1
             MelonDebug.Msg($"Getting Method Stage1 from {bootstrapInteropType.FullName}...");
-            mlStage1 = MonoLibrary.Instance.mono_class_get_method_from_name(mlInteropType, "Stage1".ToAnsiPointer(), 1);
+            mlStage1 = MonoLibrary.Instance.mono_class_get_method_from_name(mlInteropType, "Stage1".ToAnsiPointer(), 3);
             if (mlStage1 == IntPtr.Zero)
             {
                 MelonLogger.ThrowInternalFailure($"Failed to get Method {bootstrapInteropType.FullName}::Stage1 from {sharedPath}!");

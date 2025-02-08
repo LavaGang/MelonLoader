@@ -4,6 +4,12 @@ using System.Runtime.InteropServices;
 namespace MelonLoader.Bootstrap;
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+internal unsafe delegate nint NativeLoadLibFn(nint libraryPath);
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+internal unsafe delegate nint NativeGetExportFn(nint lib, nint name);
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 internal unsafe delegate void NativeHookFn(nint* target, nint detour);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]

@@ -1,6 +1,4 @@
 ﻿using MelonLoader.Bootstrap;
-using System;
-using System.Runtime.InteropServices;
 
 namespace MelonLoader.InternalUtils;
 

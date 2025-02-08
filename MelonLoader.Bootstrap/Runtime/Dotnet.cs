@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using MelonLoader.Bootstrap.Utils;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace MelonLoader.Bootstrap.Runtime;
@@ -19,7 +20,7 @@ internal static partial class Dotnet
         StringMarshalling.Utf8;
 #endif
 
-    private delegate void InitializeFn(ref nint startFunc);
+    private delegate void InitializeFn(ref nint bootstrapHandlePtr, ref nint loadLibPtr, ref nint getExportPtr);
 
     public static bool Initialize()
     {
@@ -70,8 +71,16 @@ internal static partial class Dotnet
         }
 
         MelonDebug.Log("Invoking NativeHost entry");
-        var startFuncPtr = Core.LibraryHandle;
-        initialize(ref startFuncPtr);
+
+        var bootstrapHandlePtr = Core.LibraryHandle;
+
+        NativeLoadLibFn loadLibFuncDel = NativeFunc.NativeLoadLib;
+        NativeGetExportFn getExportFuncDel = NativeFunc.NativeGetExport;
+
+        var loadLibFuncPtr = Marshal.GetFunctionPointerForDelegate(loadLibFuncDel);
+        var getExportFuncPtr = Marshal.GetFunctionPointerForDelegate(getExportFuncDel);
+
+        initialize(ref bootstrapHandlePtr, ref loadLibFuncPtr, ref getExportFuncPtr);
 
         return true;
     }

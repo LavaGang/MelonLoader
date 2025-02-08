@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using MelonLoader.Bootstrap;
+
 
 #if NET6_0_OR_GREATER
 using MelonLoader.CoreClrUtils;
@@ -54,6 +56,16 @@ public static unsafe class BootstrapInterop
 #endif
     }
 
+    public static nint NativeLoadLibInteropPtr { get; private set; }
+    private static NativeLoadLibFn NativeLoadLibInterop;
+    internal static IntPtr NativeLoadLib(string libraryPath)
+        => NativeLoadLibInterop(Marshal.StringToHGlobalAnsi(libraryPath));
+
+    public static nint NativeGetExportInteropPtr { get; private set; }
+    private static NativeGetExportFn NativeGetExportInterop;
+    internal static IntPtr NativeGetExport(IntPtr hModule, string lpProcName)
+        => NativeGetExportInterop(hModule, Marshal.StringToHGlobalAnsi(lpProcName));
+
     internal static unsafe void NativeHookAttachDirect(nint target, nint detour)
     {
         Library.NativeHookAttach((nint*)target, detour);
@@ -68,11 +80,18 @@ public static unsafe class BootstrapInterop
 #endif
     }
 
-    public static void Stage1(nint bootstrapHandle)
-        => Stage1(bootstrapHandle, false);
-    internal static void Stage1(nint bootstrapHandle, bool isNativeHost)
+    public static void Stage1(nint bootstrapHandle, nint loadLibFunc, nint getExportFunc)
+        => Stage1(bootstrapHandle, loadLibFunc, getExportFunc, false);
+    internal static void Stage1(nint bootstrapHandle, nint loadLibFunc, nint getExportFunc, bool isNativeHost)
     {
         _handle = bootstrapHandle;
+
+        NativeLoadLibInteropPtr = loadLibFunc;
+        NativeLoadLibInterop = (NativeLoadLibFn)Marshal.GetDelegateForFunctionPointer(NativeLoadLibInteropPtr, typeof(NativeLoadLibFn));
+
+        NativeGetExportInteropPtr = getExportFunc;
+        NativeGetExportInterop = (NativeGetExportFn)Marshal.GetDelegateForFunctionPointer(NativeGetExportInteropPtr, typeof(NativeGetExportFn));
+
         Library = new MelonNativeLibrary<BootstrapLibrary>(bootstrapHandle).Instance;
 
         try

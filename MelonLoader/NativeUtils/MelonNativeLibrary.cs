@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MelonLoader.InternalUtils;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -20,7 +21,7 @@ namespace MelonLoader
         {
             if (string.IsNullOrEmpty(filepath))
                 throw new ArgumentNullException(nameof(filepath));
-            IntPtr ptr = AgnosticLoadLibrary(filepath);
+            IntPtr ptr = BootstrapInterop.NativeLoadLib(filepath);
             if (ptr == IntPtr.Zero)
                 throw new Exception($"Unable to Load Native Library {filepath}!");
             return ptr;
@@ -53,7 +54,7 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
 
-            IntPtr returnval = AgnosticGetProcAddress(nativeLib, name);
+            IntPtr returnval = BootstrapInterop.NativeGetExport(nativeLib, name);
             if (returnval == IntPtr.Zero)
                 throw new Exception($"Unable to Find Native Library Export {name}!");
 
@@ -71,44 +72,6 @@ namespace MelonLoader
             catch { result = IntPtr.Zero; }
             return wasSuccessful;
         }
-
-        public static IntPtr AgnosticLoadLibrary(string name)
-        {
-#if WINDOWS
-            return LoadLibrary(name);
-#elif LINUX
-            if (!Path.HasExtension(name))
-                name += ".so";
-            
-            return dlopen(name, RTLD_NOW);
-#endif
-        }
-
-        public static IntPtr AgnosticGetProcAddress(IntPtr hModule, string lpProcName)
-        {
-#if WINDOWS
-            return GetProcAddress(hModule, lpProcName);
-#elif LINUX
-            return dlsym(hModule, lpProcName);
-#endif
-        }
-        
-#if WINDOWS
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        private static extern IntPtr LoadLibrary(string lpLibFileName);
-        [DllImport("kernel32")]
-        internal static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
-        [DllImport("kernel32")]
-        internal static extern IntPtr FreeLibrary(IntPtr hModule);
-#elif LINUX
-        [DllImport("libdl.so.2")]
-        protected static extern IntPtr dlopen(string filename, int flags);
-
-        [DllImport("libdl.so.2")]
-        protected static extern IntPtr dlsym(IntPtr handle, string symbol);
-
-        const int RTLD_NOW = 2; // for dlopen's flags 
-#endif
         
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.LPStr)]
@@ -145,13 +108,19 @@ namespace MelonLoader
                     continue;
 
                 var fieldType = fieldInfo.FieldType;
+                MelonNativeLibraryImportAttribute[] nativeImportAtt = (MelonNativeLibraryImportAttribute[])fieldType.GetCustomAttributes(typeof(MelonNativeLibraryImportAttribute), false);
                 if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length == 0)
                     continue;
+
+                string exportName = fieldInfo.Name;
+                if ((nativeImportAtt != null)
+                    && (nativeImportAtt.Length > 0))
+                    exportName = nativeImportAtt[0].Name;
 
                 Delegate export = null;
                 try
                 {
-                    export = GetExport(fieldType, fieldInfo.Name);
+                    export = GetExport(fieldType, exportName);
                 }
                 catch
                 {
