@@ -70,9 +70,6 @@ namespace MelonLoader.Runtime.Il2Cpp
         private static bool CheckExports()
         {
             Dictionary<string, Delegate> listOfExports = new();
-
-            listOfExports[nameof(Il2CppLibrary.Instance.il2cpp_init)] = Il2CppLibrary.Instance.il2cpp_init;
-            listOfExports[nameof(Il2CppLibrary.Instance.il2cpp_domain_get)] = Il2CppLibrary.Instance.il2cpp_domain_get;
             listOfExports[nameof(Il2CppLibrary.Instance.il2cpp_method_get_name)] = Il2CppLibrary.Instance.il2cpp_method_get_name;
             listOfExports[nameof(Il2CppLibrary.Instance.il2cpp_runtime_invoke)] = Il2CppLibrary.Instance.il2cpp_runtime_invoke;
 

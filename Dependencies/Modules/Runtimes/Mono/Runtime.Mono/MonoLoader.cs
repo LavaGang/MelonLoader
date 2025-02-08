@@ -152,12 +152,22 @@ namespace MelonLoader.Runtime.Mono
                 : MonoLibrary.Instance.mono_jit_init_version;
 
             listOfExports[initName] = initDel;
+
+            if (RuntimeInfo.IsBleedingEdge)
+                listOfExports[nameof(MonoLibrary.Instance.mono_jit_init_version)] = MonoLibrary.Instance.mono_jit_init_version;
+            else
+                listOfExports[nameof(MonoLibrary.Instance.mono_init_version)] = MonoLibrary.Instance.mono_init_version;
+
             listOfExports[nameof(MonoLibrary.Instance.mono_domain_get)] = MonoLibrary.Instance.mono_domain_get;
-            listOfExports[nameof(MonoLibrary.Instance.mono_assembly_open_full)] = MonoLibrary.Instance.mono_assembly_open_full;
+            listOfExports[nameof(MonoLibrary.Instance.mono_domain_set)] = MonoLibrary.Instance.mono_domain_set;
+            listOfExports[nameof(MonoLibrary.Instance.mono_domain_assembly_open)] = MonoLibrary.Instance.mono_domain_assembly_open;
             listOfExports[nameof(MonoLibrary.Instance.mono_assembly_get_image)] = MonoLibrary.Instance.mono_assembly_get_image;
             listOfExports[nameof(MonoLibrary.Instance.mono_class_from_name)] = MonoLibrary.Instance.mono_class_from_name;
             listOfExports[nameof(MonoLibrary.Instance.mono_method_get_name)] = MonoLibrary.Instance.mono_method_get_name;
             listOfExports[nameof(MonoLibrary.Instance.mono_runtime_invoke)] = MonoLibrary.Instance.mono_runtime_invoke;
+            listOfExports[nameof(MonoLibrary.Instance.mono_thread_set_main)] = MonoLibrary.Instance.mono_thread_set_main;
+            listOfExports[nameof(MonoLibrary.Instance.mono_string_new)] = MonoLibrary.Instance.mono_string_new;
+            listOfExports[nameof(MonoLibrary.Instance.mono_class_get_method_from_name)] = MonoLibrary.Instance.mono_class_get_method_from_name;
 
             foreach (var exportPair in listOfExports)
             {
