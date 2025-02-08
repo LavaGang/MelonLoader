@@ -61,7 +61,7 @@
 
     <ItemGroup>
         <NativeLibrary Include="$(AppHostPath)" />
-        <NativeLibrary Include="Deps/$(RuntimeIdentifier)/$(LibPrefix)dobby$(LibExt)" />
+        <NativeLibrary Include="$(SolutionDir)Dependencies/Dobby/$(RuntimeIdentifier)/$(LibPrefix)dobby$(LibExt)" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
