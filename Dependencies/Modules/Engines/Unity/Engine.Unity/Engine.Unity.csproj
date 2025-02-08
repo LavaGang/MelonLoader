@@ -10,7 +10,6 @@
         <AssemblyName>MelonLoader.Engine.Unity</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
-      <PackageReference Include="AssetRipper.Primitives" Version="3.1.4" ExcludeAssets="Runtime" />
       <ProjectReference Include="$(SolutionDir)\MelonLoader\MelonLoader.csproj" Private="false" ExcludeAssets="all">
         <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
       </ProjectReference>
@@ -34,10 +33,16 @@
       <ProjectReference Include="..\Engine.Unity.Shared\Engine.Unity.Shared.csproj" Private="false" ExcludeAssets="all">
         <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
       </ProjectReference>
-      <ProjectReference Include="..\Il2Cpp\Unity.Il2Cpp.Shared\Unity.Il2Cpp.Shared.csproj">
-        <ExcludeAssets>all</ExcludeAssets>
-        <Private>False</Private>
-        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
-      </ProjectReference>
+      <ProjectReference Include="..\Il2Cpp\Unity.Il2Cpp\Unity.Il2Cpp.csproj" />
+    </ItemGroup>
+	<ItemGroup>
+        <PackageReference Include="HarmonyX" Version="2.10.2" ExcludeAssets="Runtime" />
+        <PackageReference Include="Iced" Version="1.21.0" ExcludeAssets="Runtime" />
+        <PackageReference Include="Il2CppInterop.Common" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
+        <PackageReference Include="Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
+        <PackageReference Include="Il2CppInterop.HarmonySupport" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
+        <PackageReference Include="Mono.Cecil" Version="0.11.6" ExcludeAssets="Runtime" />
+        <PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" ExcludeAssets="Runtime" />
+        <PackageReference Include="MonoMod.Utils" Version="22.7.31.1" ExcludeAssets="Runtime" />
     </ItemGroup>
 </Project>

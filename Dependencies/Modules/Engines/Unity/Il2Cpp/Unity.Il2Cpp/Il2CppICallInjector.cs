@@ -15,7 +15,7 @@ using MelonLoader.Runtime.Il2Cpp;
 
 namespace MelonLoader.Engine.Unity.Il2Cpp
 {
-    internal static class Il2CppICallInjector
+    public static class Il2CppICallInjector
     {
         private static Dictionary<string, (object, DynamicMethodDefinition, MethodInfo, IntPtr)> _lookup = new();
 
@@ -27,7 +27,7 @@ namespace MelonLoader.Engine.Unity.Il2Cpp
         private static bool _extendedDebug;
         private static MelonLogger.Instance _logger;
 
-        internal static unsafe void Install()
+        public static unsafe void Install()
         {
             try
             {
@@ -52,7 +52,7 @@ namespace MelonLoader.Engine.Unity.Il2Cpp
             }
         }
 
-        internal static void Shutdown()
+        public static void Shutdown()
         {
             if (il2cpp_resolve_icall_hook != null)
             {

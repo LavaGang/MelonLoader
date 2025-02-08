@@ -19,6 +19,9 @@
 	  <ProjectReference Include="..\Unity.Il2Cpp.Shared\Unity.Il2Cpp.Shared.csproj" Private="false" ExcludeAssets="all">
         <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
       </ProjectReference>
+      <ProjectReference Include="..\..\..\..\Runtimes\Il2Cpp\Runtime.Il2Cpp.Shared\Runtime.Il2Cpp.Shared.csproj" Private="false" ExcludeAssets="all">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
     </ItemGroup>
 	<ItemGroup>
         <Reference Include="Il2Cppmscorlib">
@@ -41,6 +44,7 @@
         <PackageReference Include="Iced" Version="1.21.0" ExcludeAssets="Runtime" />
         <PackageReference Include="Il2CppInterop.Common" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
         <PackageReference Include="Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
+        <PackageReference Include="Il2CppInterop.Generator" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
         <PackageReference Include="Il2CppInterop.HarmonySupport" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
         <PackageReference Include="Mono.Cecil" Version="0.11.6" ExcludeAssets="Runtime" />
         <PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" ExcludeAssets="Runtime" />
