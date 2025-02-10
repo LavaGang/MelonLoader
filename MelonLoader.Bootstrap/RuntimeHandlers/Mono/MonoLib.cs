@@ -32,9 +32,12 @@ internal class MonoLib
     public required bool IsOld { get; init; }
 
     public required nint JitInitVersionPtr { get; init; }
+    public required nint DebugInitPtr { get; init; }
+    public required nint JitParseOptionsPtr { get; init; }
     public required nint RuntimeInvokePtr { get; init; }
 
     public required ThreadCurrentFn ThreadCurrent { get; init; }
+    public required DebugInitFn DebugInit { get; init; }
     public required ThreadSetMainFn ThreadSetMain { get; init; }
     public required RuntimeInvokeFn RuntimeInvoke { get; init; }
     public required StringNewFn StringNew { get; init; }
@@ -49,8 +52,8 @@ internal class MonoLib
     public required InstallAssemblySearchHookFn InstallAssemblySearchHook { get; init; }
     public required InstallAssemblyLoadHookFn InstallAssemblyLoadHook { get; init; }
 
-    public DebugDomainCreateFn? DebugDomainCreate { get; init; }
     public DomainSetConfigFn? DomainSetConfig { get; init; }
+    public DebugEnabledFn? DebugEnabled { get; init; }
 
     public static MonoLib? TryLoad(string searchDir)
     {
@@ -73,6 +76,8 @@ internal class MonoLib
 
         if (!NativeLibrary.TryGetExport(hRuntime, "mono_jit_init_version", out var jitInitVersionPtr)
             || !NativeLibrary.TryGetExport(hRuntime, "mono_runtime_invoke", out var runtimeInvokePtr)
+            || !NativeLibrary.TryGetExport(hRuntime, "mono_jit_parse_options", out var jitParseOptionsPtr)
+            || !NativeLibrary.TryGetExport(hRuntime, "mono_debug_init", out var debugInitPtr)
             || !NativeFunc.GetExport<ThreadCurrentFn>(hRuntime, "mono_thread_current", out var threadCurrent)
             || !NativeFunc.GetExport<ThreadSetMainFn>(hRuntime, "mono_thread_set_main", out var threadSetMain)
             || !NativeFunc.GetExport<StringNewFn>(hRuntime, "mono_string_new", out var stringNew)
@@ -89,8 +94,9 @@ internal class MonoLib
             return null;
 
         var runtimeInvoke = Marshal.GetDelegateForFunctionPointer<RuntimeInvokeFn>(runtimeInvokePtr);
+        var debugInit = Marshal.GetDelegateForFunctionPointer<DebugInitFn>(debugInitPtr);
 
-        var debugDomainCreate = NativeFunc.GetExport<DebugDomainCreateFn>(hRuntime, "mono_debug_domain_create");
+        var debugEnabled = NativeFunc.GetExport<DebugEnabledFn>(hRuntime, "mono_debug_enabled");
         var domainSetConfig = NativeFunc.GetExport<DomainSetConfigFn>(hRuntime, "mono_domain_set_config");
 
         return new()
@@ -99,8 +105,12 @@ internal class MonoLib
             IsOld = isOld,
             RuntimeInvoke = runtimeInvoke,
             JitInitVersionPtr = jitInitVersionPtr,
+            JitParseOptionsPtr = jitParseOptionsPtr,
             RuntimeInvokePtr = runtimeInvokePtr,
             ThreadCurrent = threadCurrent,
+            DebugInitPtr = debugInitPtr,
+            DebugEnabled = debugEnabled,
+            DebugInit = debugInit,
             ThreadSetMain = threadSetMain,
             StringNew = stringNew,
             AssemblyGetObject = assemblyGetObject,
@@ -113,8 +123,7 @@ internal class MonoLib
             InstallAssemblyPreloadHook = installAssemblyPreloadHook,
             InstallAssemblySearchHook = installAssemblySearchHook,
             InstallAssemblyLoadHook = installAssemblyLoadHook,
-            DomainSetConfig = domainSetConfig,
-            DebugDomainCreate = debugDomainCreate
+            DomainSetConfig = domainSetConfig
         };
     }
 
@@ -195,7 +204,11 @@ internal class MonoLib
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint JitInitVersionFn(nint name, nint b);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void DebugDomainCreateFn(nint domain);
+    public delegate void JitParseOptionsFn(nint argc, string[] argv);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void DebugInitFn(MonoDebugFormat format);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool DebugEnabledFn();
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint ThreadCurrentFn();
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -244,6 +257,13 @@ internal class MonoLib
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void AssemblyLoadHookFn(nint monoAssembly, nint userData);
 
+    public enum MonoDebugFormat
+    {
+        MONO_DEBUG_FORMAT_NONE,
+        MONO_DEBUG_FORMAT_MONO,
+        MONO_DEBUG_FORMAT_DEBUGGER
+    }
+    
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct AssemblyName
     {

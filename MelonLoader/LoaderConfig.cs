@@ -19,6 +19,9 @@ public class LoaderConfig
 
     [TomlProperty("logs")]
     public LogsConfig Logs { get; internal set; } = new();
+    
+    [TomlProperty("mono_debug_server")]
+    public MonoDebugServerConfig MonoDebugServer { get; internal set; } = new();
 
     [TomlProperty("unityengine")]
     public UnityEngineConfig UnityEngine { get; internal set; } = new();
@@ -93,6 +96,22 @@ public class LoaderConfig
         [TomlProperty("max_logs")]
         [TomlPrecedingComment("Sets the maximum amount of log files in the Logs folder (Default: 10). Equivalent to the '--melonloader.maxlogs' launch option")]
         public uint MaxLogs { get; internal set; } = 10;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    public class MonoDebugServerConfig
+    {
+        [TomlProperty("debug_suspend")]
+        [TomlPrecedingComment("Let the Mono debug server wait until a debugger is attached when debug_mode is true (only for Mono games). Equivalent to the '--melonloader.debugsuspend' launch option")]
+        public bool DebugSuspend { get; internal set; }
+
+        [TomlProperty("debug_ip_address")]
+        [TomlPrecedingComment("The IP address the Mono debug server will listen to when debug_mode is true (only for Mono games). Equivalent to the '--melonloader.debugipaddress' launch option")]
+        public string DebugIpAddress { get; internal set; } = "127.0.0.1";
+
+        [TomlProperty("debug_port")]
+        [TomlPrecedingComment("The port the Mono debug server will listen to when debug_mode is true (only for Mono games). Equivalent to the '--melonloader.debugport' launch option")]
+        public uint DebugPort { get; internal set; } = 55555;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]

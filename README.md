@@ -156,6 +156,14 @@ dont_set_title = false
 # Sets the maximum amount of log files in the Logs folder (Default: 10). Equivalent to the '--melonloader.maxlogs' launch option
 max_logs = 10
 
+[mono_debug_server]
+# Let the Mono debug server wait until a debugger is attached when debug_mode is true (only for Mono games). Equivalent to the '--melonloader.debugsuspend' launch option
+debug_suspend = false
+# The IP address the Mono debug server will listen to when debug_mode is true (only for Mono games). Equivalent to the '--melonloader.debugipaddress' launch option
+debug_ip_address = "127.0.0.1"
+# The port the Mono debug server will listen to when debug_mode is true (only for Mono games). Equivalent to the '--melonloader.debugport' launch option
+debug_port = 10000
+
 [unityengine]
 # Overrides the detected UnityEngine version. Equivalent to the '--melonloader.unityversion' launch option
 version_override = ""
@@ -192,6 +200,9 @@ enable_cpp2il_native_method_detector = false
 | --melonloader.hideconsole | Hides the Console |
 | --melonloader.hidewarnings | Hides Warnings from Displaying |
 | --melonloader.debug | Debug Mode |
+| --melonloader.debugsuspend | Let the Mono debug server wait until a debugger is attached when in Debug Mode (only for Mono games) |
+| --melonloader.debugipaddress | The IP address the Mono debug server will listen to when in Debug Mode (only for Mono games) |
+| --melonloader.debugport | The port the Mono debug server will listen to when in Debug Mode (only for Mono games)       |
 | --melonloader.maxlogs | Max Log Files [ Default: 10 ] [ NoCap: 0 ] |
 | --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
 | --melonloader.loadmodemods | Load Mode for Mods [ Default: 0 ] |

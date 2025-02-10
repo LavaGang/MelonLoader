@@ -119,6 +119,16 @@ public static class Core
         if (uint.TryParse(ArgParser.GetValue("melonloader.maxlogs"), out var maxLogs))
             LoaderConfig.Current.Logs.MaxLogs = maxLogs;
 
+        if (ArgParser.IsDefined("melonloader.debugsuspend"))
+            LoaderConfig.Current.MonoDebugServer.DebugSuspend = true;
+
+        var debugIpAddress = ArgParser.GetValue("melonloader.debugipaddress");
+        if (debugIpAddress != null)
+            LoaderConfig.Current.MonoDebugServer.DebugIpAddress = debugIpAddress;
+
+        if (uint.TryParse(ArgParser.GetValue("melonloader.debugport"), out var debugPort))
+            LoaderConfig.Current.MonoDebugServer.DebugPort = debugPort;
+        
         var unityVersionOverride = ArgParser.GetValue("melonloader.unityversion");
         if (unityVersionOverride != null)
             LoaderConfig.Current.UnityEngine.VersionOverride = unityVersionOverride;
