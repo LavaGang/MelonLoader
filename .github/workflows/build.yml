@@ -27,7 +27,7 @@ jobs:
         run: dotnet restore
 
       - name: Build Debug for win-x64
-        run: dotnet build --no-restore -c Debug -p:RID="win-x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+        run: dotnet build --no-restore -c Debug -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
 
       - name: Upload Debug for win-x64
         uses: actions/upload-artifact@v4
@@ -36,7 +36,7 @@ jobs:
           path: Output/Debug/win-x64
 
       - name: Build Release for win-x64
-        run: dotnet build --no-restore -c Release -p:RID="win-x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+        run: dotnet build --no-restore -c Release -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
 
       - name: Upload Release for win-x64
         uses: actions/upload-artifact@v4
@@ -45,7 +45,7 @@ jobs:
           path: Output/Release/win-x64
 
       - name: Build Debug for win-x86
-        run: dotnet build --no-restore -c Debug -p:RID="win-x86" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+        run: dotnet build --no-restore -c Debug -p:Platform="x86" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
 
       - name: Upload Debug for win-x86
         uses: actions/upload-artifact@v4
@@ -54,7 +54,7 @@ jobs:
           path: Output/Debug/win-x86
 
       - name: Build Release for win-x86
-        run: dotnet build --no-restore -c Release -p:RID="win-x86" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+        run: dotnet build --no-restore -c Release -p:Platform="x86" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
 
       - name: Upload Release for win-x86
         uses: actions/upload-artifact@v4
@@ -63,7 +63,7 @@ jobs:
           path: Output/Release/win-x86
 
       - name: Pack NuGet Package
-        run: dotnet pack --no-build -c Release -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}"
+        run: dotnet pack --no-build -c Release -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}"
 
       - name: Upload NuGet Artifact
         uses: actions/upload-artifact@v4
@@ -85,7 +85,7 @@ jobs:
         run: dotnet restore
 
       - name: Build Debug for linux-x64
-        run: dotnet build --no-restore -c Debug -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+        run: dotnet build --no-restore -c Debug -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
 
       - name: Upload Debug for linux-x64
         uses: actions/upload-artifact@v4
@@ -94,7 +94,7 @@ jobs:
           path: Output/Debug/linux-x64
 
       - name: Build Release for linux-x64
-        run: dotnet build --no-restore -c Release -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+        run: dotnet build --no-restore -c Release -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
 
       - name: Upload Release for linux-x64
         uses: actions/upload-artifact@v4
