@@ -9,33 +9,34 @@
 
         <LangVersion>Latest</LangVersion>
         <IsPackable>false</IsPackable>
-        <RuntimeIdentifiers Condition="'$([MSBuild]::IsOSUnixLike())' == 'false'">win-x64;win-x86</RuntimeIdentifiers>
-        <RuntimeIdentifiers Condition="'$([MSBuild]::IsOSUnixLike())' == 'true'">linux-x64</RuntimeIdentifiers>
-
-        <RID Condition="'$([MSBuild]::IsOSUnixLike())' == 'false'">win-x64</RID>
-        <RID Condition="'$([MSBuild]::IsOSUnixLike())' == 'true'">linux-x64</RID>
-        <RuntimeIdentifier>$(RID)</RuntimeIdentifier>
-
-        <MLOutDir>$(SolutionDir)/Output/$(Configuration)/$(RuntimeIdentifier)</MLOutDir>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>x86;x64</Platforms>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$([MSBuild]::IsOSUnixLike())' == 'true'">
+        <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
+        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+        <PlatformTarget>x64</PlatformTarget>
+        <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
+        <LibPrefix>lib</LibPrefix>
+        <LibExt>.a</LibExt>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$([MSBuild]::IsOSUnixLike())' == 'false'">
+        <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
+        <RuntimeIdentifier>win-$(Platform)</RuntimeIdentifier>
+        <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+        <LibExt>.lib</LibExt>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RuntimeIdentifier.EndsWith(`-x64`))' == 'true'">
         <DefineConstants>$(DefineConstants);X64</DefineConstants>
     </PropertyGroup>
-
-    <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
-        <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
-
-        <LibPrefix>lib</LibPrefix>
-        <LibExt>.a</LibExt> 
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'">
-        <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
-
-        <LibExt>.lib</LibExt> 
+    
+    <PropertyGroup>
+        <MLOutDir>$(SolutionDir)/Output/$(Configuration)/$(RuntimeIdentifier)</MLOutDir>
     </PropertyGroup>
 </Project>
   
