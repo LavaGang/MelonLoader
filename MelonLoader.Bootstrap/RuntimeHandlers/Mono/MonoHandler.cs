@@ -146,7 +146,7 @@ internal static class MonoHandler
         if (File.Exists(corlibPath))
         {
             var corlibVersion = FileVersionInfo.GetVersionInfo(corlibPath);
-            if (corlibVersion.FileMajorPart <= 2)
+            if (corlibVersion.FileMajorPart <= 3)
             {
                 Core.Logger.Msg("Loading .NET Standard 2.0 overrides");
 
