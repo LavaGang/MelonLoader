@@ -267,9 +267,10 @@ namespace MelonLoader
 
         internal static unsafe void PassLogMsg(ColorRGB msgColor, string msg, ColorRGB sectionColor, string section)
         {
+            char[] msgArray = msg.ToCharArray();
             if (section == null)
             {
-                fixed (char* pMsg = msg)
+                fixed (char* pMsg = msgArray)
                 {
                     BootstrapInterop.Library.LogMsg(&msgColor, pMsg, msg.Length, null, null, 0);
                 }
@@ -277,9 +278,10 @@ namespace MelonLoader
                 return;
             }
 
-            fixed (char* pMsg = msg)
+            fixed (char* pMsg = msgArray)
             {
-                fixed (char* pSection = section)
+                char[] sectionArray = section.ToCharArray();
+                fixed (char* pSection = sectionArray)
                 {
                     BootstrapInterop.Library.LogMsg(&msgColor, pMsg, msg.Length, &sectionColor, pSection, section.Length);
                 }
@@ -288,9 +290,10 @@ namespace MelonLoader
 
         internal static unsafe void PassLogError(string msg, string section, bool warning)
         {
+            char[] msgArray = msg.ToCharArray();
             if (section == null)
             {
-                fixed (char* pMsg = msg)
+                fixed (char* pMsg = msgArray)
                 {
                     BootstrapInterop.Library.LogError(pMsg, msg.Length, null, 0, warning);
                 }
@@ -298,9 +301,10 @@ namespace MelonLoader
                 return;
             }
 
-            fixed (char* pMsg = msg)
+            fixed (char* pMsg = msgArray)
             {
-                fixed (char* pSection = section)
+                char[] sectionArray = section.ToCharArray();
+                fixed (char* pSection = sectionArray)
                 {
                     BootstrapInterop.Library.LogError(pMsg, msg.Length, pSection, section.Length, warning);
                 }
@@ -309,9 +313,11 @@ namespace MelonLoader
 
         internal static unsafe void PassLogMelonInfo(ColorRGB nameColor, string name, string info)
         {
-            fixed (char* pName = name)
+            char[] nameArray = name.ToCharArray();
+            fixed (char* pName = nameArray)
             {
-                fixed (char* pInfo = info)
+                char[] infoArray = info.ToCharArray();
+                fixed (char* pInfo = infoArray)
                 {
                     BootstrapInterop.Library.LogMelonInfo(&nameColor, pName, name.Length, pInfo, info.Length);
                 }
