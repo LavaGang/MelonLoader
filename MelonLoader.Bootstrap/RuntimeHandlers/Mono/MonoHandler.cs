@@ -1,20 +1,28 @@
 ﻿using MelonLoader.Bootstrap.Utils;
 using System.Diagnostics;
+using System.Text;
 
 namespace MelonLoader.Bootstrap.RuntimeHandlers.Mono;
 
 internal static class MonoHandler
 {
     private static Dobby.Patch<MonoLib.JitInitVersionFn>? initPatch;
+    private static Dobby.Patch<MonoLib.JitParseOptionsFn>? jitParseOptionsPatch;
+    private static Dobby.Patch<MonoLib.DebugInitFn>? debugInitPatch;
     private static Dobby.Patch<MonoLib.RuntimeInvokeFn>? invokePatch;
 
     private static nint assemblyManagerResolve;
     private static nint assemblyManagerLoadInfo;
     private static nint coreStart;
+    private static bool debugInitCalled;
 
     internal static nint Domain { get; private set; }
     internal static MonoLib Mono { get; private set; } = null!;
 
+    private const string MonoDebugArgsStart = "--debugger-agent=transport=dt_socket,server=y,address=";
+    private const string MonoDebugNoSuspendArg = ",suspend=n";
+    private const string MonoDebugNoSuspendArgOldMono = ",suspend=n,defer=y";
+    
     public static bool TryInitialize()
     {
         var monoLib = MonoLib.TryLoad(Core.GameDir);
@@ -27,8 +35,24 @@ internal static class MonoHandler
 
         MelonDebug.Log("Patching mono init");
         initPatch = Dobby.CreatePatch<MonoLib.JitInitVersionFn>(Mono.JitInitVersionPtr, InitDetour);
+        MelonDebug.Log("Patching mono jit parse options");
+        jitParseOptionsPatch = Dobby.CreatePatch<MonoLib.JitParseOptionsFn>(Mono.JitParseOptionsPtr, JitParseOptionsDetour);
+        MelonDebug.Log("Patching mono debug init");
+        debugInitPatch = Dobby.CreatePatch<MonoLib.DebugInitFn>(Mono.DebugInitPtr, DebugInitDetour);
 
         return true;
+    }
+
+    private static void DebugInitDetour(MonoLib.MonoDebugFormat format)
+    {
+        if (debugInitPatch == null)
+            return;
+
+        debugInitPatch.Destroy();
+
+        debugInitCalled = true;
+
+        debugInitPatch.Original(format);
     }
 
     private static nint InitDetour(nint name, nint b)
@@ -41,13 +65,17 @@ internal static class MonoHandler
         ConsoleHandler.ResetHandles();
         MelonDebug.Log("In init detour");
 
-        Domain = initPatch.Original(name, b);
+        JitParseOptionsDetour(0, []);
+        bool debuggerAlreadyEnabled = debugInitCalled || (Mono.DebugEnabled != null && Mono.DebugEnabled());
 
-        if (LoaderConfig.Current.Loader.DebugMode && Mono.DebugDomainCreate != null)
+        if (LoaderConfig.Current.Loader.DebugMode && !debuggerAlreadyEnabled)
         {
-            MelonDebug.Log("Creating Mono Debug Domain");
-            Mono.DebugDomainCreate(Domain);
+            MelonDebug.Log("Initialising mono debugger");
+            Mono.DebugInit(MonoLib.MonoDebugFormat.MONO_DEBUG_FORMAT_MONO);
         }
+        
+        MelonDebug.Log("Original init jit version");
+        Domain = initPatch.Original(name, b);
 
         MelonDebug.Log("Setting Mono Main Thread");
         Mono.SetCurrentThreadAsMain();
@@ -60,8 +88,47 @@ internal static class MonoHandler
         }
 
         InitializeManaged();
+        jitParseOptionsPatch?.Destroy();
 
         return Domain;
+    }
+
+    private static void JitParseOptionsDetour(IntPtr argc, string[] argv)
+    {
+        if (jitParseOptionsPatch == null)
+            return;
+
+        if (!LoaderConfig.Current.Loader.DebugMode)
+        {
+            jitParseOptionsPatch.Original(argc, argv);
+            return;
+        }
+        
+        string newArgs;
+        string? dnSpyEnv = Environment.GetEnvironmentVariable("DNSPY_UNITY_DBG2");
+        if (dnSpyEnv == null)
+        {
+            StringBuilder newArgsSb = new(MonoDebugArgsStart);
+            newArgsSb.Append(LoaderConfig.Current.MonoDebugServer.DebugIpAddress);
+            newArgsSb.Append(':');
+            newArgsSb.Append(LoaderConfig.Current.MonoDebugServer.DebugPort);
+            if (!LoaderConfig.Current.MonoDebugServer.DebugSuspend)
+                newArgsSb.Append(Mono.IsOld ? MonoDebugNoSuspendArgOldMono : MonoDebugNoSuspendArg);
+            newArgs = newArgsSb.ToString();
+        }
+        else
+        {
+            newArgs = dnSpyEnv;
+        }
+        
+        string[] newArgv = new string[argc + 1];
+        Array.Copy(argv, 0, newArgv, 0, argc);
+        argc++;
+        newArgv[argc - 1] = newArgs;
+        
+        MelonDebug.Log($"Adding jit option: {string.Join(' ', newArgs)}");
+
+        jitParseOptionsPatch.Original(argc, newArgv);
     }
 
     private static unsafe void InitializeManaged()
