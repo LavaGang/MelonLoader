@@ -19,6 +19,13 @@ internal static class MonoHandler
     internal static nint Domain { get; private set; }
     internal static MonoLib Mono { get; private set; } = null!;
 
+    private const char MonoPathSeparator =
+#if WINDOWS
+        ';';
+#elif LINUX
+        ':';
+#endif
+    
     private const string MonoDebugArgsStart = "--debugger-agent=transport=dt_socket,server=y,address=";
     private const string MonoDebugNoSuspendArg = ",suspend=n";
     private const string MonoDebugNoSuspendArgOldMono = ",suspend=n,defer=y";
@@ -65,6 +72,29 @@ internal static class MonoHandler
         ConsoleHandler.ResetHandles();
         MelonDebug.Log("In init detour");
 
+        StringBuilder newAssembliesPathSb = new();
+        if (!string.IsNullOrWhiteSpace(LoaderConfig.Current.UnityEngine.MonoSearchPathOverride))
+        {
+            var absolutePaths = LoaderConfig.Current.UnityEngine.MonoSearchPathOverride
+                .Split(MonoPathSeparator)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => Path.GetFullPath(x, LoaderConfig.Current.Loader.BaseDirectory));
+            newAssembliesPathSb.Append(string.Join(MonoPathSeparator, absolutePaths));
+            newAssembliesPathSb.Append(MonoPathSeparator);
+        }
+
+        if (Mono.IsOld)
+        {
+            string baseOverridesDir = Path.Combine(LoaderConfig.Current.Loader.BaseDirectory, "MelonLoader", "Dependencies", "NetStandardPatches");
+            newAssembliesPathSb.Append(baseOverridesDir);
+            newAssembliesPathSb.Append(MonoPathSeparator);
+        }
+        newAssembliesPathSb.Append(Mono.AssemblyGetrootdir());
+
+        string newAssembliesPath = newAssembliesPathSb.ToString();
+        MelonDebug.Log($"Setting Mono assemblies path to: {newAssembliesPath}");
+        Mono.SetAssembliesPath(newAssembliesPath);
+
         JitParseOptionsDetour(0, []);
         bool debuggerAlreadyEnabled = debugInitCalled || (Mono.DebugEnabled != null && Mono.DebugEnabled());
 
@@ -73,7 +103,7 @@ internal static class MonoHandler
             MelonDebug.Log("Initialising mono debugger");
             Mono.DebugInit(MonoLib.MonoDebugFormat.MONO_DEBUG_FORMAT_MONO);
         }
-        
+
         MelonDebug.Log("Original init jit version");
         Domain = initPatch.Original(name, b);
 
@@ -140,27 +170,6 @@ internal static class MonoHandler
         {
             Core.Logger.Error($"Mono MelonLoader assembly not found at: '{mlPath}'");
             return;
-        }
-
-        var corlibPath = Path.Combine(Core.DataDir, "Managed", "mscorlib.dll");
-        if (File.Exists(corlibPath))
-        {
-            var corlibVersion = FileVersionInfo.GetVersionInfo(corlibPath);
-            if (corlibVersion.FileMajorPart <= 3)
-            {
-                Core.Logger.Msg("Loading .NET Standard 2.0 overrides");
-
-                var overridesDir = Path.Combine(LoaderConfig.Current.Loader.BaseDirectory, "MelonLoader", "Dependencies", "NetStandardPatches");
-                if (Directory.Exists(overridesDir))
-                {
-                    foreach (var dll in Directory.EnumerateFiles(overridesDir, "*.dll"))
-                    {
-                        MelonDebug.Log("Loading assembly: " + dll);
-                        if (Mono.DomainAssemblyOpen(Domain, dll) == 0)
-                            MelonDebug.Log("Assembly failed to load!");
-                    }
-                }
-            }
         }
 
         MelonDebug.Log("Loading ML assembly");

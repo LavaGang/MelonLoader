@@ -117,6 +117,14 @@ public class LoaderConfig
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class UnityEngineConfig
     {
+        [TomlNonSerialized]
+        private const string MonoPathSeparatorDescription =
+#if WINDOWS
+            "semicolon (;)";
+#elif LINUX
+            "colon (:)";
+#endif
+
         [TomlProperty("version_override")]
         [TomlPrecedingComment("Overrides the detected UnityEngine version. Equivalent to the '--melonloader.unityversion' launch option")]
         public string VersionOverride { get; internal set; } = "";
@@ -124,6 +132,10 @@ public class LoaderConfig
         [TomlProperty("disable_console_log_cleaner")]
         [TomlPrecedingComment("Disables the console log cleaner (only applies to Il2Cpp games). Equivalent to the '--melonloader.disableunityclc' launch option")]
         public bool DisableConsoleLogCleaner { get; internal set; }
+
+        [TomlProperty("mono_search_path_override")]
+        [TomlPrecedingComment($"A {MonoPathSeparatorDescription} separated list of paths that Mono will prioritise to seek mscorlib and core libraries before the Managed folder and Melon's included set of core libraries. Equivalent to the '--melonloader.monosearchpathoverride' launch option")]
+        public string MonoSearchPathOverride { get; internal set; } = "";
 
         [TomlProperty("force_offline_generation")]
         [TomlPrecedingComment("Forces the Il2Cpp Assembly Generator to run without contacting the remote API. Equivalent to the '--melonloader.agfoffline' launch option")]

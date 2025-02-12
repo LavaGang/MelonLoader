@@ -42,6 +42,8 @@ internal class MonoLib
     public required RuntimeInvokeFn RuntimeInvoke { get; init; }
     public required StringNewFn StringNew { get; init; }
     public required AssemblyGetObjectFn AssemblyGetObject { get; init; }
+    public required SetAssembliesPathFn SetAssembliesPath { get; init; }
+    public required AssemblyGetrootdirFn AssemblyGetrootdir { get; init; }
     public required MethodGetNameFn MethodGetName { get; init; }
     public required AddInternalCallFn AddInternalCall { get; init; }
     public required DomainAssemblyOpenFn DomainAssemblyOpen { get; init; }
@@ -83,6 +85,8 @@ internal class MonoLib
             || !NativeFunc.GetExport<StringNewFn>(hRuntime, "mono_string_new", out var stringNew)
             || !NativeFunc.GetExport<AssemblyGetObjectFn>(hRuntime, "mono_assembly_get_object", out var assemblyGetObject)
             || !NativeFunc.GetExport<MethodGetNameFn>(hRuntime, "mono_method_get_name", out var methodGetName)
+            || !NativeFunc.GetExport<SetAssembliesPathFn>(hRuntime, "mono_set_assemblies_path", out var setAssembliesPath)
+            || !NativeFunc.GetExport<AssemblyGetrootdirFn>(hRuntime, "mono_assembly_getrootdir", out var assemblyGetRootDir)
             || !NativeFunc.GetExport<AddInternalCallFn>(hRuntime, "mono_add_internal_call", out var addInternalCall)
             || !NativeFunc.GetExport<DomainAssemblyOpenFn>(hRuntime, "mono_domain_assembly_open", out var domainAssemblyOpen)
             || !NativeFunc.GetExport<AssemblyGetImageFn>(hRuntime, "mono_assembly_get_image", out var assemblyGetImage)
@@ -115,6 +119,8 @@ internal class MonoLib
             StringNew = stringNew,
             AssemblyGetObject = assemblyGetObject,
             MethodGetName = methodGetName,
+            SetAssembliesPath = setAssembliesPath,
+            AssemblyGetrootdir = assemblyGetRootDir,
             AddInternalCall = addInternalCall,
             DomainAssemblyOpen = domainAssemblyOpen,
             AssemblyGetImage = assemblyGetImage,
@@ -219,6 +225,10 @@ internal class MonoLib
     public unsafe delegate nint RuntimeInvokeFn(nint method, nint obj, void** args, ref nint ex);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint AssemblyGetObjectFn(nint domain, nint assembly);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate nint SetAssembliesPathFn(string domain);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate string AssemblyGetrootdirFn();
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint InstallAssemblyPreloadHookFn(AssemblyPreloadHookFn func, nint userData);

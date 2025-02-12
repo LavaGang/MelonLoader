@@ -220,6 +220,7 @@ enable_cpp2il_native_method_detector = false
 | --melonloader.agfregex | Forces Assembly Generator to use a Specified Regex |
 | --melonloader.agfvdumper | Forces Assembly Generator to use a Specified Version of Dumper |
 | --melonloader.disableunityclc | Disable Unity Console Log Cleaner |
+| --melonloader.monosearchpathoverride | A list of paths that Mono will prioritise to seek mscorlib and core libraries before the Managed folder and Melon's included set of core libraries. The list is separated by semicolons (;) on Windows and by colons (:) on Linux |
 
 
 - These ones below are Cpp2IL specific Launch Options.
