@@ -162,7 +162,7 @@ debug_suspend = false
 # The IP address the Mono debug server will listen to when debug_mode is true (only for Mono games). Equivalent to the '--melonloader.debugipaddress' launch option
 debug_ip_address = "127.0.0.1"
 # The port the Mono debug server will listen to when debug_mode is true (only for Mono games). Equivalent to the '--melonloader.debugport' launch option
-debug_port = 10000
+debug_port = 55555
 
 [unityengine]
 # Overrides the detected UnityEngine version. Equivalent to the '--melonloader.unityversion' launch option
