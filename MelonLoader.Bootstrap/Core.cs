@@ -136,6 +136,10 @@ public static class Core
         if (ArgParser.IsDefined("melonloader.disableunityclc"))
             LoaderConfig.Current.UnityEngine.DisableConsoleLogCleaner = true;
 
+        var monoSearchPathOverride = ArgParser.GetValue("melonloader.monosearchpathoverride");
+        if (monoSearchPathOverride != null)
+            LoaderConfig.Current.UnityEngine.MonoSearchPathOverride = monoSearchPathOverride;
+
         if (ArgParser.IsDefined("melonloader.agfregenerate"))
             LoaderConfig.Current.UnityEngine.ForceRegeneration = true;
 
