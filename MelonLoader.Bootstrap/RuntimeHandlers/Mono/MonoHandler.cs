@@ -156,7 +156,7 @@ internal static class MonoHandler
                     foreach (var dll in Directory.EnumerateFiles(overridesDir, "*.dll"))
                     {
                         MelonDebug.Log("Loading assembly: " + dll);
-                        if (Mono.DomainAssemblyOpen(Domain, dll) == 0)
+                        if (Mono.TryLoadAssemblyUnicode(Domain, dll) == 0)
                             MelonDebug.Log("Assembly failed to load!");
                     }
                 }
@@ -164,7 +164,7 @@ internal static class MonoHandler
         }
 
         MelonDebug.Log("Loading ML assembly");
-        var assembly = Mono.DomainAssemblyOpen(Domain, mlPath);
+        var assembly = Mono.TryLoadAssemblyUnicode(Domain, mlPath);
         if (assembly == 0)
         {
             Core.Logger.Error($"Failed to load the Mono MelonLoader assembly");

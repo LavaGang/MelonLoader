@@ -127,6 +127,20 @@ internal class MonoLib
         };
     }
 
+    public nint TryLoadAssemblyUnicode(nint domain, string path)
+    {
+        if (!File.Exists(path))
+            return 0;
+
+        var dir = Path.GetDirectoryName(path)!;
+        var prevCwd = Directory.GetCurrentDirectory();
+
+        Directory.SetCurrentDirectory(dir);
+        var asm = DomainAssemblyOpen(domain, Path.GetFileName(path));
+        Directory.SetCurrentDirectory(prevCwd);
+        return asm;
+    }
+
     private static string? FindMonoPath(string searchDir)
     {
         foreach (var folder in folderNames)
