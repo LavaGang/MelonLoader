@@ -456,10 +456,6 @@ namespace MelonLoader.Fixes
             if (klass == IntPtr.Zero)
                 return true;
 
-            IntPtr image = IL2CPP.il2cpp_class_get_image(klass);
-            if (image == IntPtr.Zero)
-                return true;
-
             IntPtr klassNamespace = IL2CPP.il2cpp_class_get_namespace(klass);
             if (klassNamespace == IntPtr.Zero)
                 return true;
@@ -480,30 +476,24 @@ namespace MelonLoader.Fixes
                     fullTypeName = $"{klassNamespaceStr}.{klassNameStr}";
             }
 
-            IntPtr fileName = IL2CPP.il2cpp_image_get_filename(image);
-            if (fileName == IntPtr.Zero)
-                return true;
+            var assemblyName = "Il2Cpp" + Marshal.PtrToStringAnsi(IL2CPP.il2cpp_class_get_assemblyname(klass));
 
-            string fileNameStr = Marshal.PtrToStringAnsi(fileName);
-            if (string.IsNullOrEmpty(fileNameStr))
-                return true;
-
-            string il2cppAssemblyPath = Path.Combine(MelonEnvironment.Il2CppAssembliesDirectory, fileNameStr);
-            if (!File.Exists(il2cppAssemblyPath))
-                il2cppAssemblyPath = Path.Combine(MelonEnvironment.Il2CppAssembliesDirectory, $"Il2Cpp{fileNameStr}");
-            if (File.Exists(il2cppAssemblyPath))
+            Assembly asm;
+            try
             {
-                Assembly asm = Assembly.LoadFrom(il2cppAssemblyPath);
-                if (asm != null)
-                {
-                    __result = asm.GetType($"Il2Cpp.{fullTypeName}");
-                    if (__result == null)
-                        __result = asm.GetType($"Il2Cpp{fullTypeName}");
-                    if (__result == null)
-                        __result = asm.GetType(fullTypeName);
-                    if (__result != null)
-                        return false;
-                }
+                asm = Assembly.Load(assemblyName);
+            }
+            catch
+            {
+                MelonLogger.Warning($"SystemTypeFromIl2CppType fix failed to resolve assembly '{assemblyName}'");
+                return true;
+            }
+
+            __result = (asm.GetType($"Il2Cpp.{fullTypeName}") ?? asm.GetType($"Il2Cpp{fullTypeName}")) ?? asm.GetType(fullTypeName);
+            if (__result != null)
+            {
+                MelonDebug.Msg($"SystemTypeFromIl2CppType fix resolved type: {__result.AssemblyQualifiedName}");
+                return false;
             }
 
             return true;
