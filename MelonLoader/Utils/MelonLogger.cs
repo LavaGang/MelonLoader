@@ -269,53 +269,25 @@ namespace MelonLoader
         {
             if (section == null)
             {
-                fixed (char* pMsg = msg)
-                {
-                    BootstrapInterop.Library.LogMsg(&msgColor, pMsg, msg.Length, null, null, 0);
-                }
-
+                BootstrapInterop.Library.LogMsg(&msgColor, msg, msg.Length, null, null, 0);
                 return;
             }
-
-            fixed (char* pMsg = msg)
-            {
-                fixed (char* pSection = section)
-                {
-                    BootstrapInterop.Library.LogMsg(&msgColor, pMsg, msg.Length, &sectionColor, pSection, section.Length);
-                }
-            }
+            BootstrapInterop.Library.LogMsg(&msgColor, msg, msg.Length, &sectionColor, section, section.Length);
         }
 
-        internal static unsafe void PassLogError(string msg, string section, bool warning)
+        internal static void PassLogError(string msg, string section, bool warning)
         {
             if (section == null)
             {
-                fixed (char* pMsg = msg)
-                {
-                    BootstrapInterop.Library.LogError(pMsg, msg.Length, null, 0, warning);
-                }
-
+                BootstrapInterop.Library.LogError(msg, msg.Length, null, 0, warning);
                 return;
             }
-
-            fixed (char* pMsg = msg)
-            {
-                fixed (char* pSection = section)
-                {
-                    BootstrapInterop.Library.LogError(pMsg, msg.Length, pSection, section.Length, warning);
-                }
-            }
+            BootstrapInterop.Library.LogError(msg, msg.Length, section, section.Length, warning);
         }
 
         internal static unsafe void PassLogMelonInfo(ColorRGB nameColor, string name, string info)
         {
-            fixed (char* pName = name)
-            {
-                fixed (char* pInfo = info)
-                {
-                    BootstrapInterop.Library.LogMelonInfo(&nameColor, pName, name.Length, pInfo, info.Length);
-                }
-            }
+            BootstrapInterop.Library.LogMelonInfo(&nameColor, name, name.Length, info, info.Length);
         }
 
         [Obsolete("Log is obsolete. Please use Msg instead. This will be removed in a future update.", true)]

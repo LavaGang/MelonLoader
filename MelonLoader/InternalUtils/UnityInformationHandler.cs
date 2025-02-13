@@ -9,7 +9,7 @@ using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using System.Drawing;
 using MelonLoader.Utils;
-using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
+using UnityVersion = AssetRipper.Primitives.UnityVersion;
 
 namespace MelonLoader.InternalUtils
 {

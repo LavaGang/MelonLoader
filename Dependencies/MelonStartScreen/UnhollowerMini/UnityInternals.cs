@@ -252,7 +252,8 @@ namespace UnhollowerMini
         {
             if (str == null) return IntPtr.Zero;
 
-            fixed (char* chars = str)
+            char[] strArray = str.ToCharArray();
+            fixed (char* chars = strArray)
                 return MelonUtils.IsGameIl2Cpp() ? il2cpp_string_new_utf16(chars, str.Length) : mono_string_new_utf16(domain, chars, str.Length);
         }
 
