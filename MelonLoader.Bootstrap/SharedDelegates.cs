@@ -6,14 +6,14 @@ namespace MelonLoader.Bootstrap;
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 internal unsafe delegate void NativeHookFn(nint* target, nint detour);
 
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal unsafe delegate void LogMsgFn(ColorRGB* msgColor, char* msg, int msgLength, ColorRGB* sectionColor, char* section, int sectionLength);
+[UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+internal unsafe delegate void LogMsgFn(ColorRGB* msgColor, string msg, int msgLength, ColorRGB* sectionColor, string section, int sectionLength);
 
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal unsafe delegate void LogErrorFn(char* msg, int msgLength, char* section, int sectionLength, bool warning);
+[UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+internal unsafe delegate void LogErrorFn(string msg, int msgLength, string section, int sectionLength, bool warning);
 
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal unsafe delegate void LogMelonInfoFn(ColorRGB* nameColor, char* name, int nameLength, char* info, int infoLength);
+[UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+internal unsafe delegate void LogMelonInfoFn(ColorRGB* nameColor, string name, int nameLength, string info, int infoLength);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 internal delegate nint PtrRetFn();
