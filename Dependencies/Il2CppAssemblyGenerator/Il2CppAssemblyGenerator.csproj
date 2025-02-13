@@ -11,7 +11,7 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />
-        <PackageReference Include="AssetRipper.Primitives" Version="3.1.4" />
+        <PackageReference Include="AssetRipper.Primitives" Version="3.1.4" ExcludeAssets="Runtime" />
         <PackageReference Include="Iced" Version="1.21.0" ExcludeAssets="Runtime" />
         <PackageReference Include="Il2CppInterop.Generator" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
         <PackageReference Include="Il2CppInterop.Common" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
