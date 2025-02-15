@@ -8,13 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using MelonLoader.Logging;
 using MelonLoader.Utils;
 using Microsoft.Diagnostics.Runtime;
 
@@ -23,7 +23,7 @@ namespace MelonLoader.CoreClrUtils;
 // ReSharper disable UnusedMember.Local, InconsistentNaming
 public static unsafe class NativeStackWalk
 {
-    private static MelonLogger.Instance Logger = new MelonLogger.Instance("NativeStackWalk", Color.GreenYellow);
+    private static MelonLogger.Instance Logger = new MelonLogger.Instance("NativeStackWalk", ColorARGB.GreenYellow);
     
     private static Dictionary<ulong, string> _registeredHooks = new();
 

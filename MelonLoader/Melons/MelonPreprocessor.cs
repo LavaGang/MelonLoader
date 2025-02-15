@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using MelonLoader.Logging;
 using Mono.Cecil;
 
 namespace MelonLoader.Melons
@@ -25,7 +25,7 @@ namespace MelonLoader.Melons
                 if (!hasWroteLine)
                 {
                     hasWroteLine = true;
-                    MelonLogger.WriteLine(Color.Magenta);
+                    MelonLogger.WriteLine(ColorARGB.Magenta);
                 }
 
                 // Load Assembly

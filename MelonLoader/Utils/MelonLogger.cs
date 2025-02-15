@@ -1,17 +1,16 @@
 using MelonLoader.Utils;
 using System;
-using System.Drawing;
 using static MelonLoader.Utils.LoggerUtils;
 using System.Text.RegularExpressions;
-using MelonLoader.Bootstrap.Logging;
+using MelonLoader.Logging;
 using MelonLoader.InternalUtils;
 
 namespace MelonLoader
 {
     public class MelonLogger
     {
-        public static readonly Color DefaultMelonColor = Color.Cyan;
-        public static readonly Color DefaultTextColor = Color.LightGray;
+        public static readonly ColorARGB DefaultMelonColor = ColorARGB.Cyan;
+        public static readonly ColorARGB DefaultTextColor = ColorARGB.LightGray;
 
         //Identical to Msg(string) except it skips walking the stack to find a melon
         internal static void MsgDirect(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt, true);
@@ -29,13 +28,13 @@ namespace MelonLoader
         public static void Msg(ConsoleColor txt_color, string txt, params object[] args) => NativeMsg(DefaultMelonColor, ConsoleColorToDrawingColor(txt_color), null, string.Format(txt, args));
 
         //Identical to Msg(Color, string) except it skips walking the stack to find a melon
-        public static void MsgDirect(Color txt_color, string txt) => NativeMsg(DefaultMelonColor, txt_color, null, txt, true);
+        public static void MsgDirect(ColorARGB txt_color, string txt) => NativeMsg(DefaultMelonColor, txt_color, null, txt, true);
 
-        public static void Msg(Color txt_color, object obj) => NativeMsg(DefaultMelonColor, txt_color, null, obj.ToString());
+        public static void Msg(ColorARGB txt_color, object obj) => NativeMsg(DefaultMelonColor, txt_color, null, obj.ToString());
 
-        public static void Msg(Color txt_color, string txt) => NativeMsg(DefaultMelonColor, txt_color, null, txt);
+        public static void Msg(ColorARGB txt_color, string txt) => NativeMsg(DefaultMelonColor, txt_color, null, txt);
 
-        public static void Msg(Color txt_color, string txt, params object[] args) => NativeMsg(DefaultMelonColor, txt_color, null, string.Format(txt, args));
+        public static void Msg(ColorARGB txt_color, string txt, params object[] args) => NativeMsg(DefaultMelonColor, txt_color, null, string.Format(txt, args));
 
         //Identical to MsgPastel(string) except it skips walking the stack to find a melon
         internal static void MsgPastelDirect(string txt) => NativePastelMsg(DefaultMelonColor, DefaultTextColor, null, txt, true);
@@ -53,13 +52,13 @@ namespace MelonLoader
         public static void MsgPastel(ConsoleColor txt_color, string txt, params object[] args) => NativePastelMsg(DefaultMelonColor, ConsoleColorToDrawingColor(txt_color), null, string.Format(txt, args));
 
         //Identical to MsgPastel(Color, string) except it skips walking the stack to find a melon
-        public static void MsgPastelDirect(Color txt_color, string txt) => NativePastelMsg(DefaultMelonColor, txt_color, null, txt, true);
+        public static void MsgPastelDirect(ColorARGB txt_color, string txt) => NativePastelMsg(DefaultMelonColor, txt_color, null, txt, true);
 
-        public static void MsgPastel(Color txt_color, object obj) => NativePastelMsg(DefaultMelonColor, txt_color, null, obj.ToString());
+        public static void MsgPastel(ColorARGB txt_color, object obj) => NativePastelMsg(DefaultMelonColor, txt_color, null, obj.ToString());
 
-        public static void MsgPastel(Color txt_color, string txt) => NativePastelMsg(DefaultMelonColor, txt_color, null, txt);
+        public static void MsgPastel(ColorARGB txt_color, string txt) => NativePastelMsg(DefaultMelonColor, txt_color, null, txt);
 
-        public static void MsgPastel(Color txt_color, string txt, params object[] args) => NativePastelMsg(DefaultMelonColor, txt_color, null, string.Format(txt, args));
+        public static void MsgPastel(ColorARGB txt_color, string txt, params object[] args) => NativePastelMsg(DefaultMelonColor, txt_color, null, string.Format(txt, args));
 
         public static void Warning(object obj) => NativeWarning(null, obj.ToString());
 
@@ -77,9 +76,9 @@ namespace MelonLoader
 
         public static void WriteLine(int length = 30) => MsgDirect(new string('-', length));
 
-        public static void WriteLine(Color color, int length = 30) => MsgDirect(color, new string('-', length));
+        public static void WriteLine(ColorARGB color, int length = 30) => MsgDirect(color, new string('-', length));
 
-        private static void NativeMsg(Color namesection_color, Color txt_color, string namesection, string txt, bool skipStackWalk = false)
+        private static void NativeMsg(ColorARGB namesection_color, ColorARGB txt_color, string namesection, string txt, bool skipStackWalk = false)
         {
             if (namesection == null)
             {
@@ -95,7 +94,7 @@ namespace MelonLoader
             RunMsgCallbacks(namesection_color, txt_color, namesection, txt ?? "null");
         }
 
-        private static void NativePastelMsg(Color namesection_color, Color txt_color, string namesection, string txt, bool skipStackWalk = false)
+        private static void NativePastelMsg(ColorARGB namesection_color, ColorARGB txt_color, string namesection, string txt, bool skipStackWalk = false)
         {
             if (namesection == null)
             {
@@ -138,7 +137,7 @@ namespace MelonLoader
             PassLogError(new string('=', 50), namesection, false);
         }
 
-        internal static void RunMsgCallbacks(Color namesection_color, Color txt_color, string namesection, string txt)
+        internal static void RunMsgCallbacks(ColorARGB namesection_color, ColorARGB txt_color, string namesection, string txt)
         {
             MsgCallbackHandler?.Invoke(DrawingColorToConsoleColor(namesection_color), DrawingColorToConsoleColor(txt_color), namesection, txt);
             MsgDrawingCallbackHandler?.Invoke(namesection_color, txt_color, namesection, txt);
@@ -147,7 +146,7 @@ namespace MelonLoader
         [Obsolete("MsgCallbackHandler is obsolete. Please use MsgDrawingCallbackHandler for full Color support. This will be removed in a future update.", true)]
         public static event Action<ConsoleColor, ConsoleColor, string, string> MsgCallbackHandler;
 
-        public static event Action<Color, Color, string, string> MsgDrawingCallbackHandler;
+        public static event Action<ColorARGB, ColorARGB, string, string> MsgDrawingCallbackHandler;
 
         internal static void RunWarningCallbacks(string namesection, string txt) => WarningCallbackHandler?.Invoke(namesection, txt);
 
@@ -168,14 +167,14 @@ namespace MelonLoader
                 set => DrawingColor = ConsoleColorToDrawingColor(value);
             }
 
-            private Color DrawingColor = DefaultMelonColor;
+            private ColorARGB DrawingColor = DefaultMelonColor;
 
             public Instance(string name) => Name = name?.Replace(" ", "_");
 
             [Obsolete("ConsoleColor is obsolete, use the (string, Color) constructor instead. This will be removed in a future update.", true)]
             public Instance(string name, ConsoleColor color) : this(name) => Color = color;
 
-            public Instance(string name, Color color) : this(name) => DrawingColor = color;
+            public Instance(string name, ColorARGB color) : this(name) => DrawingColor = color;
 
             public void Msg(object obj) => NativeMsg(DrawingColor, DefaultTextColor, Name, obj.ToString());
 
@@ -189,11 +188,11 @@ namespace MelonLoader
 
             public void Msg(ConsoleColor txt_color, string txt, params object[] args) => NativeMsg(DrawingColor, ConsoleColorToDrawingColor(txt_color), Name, string.Format(txt, args));
 
-            public void Msg(Color txt_color, object obj) => NativeMsg(DrawingColor, txt_color, Name, obj.ToString());
+            public void Msg(ColorARGB txt_color, object obj) => NativeMsg(DrawingColor, txt_color, Name, obj.ToString());
 
-            public void Msg(Color txt_color, string txt) => NativeMsg(DrawingColor, txt_color, Name, txt);
+            public void Msg(ColorARGB txt_color, string txt) => NativeMsg(DrawingColor, txt_color, Name, txt);
 
-            public void Msg(Color txt_color, string txt, params object[] args) => NativeMsg(DrawingColor, txt_color, Name, string.Format(txt, args));
+            public void Msg(ColorARGB txt_color, string txt, params object[] args) => NativeMsg(DrawingColor, txt_color, Name, string.Format(txt, args));
 
             public void MsgPastel(object obj) => NativePastelMsg(DrawingColor, DefaultTextColor, Name, obj.ToString());
 
@@ -207,11 +206,11 @@ namespace MelonLoader
 
             public void MsgPastel(ConsoleColor txt_color, string txt, params object[] args) => NativePastelMsg(DrawingColor, ConsoleColorToDrawingColor(txt_color), Name, string.Format(txt, args));
 
-            public void MsgPastel(Color txt_color, object obj) => NativePastelMsg(DrawingColor, txt_color, Name, obj.ToString());
+            public void MsgPastel(ColorARGB txt_color, object obj) => NativePastelMsg(DrawingColor, txt_color, Name, obj.ToString());
 
-            public void MsgPastel(Color txt_color, string txt) => NativePastelMsg(DrawingColor, txt_color, Name, txt);
+            public void MsgPastel(ColorARGB txt_color, string txt) => NativePastelMsg(DrawingColor, txt_color, Name, txt);
 
-            public void MsgPastel(Color txt_color, string txt, params object[] args) => NativePastelMsg(DrawingColor, txt_color, Name, string.Format(txt, args));
+            public void MsgPastel(ColorARGB txt_color, string txt, params object[] args) => NativePastelMsg(DrawingColor, txt_color, Name, string.Format(txt, args));
 
             public void Warning(object obj) => NativeWarning(Name, obj.ToString());
 
@@ -231,12 +230,12 @@ namespace MelonLoader
 
             public void WriteLine(int length = 30) => MelonLogger.WriteLine(length);
 
-            public void WriteLine(Color color, int length = 30) => MelonLogger.WriteLine(color, length);
+            public void WriteLine(ColorARGB color, int length = 30) => MelonLogger.WriteLine(color, length);
 
             public void BigError(string txt) => MelonLogger.BigError(Name, txt);
         }
 
-        internal static void PastelMsg(Color namesection_color, Color txt_color, string namesection, string txt)
+        internal static void PastelMsg(ColorARGB namesection_color, ColorARGB txt_color, string namesection, string txt)
         {
             // Regex to check for ANSI
             var cleanTxt = Regex.Replace(txt, @"(\x1B|\e|\033)\[(.*?)m", "");
@@ -256,7 +255,7 @@ namespace MelonLoader
             BootstrapInterop.Library.LogMsg(null, null, 0, null, null, 0);
         }
 
-        internal static void PrintModName(Color meloncolor, Color authorcolor, string name, string author, string additionalCredits, string version, string id)
+        internal static void PrintModName(ColorARGB meloncolor, ColorARGB authorcolor, string name, string author, string additionalCredits, string version, string id)
         {
             PassLogMelonInfo(meloncolor, name, $"v{version}{(id == null ? "" : $" ({id})")}");
             PassLogMsg(authorcolor, $"by {author}", default, null);
@@ -265,7 +264,7 @@ namespace MelonLoader
                 PassLogMsg(DefaultTextColor, $"Additional credits: {additionalCredits}", default, null);
         }
 
-        internal static unsafe void PassLogMsg(ColorRGB msgColor, string msg, ColorRGB sectionColor, string section)
+        internal static unsafe void PassLogMsg(ColorARGB msgColor, string msg, ColorARGB sectionColor, string section)
         {
             if (section == null)
             {
@@ -285,7 +284,7 @@ namespace MelonLoader
             BootstrapInterop.Library.LogError(msg, msg.Length, section, section.Length, warning);
         }
 
-        internal static unsafe void PassLogMelonInfo(ColorRGB nameColor, string name, string info)
+        internal static unsafe void PassLogMelonInfo(ColorARGB nameColor, string name, string info)
         {
             BootstrapInterop.Library.LogMelonInfo(&nameColor, name, name.Length, info, info.Length);
         }

@@ -1,9 +1,9 @@
-﻿using MelonLoader.Bootstrap.Logging;
+﻿using MelonLoader.Logging;
 using MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
 using MelonLoader.Bootstrap.RuntimeHandlers.Mono;
 using MelonLoader.Bootstrap.Utils;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
+using MelonLoader.Bootstrap.Logging;
 using Tomlet;
 
 namespace MelonLoader.Bootstrap;
@@ -12,7 +12,7 @@ public static class Core
 {
     public static nint LibraryHandle { get; private set; }
 
-    internal static InternalLogger Logger { get; private set; } = new(Color.BlueViolet, "MelonLoader.Bootstrap");
+    internal static InternalLogger Logger { get; private set; } = new(ColorARGB.BlueViolet, "MelonLoader.Bootstrap");
     public static string DataDir { get; private set; } = null!;
     public static string GameDir { get; private set; } = null!;
 

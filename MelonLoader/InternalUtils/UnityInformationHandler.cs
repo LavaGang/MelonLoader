@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
-using System.Drawing;
+using MelonLoader.Logging;
 using MelonLoader.Utils;
 using UnityVersion = AssetRipper.Primitives.UnityVersion;
 
@@ -63,12 +63,12 @@ namespace MelonLoader.InternalUtils
             if (string.IsNullOrEmpty(GameVersion))
                 GameVersion = DefaultInfo;
 
-            MelonLogger.WriteLine(Color.Magenta);
+            MelonLogger.WriteLine(ColorARGB.Magenta);
             MelonLogger.Msg($"Game Name: {GameName}");
             MelonLogger.Msg($"Game Developer: {GameDeveloper}");
             MelonLogger.Msg($"Unity Version: {EngineVersion}");
             MelonLogger.Msg($"Game Version: {GameVersion}");
-            MelonLogger.WriteLine(Color.Magenta);
+            MelonLogger.WriteLine(ColorARGB.Magenta);
             MelonLogger.WriteSpacer();
         }
 

@@ -1,8 +1,8 @@
 ﻿using MelonLoader.Utils;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using MelonLoader.Logging;
 
 namespace MelonLoader.Melons
 {
@@ -82,7 +82,7 @@ namespace MelonLoader.Melons
             }
 
             if (hasWroteLine)
-                MelonLogger.WriteLine(Color.Magenta);
+                MelonLogger.WriteLine(ColorARGB.Magenta);
             MelonLogger.Msg($"{count} {typeName} loaded.");
 
             if (firstSpacer || (type == eScanType.Mods))

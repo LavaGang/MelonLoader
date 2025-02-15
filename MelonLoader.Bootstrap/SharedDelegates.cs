@@ -1,4 +1,4 @@
-﻿using MelonLoader.Bootstrap.Logging;
+﻿using MelonLoader.Logging;
 using System.Runtime.InteropServices;
 
 namespace MelonLoader.Bootstrap;
@@ -7,13 +7,13 @@ namespace MelonLoader.Bootstrap;
 internal unsafe delegate void NativeHookFn(nint* target, nint detour);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-internal unsafe delegate void LogMsgFn(ColorRGB* msgColor, string msg, int msgLength, ColorRGB* sectionColor, string section, int sectionLength);
+internal unsafe delegate void LogMsgFn(ColorARGB* msgColor, string msg, int msgLength, ColorARGB* sectionColor, string section, int sectionLength);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
 internal unsafe delegate void LogErrorFn(string msg, int msgLength, string section, int sectionLength, bool warning);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-internal unsafe delegate void LogMelonInfoFn(ColorRGB* nameColor, string name, int nameLength, string info, int infoLength);
+internal unsafe delegate void LogMelonInfoFn(ColorARGB* nameColor, string name, int nameLength, string info, int infoLength);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 internal delegate nint PtrRetFn();

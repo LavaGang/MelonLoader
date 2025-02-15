@@ -1,4 +1,4 @@
-﻿using MelonLoader.Bootstrap.Logging;
+﻿using MelonLoader.Logging;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -71,7 +71,7 @@ internal static partial class ConsoleHandler
 #endif
     }
 
-    public static ConsoleColor GetClosestConsoleColor(ColorRGB color)
+    public static ConsoleColor GetClosestConsoleColor(ColorARGB color)
     {
         var index = color.R > 128 | color.G > 128 | color.B > 128 ? 8 : 0; // Bright bit
         index |= color.R > 64 ? 4 : 0; // Red bit
