@@ -1,8 +1,8 @@
 ﻿#if NET35
 using HarmonyLib;
 using System;
-using System.Drawing;
 using System.Text.RegularExpressions;
+using MelonLoader.Logging;
 
 namespace MelonLoader.Fixes
 {
@@ -20,7 +20,7 @@ namespace MelonLoader.Fixes
 
         private static void OnPreInit()
         {
-            MelonLogger.MsgDirect(Color.Yellow, "The current game is running on .NET Framework 2.0, which is obsolete. Some universal Melons may run into unexpected errors.");
+            MelonLogger.MsgDirect(ColorARGB.Yellow, "The current game is running on .NET Framework 2.0, which is obsolete. Some universal Melons may run into unexpected errors.");
         }
 
         private static void RegexCtor([HarmonyArgument(1)] ref RegexOptions options)

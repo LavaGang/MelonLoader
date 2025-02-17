@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+using MelonLoader.Logging;
 using MelonLoader.Utils;
 
 namespace MelonLoader
@@ -10,7 +10,7 @@ namespace MelonLoader
         {
             if (!IsEnabled())
                 return;
-            MelonLogger.PassLogMsg(MelonLogger.DefaultTextColor, obj.ToString(), Color.CornflowerBlue, "DEBUG");
+            MelonLogger.PassLogMsg(MelonLogger.DefaultTextColor, obj.ToString(), ColorARGB.CornflowerBlue, "DEBUG");
             MsgCallbackHandler?.Invoke(LoggerUtils.DrawingColorToConsoleColor(MelonLogger.DefaultTextColor), obj.ToString());
         }
 
@@ -18,7 +18,7 @@ namespace MelonLoader
         {
             if (!IsEnabled())
                 return;
-            MelonLogger.PassLogMsg(MelonLogger.DefaultTextColor, txt, Color.CornflowerBlue, "DEBUG");
+            MelonLogger.PassLogMsg(MelonLogger.DefaultTextColor, txt, ColorARGB.CornflowerBlue, "DEBUG");
             MsgCallbackHandler?.Invoke(LoggerUtils.DrawingColorToConsoleColor(MelonLogger.DefaultTextColor), txt);
         }
 
@@ -26,7 +26,7 @@ namespace MelonLoader
         {
             if (!IsEnabled())
                 return;
-            MelonLogger.PassLogMsg(MelonLogger.DefaultTextColor, string.Format(txt, args), Color.CornflowerBlue, "DEBUG");
+            MelonLogger.PassLogMsg(MelonLogger.DefaultTextColor, string.Format(txt, args), ColorARGB.CornflowerBlue, "DEBUG");
             MsgCallbackHandler?.Invoke(LoggerUtils.DrawingColorToConsoleColor(MelonLogger.DefaultTextColor), string.Format(txt, args));
         }
 

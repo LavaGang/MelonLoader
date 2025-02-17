@@ -1,10 +1,11 @@
-﻿using System.Drawing;
+﻿using MelonLoader.Bootstrap.Logging;
+using MelonLoader.Logging;
 
 namespace MelonLoader.Bootstrap;
 
 internal static class MelonDebug
 {
-    private static readonly InternalLogger logger = new(Color.CornflowerBlue, "BS DEBUG");
+    private static readonly InternalLogger logger = new(ColorARGB.CornflowerBlue, "BS DEBUG");
 
     public static void Log(string msg)
     {

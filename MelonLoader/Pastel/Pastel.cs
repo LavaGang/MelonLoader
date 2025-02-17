@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using MelonLoader.Logging;
 
 namespace MelonLoader.Pastel
 {
@@ -28,7 +28,7 @@ namespace MelonLoader.Pastel
 
         private static bool _enabled;
 
-        private delegate string ColorFormat(string input, Color color);
+        private delegate string ColorFormat(string input, ColorARGB color);
         private delegate string HexColorFormat(string input, string hexColor);
 
         private enum ColorPlane : byte
@@ -63,10 +63,10 @@ namespace MelonLoader.Pastel
 
 
 
-        private static readonly Func<string, int> _parseHexColor = hc => int.Parse(hc.Replace("#", ""), NumberStyles.HexNumber);
+        private static readonly Func<string, uint> _parseHexColor = hc => uint.Parse(hc.Replace("#", ""), NumberStyles.HexNumber);
 
-        private static readonly Func<string, Color, ColorPlane, string> _colorFormat = (i, c, p) => string.Format(_formatStringFull, _planeFormatModifiers[p], c.R, c.G, c.B, CloseNestedPastelStrings(i, c, p));
-        private static readonly Func<string, string, ColorPlane, string> _colorHexFormat = (i, c, p) => _colorFormat(i, Color.FromArgb(_parseHexColor(c)), p);
+        private static readonly Func<string, ColorARGB, ColorPlane, string> _colorFormat = (i, c, p) => string.Format(_formatStringFull, _planeFormatModifiers[p], c.R, c.G, c.B, CloseNestedPastelStrings(i, c, p));
+        private static readonly Func<string, string, ColorPlane, string> _colorHexFormat = (i, c, p) => _colorFormat(i, ColorARGB.FromArgb(_parseHexColor(c)), p);
 
         private static readonly ColorFormat _noColorOutputFormat = (i, _) => i;
         private static readonly HexColorFormat _noHexColorOutputFormat = (i, _) => i;
@@ -160,7 +160,7 @@ namespace MelonLoader.Pastel
         /// </summary>
         /// <param name="input">The string to color.</param>
         /// <param name="color">The color to use on the specified string.</param>
-        public static string Pastel(this string input, Color color)
+        public static string Pastel(this string input, ColorARGB color)
         {
             return _colorFormatFuncs[_enabled][ColorPlane.Foreground](input, color);
         }
@@ -182,7 +182,7 @@ namespace MelonLoader.Pastel
         /// </summary>
         /// <param name="input">The string to color.</param>
         /// <param name="color">The color to use on the specified string.</param>
-        public static string PastelBg(this string input, Color color)
+        public static string PastelBg(this string input, ColorARGB color)
         {
             return _colorFormatFuncs[_enabled][ColorPlane.Background](input, color);
         }
@@ -199,7 +199,7 @@ namespace MelonLoader.Pastel
 
 
 
-        private static string CloseNestedPastelStrings(string input, Color color, ColorPlane colorPlane)
+        private static string CloseNestedPastelStrings(string input, ColorARGB color, ColorPlane colorPlane)
         {
             var closedString = _closeNestedPastelStringRegex1.Replace(input, _formatStringEnd);
 

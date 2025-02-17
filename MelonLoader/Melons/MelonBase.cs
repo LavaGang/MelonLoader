@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using MelonLoader.Logging;
+
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -37,7 +38,7 @@ namespace MelonLoader
         /// <summary>
         /// Creates a new Melon instance for a Wrapper.
         /// </summary>
-        public static T CreateWrapper<T>(string name, string author, string version, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, Color? color = null, Color? authorColor = null, string id = null) where T : MelonBase, new()
+        public static T CreateWrapper<T>(string name, string author, string version, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, ColorARGB? color = null, ColorARGB? authorColor = null, string id = null) where T : MelonBase, new()
         {
             var melon = new T
             {
@@ -100,12 +101,12 @@ namespace MelonLoader
         /// <summary>
         /// Console Color of the Melon.
         /// </summary>
-        public Color ConsoleColor { get; internal set; }
+        public ColorARGB ConsoleColor { get; internal set; }
 
         /// <summary>
         /// Console Color of the Author that made this melon.
         /// </summary>
-        public Color AuthorConsoleColor { get; internal set; }
+        public ColorARGB AuthorConsoleColor { get; internal set; }
 
         /// <summary>
         /// Info Attribute of the Melon.
@@ -319,8 +320,8 @@ namespace MelonLoader
             if (incompatibilities == null || incompatibilities.Length == 0)
                 return;
 
-            MelonLogger.WriteLine(Color.Red);
-            MelonLogger.MsgDirect(Color.DarkRed, $"'{melon.Info.Name} v{melon.Info.Version}' is incompatible:");
+            MelonLogger.WriteLine(ColorARGB.Red);
+            MelonLogger.MsgDirect(ColorARGB.DarkRed, $"'{melon.Info.Name} v{melon.Info.Version}' is incompatible:");
             if (incompatibilities.Contains(Incompatibility.Game))
             {
                 MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following Games:");
@@ -365,7 +366,7 @@ namespace MelonLoader
                 MelonLogger.MsgDirect($"    - {melon.SupportedMLBuild.HashCode}");
             }
 
-            MelonLogger.WriteLine(Color.Red);
+            MelonLogger.WriteLine(ColorARGB.Red);
             MelonLogger.WriteSpacer();
         }
 
@@ -552,19 +553,19 @@ namespace MelonLoader
 
         private void PrintLoadInfo()
         {
-            MelonLogger.WriteLine(Color.DarkGreen);
+            MelonLogger.WriteLine(ColorARGB.DarkGreen);
             
             MelonLogger.PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, AdditionalCredits?.Credits, Info.Version, ID);
-            MelonLogger.MsgDirect(Color.DarkGray, $"Assembly: {Path.GetFileName(MelonAssembly.Location)}");
+            MelonLogger.MsgDirect(ColorARGB.DarkGray, $"Assembly: {Path.GetFileName(MelonAssembly.Location)}");
 
-            MelonLogger.WriteLine(Color.DarkGreen);
+            MelonLogger.WriteLine(ColorARGB.DarkGreen);
         }
 
         private void PrintUnloadInfo(string reason)
         {
-            MelonLogger.WriteLine(Color.DarkRed);
+            MelonLogger.WriteLine(ColorARGB.DarkRed);
 
-            MelonLogger.MsgDirect(Color.DarkGray, MelonTypeName + " deinitialized:");
+            MelonLogger.MsgDirect(ColorARGB.DarkGray, MelonTypeName + " deinitialized:");
             MelonLogger.PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, AdditionalCredits?.Credits, Info.Version, ID);
 
             if (!string.IsNullOrEmpty(reason))
@@ -573,7 +574,7 @@ namespace MelonLoader
                 MelonLogger.MsgDirect($"Reason: '{reason}'");
             }
 
-            MelonLogger.WriteLine(Color.DarkRed);
+            MelonLogger.WriteLine(ColorARGB.DarkRed);
         }
 
         public static void ExecuteAll(LemonAction<MelonBase> func, bool unregisterOnFail = false, string unregistrationReason = null)

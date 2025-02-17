@@ -3,6 +3,7 @@ using MelonLoader.Bootstrap.RuntimeHandlers.Mono;
 using MelonLoader.Bootstrap.Utils;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using MelonLoader.Logging;
 
 namespace MelonLoader.Bootstrap;
 
@@ -36,7 +37,7 @@ internal static class Exports
     }
 
     [UnmanagedCallersOnly(EntryPoint = "LogMsg")]
-    public static unsafe void LogMsg(ColorRGB* msgColor, char* msg, int msgLength, ColorRGB* sectionColor, char* section, int sectionLength)
+    public static unsafe void LogMsg(ColorARGB* msgColor, char* msg, int msgLength, ColorARGB* sectionColor, char* section, int sectionLength)
     {
         if (msgColor == null || msg == null)
         {
@@ -76,7 +77,7 @@ internal static class Exports
     }
 
     [UnmanagedCallersOnly(EntryPoint = "LogMelonInfo")]
-    public static unsafe void LogMelonInfo(ColorRGB* nameColor, char* name, int nameLength, char* info, int infoLength)
+    public static unsafe void LogMelonInfo(ColorARGB* nameColor, char* name, int nameLength, char* info, int infoLength)
     {
         MelonLogger.LogMelonInfo(*nameColor, new(name, nameLength), new(info, infoLength));
     }

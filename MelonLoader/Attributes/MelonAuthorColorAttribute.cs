@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+using MelonLoader.Logging;
 using MelonLoader.Utils;
 
 namespace MelonLoader
@@ -20,7 +20,7 @@ namespace MelonLoader
         /// <summary>
         /// Color of the Author Log.
         /// </summary>
-        public Color DrawingColor { get; internal set; }
+        public ColorARGB DrawingColor { get; internal set; }
 
         public MelonAuthorColorAttribute() 
             => DrawingColor = MelonLogger.DefaultTextColor;
@@ -30,6 +30,6 @@ namespace MelonLoader
             => Color = ((color == ConsoleColor.Black) ? LoggerUtils.DrawingColorToConsoleColor(MelonLogger.DefaultMelonColor) : color);
 
         public MelonAuthorColorAttribute(int alpha, int red, int green, int blue) 
-            => DrawingColor =  System.Drawing.Color.FromArgb(alpha, red, green, blue);
+            => DrawingColor = ColorARGB.FromArgb((byte)alpha, (byte)red, (byte)green, (byte)blue);
     }
 }

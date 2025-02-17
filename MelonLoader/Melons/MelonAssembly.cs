@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
 using System.Reflection;
+using MelonLoader.Logging;
 using MelonLoader.Utils;
 #if NET6_0_OR_GREATER
 using System.Runtime.Loader;
@@ -153,8 +153,8 @@ namespace MelonLoader
             if (loadMelons)
                 ma.LoadMelons();
 
-            MelonLogger.MsgDirect(Color.DarkGray, $"Melon Assembly loaded: '{shortPath}'");
-            MelonLogger.MsgDirect(Color.DarkGray, $"SHA256 Hash: '{ma.Hash}'");
+            MelonLogger.MsgDirect(ColorARGB.DarkGray, $"Melon Assembly loaded: '{shortPath}'");
+            MelonLogger.MsgDirect(ColorARGB.DarkGray, $"SHA256 Hash: '{ma.Hash}'");
             return ma;
         }
 
