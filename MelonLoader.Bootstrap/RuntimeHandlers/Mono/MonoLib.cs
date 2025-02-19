@@ -35,6 +35,7 @@ internal class MonoLib
     public required nint DebugInitPtr { get; init; }
     public required nint JitParseOptionsPtr { get; init; }
     public required nint RuntimeInvokePtr { get; init; }
+    public required nint ImageOpenFromDataWithNamePtr { get; init; }
 
     public required ThreadCurrentFn ThreadCurrent { get; init; }
     public required DebugInitFn DebugInit { get; init; }
@@ -80,6 +81,7 @@ internal class MonoLib
             || !NativeLibrary.TryGetExport(hRuntime, "mono_runtime_invoke", out var runtimeInvokePtr)
             || !NativeLibrary.TryGetExport(hRuntime, "mono_jit_parse_options", out var jitParseOptionsPtr)
             || !NativeLibrary.TryGetExport(hRuntime, "mono_debug_init", out var debugInitPtr)
+            || !NativeLibrary.TryGetExport(hRuntime, "mono_image_open_from_data_with_name", out var imageOpenFromDataWithNamePtr)
             || !NativeFunc.GetExport<ThreadCurrentFn>(hRuntime, "mono_thread_current", out var threadCurrent)
             || !NativeFunc.GetExport<ThreadSetMainFn>(hRuntime, "mono_thread_set_main", out var threadSetMain)
             || !NativeFunc.GetExport<StringNewFn>(hRuntime, "mono_string_new", out var stringNew)
@@ -126,6 +128,7 @@ internal class MonoLib
             AssemblyGetImage = assemblyGetImage,
             ClassFromName = classFromName,
             ClassGetMethodFromName = classGetMethodFromName,
+            ImageOpenFromDataWithNamePtr = imageOpenFromDataWithNamePtr,
             InstallAssemblyPreloadHook = installAssemblyPreloadHook,
             InstallAssemblySearchHook = installAssemblySearchHook,
             InstallAssemblyLoadHook = installAssemblyLoadHook,
@@ -262,6 +265,9 @@ internal class MonoLib
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint AssemblyPreloadHookFn(ref AssemblyName name, nint assemblyPaths, nint userData);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+    public unsafe delegate nint ImageOpenFromDataWithNameFn(byte* data, uint dataLen, bool needCopy, ref MonoImageOpenStatus status, bool refonly, string name);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint AssemblySearchHookFn(ref AssemblyName name, nint userData);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -272,6 +278,13 @@ internal class MonoLib
         MONO_DEBUG_FORMAT_NONE,
         MONO_DEBUG_FORMAT_MONO,
         MONO_DEBUG_FORMAT_DEBUGGER
+    }
+    
+    public enum MonoImageOpenStatus {
+        MONO_IMAGE_OK,
+        MONO_IMAGE_ERROR_ERRNO,
+        MONO_IMAGE_MISSING_ASSEMBLYREF,
+        MONO_IMAGE_IMAGE_INVALID
     }
     
     [StructLayout(LayoutKind.Sequential)]
