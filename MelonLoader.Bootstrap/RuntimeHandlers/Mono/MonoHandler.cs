@@ -1,5 +1,4 @@
 ﻿using MelonLoader.Bootstrap.Utils;
-using System.Diagnostics;
 using System.Text;
 
 namespace MelonLoader.Bootstrap.RuntimeHandlers.Mono;
@@ -10,6 +9,7 @@ internal static class MonoHandler
     private static Dobby.Patch<MonoLib.JitParseOptionsFn>? jitParseOptionsPatch;
     private static Dobby.Patch<MonoLib.DebugInitFn>? debugInitPatch;
     private static Dobby.Patch<MonoLib.RuntimeInvokeFn>? invokePatch;
+    private static Dobby.Patch<MonoLib.ImageOpenFromDataWithNameFn>? imageOpenFromDataWithNamePatch;
 
     private static nint assemblyManagerResolve;
     private static nint assemblyManagerLoadInfo;
@@ -30,7 +30,7 @@ internal static class MonoHandler
     private const string MonoDebugNoSuspendArg = ",suspend=n";
     private const string MonoDebugNoSuspendArgOldMono = ",suspend=n,defer=y";
     
-    public static bool TryInitialize()
+    public static unsafe bool TryInitialize()
     {
         var monoLib = MonoLib.TryLoad(Core.GameDir);
         if (monoLib == null)
@@ -46,8 +46,40 @@ internal static class MonoHandler
         jitParseOptionsPatch = Dobby.CreatePatch<MonoLib.JitParseOptionsFn>(Mono.JitParseOptionsPtr, JitParseOptionsDetour);
         MelonDebug.Log("Patching mono debug init");
         debugInitPatch = Dobby.CreatePatch<MonoLib.DebugInitFn>(Mono.DebugInitPtr, DebugInitDetour);
+        MelonDebug.Log("Patching mono image open from data with name patch");
+        imageOpenFromDataWithNamePatch = Dobby.CreatePatch<MonoLib.ImageOpenFromDataWithNameFn>(Mono.ImageOpenFromDataWithNamePtr, ImageOpenFromDataWithNameDetour);
 
         return true;
+    }
+
+    private static unsafe IntPtr ImageOpenFromDataWithNameDetour(byte* data, uint dataLen, bool needCopy, ref MonoLib.MonoImageOpenStatus status, bool refonly, string name)
+    {
+        if (imageOpenFromDataWithNamePatch == null)
+            return IntPtr.Zero;
+
+        if (string.IsNullOrEmpty(name))
+            return imageOpenFromDataWithNamePatch.Original(data, dataLen, needCopy, ref status, refonly, name);
+
+        if (string.IsNullOrWhiteSpace(LoaderConfig.Current.UnityEngine.MonoSearchPathOverride))
+            return imageOpenFromDataWithNamePatch.Original(data, dataLen, needCopy, ref status, refonly, name);
+
+        string fileName = Path.GetFileName(name);
+        var foundOverridenFile = LoaderConfig.Current.UnityEngine.MonoSearchPathOverride
+            .Split(MonoPathSeparator)
+            .Select(x => Path.GetFullPath(Path.Combine(x, fileName)))
+            .FirstOrDefault(File.Exists);
+        
+        if (foundOverridenFile == null)
+            return imageOpenFromDataWithNamePatch.Original(data, dataLen, needCopy, ref status, refonly, name);
+        
+        MelonDebug.Log($"Overriding the image load of {name} to {foundOverridenFile}");
+        byte[] newDataArray = File.ReadAllBytes(foundOverridenFile);
+        uint newDataLen = (uint)newDataArray.Length;
+        fixed (byte* newDataPtr = &newDataArray[0])
+        {
+            var newReturn = imageOpenFromDataWithNamePatch.Original(newDataPtr, newDataLen, needCopy, ref status, refonly, name);
+            return newReturn;
+        }
     }
 
     private static void DebugInitDetour(MonoLib.MonoDebugFormat format)
