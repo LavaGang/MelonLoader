@@ -15,10 +15,14 @@ PlayerMain original;
 
 void detour(int a, char **b)
 {
-    Dl_info dl_info;
-    dladdr(reinterpret_cast<void*>(detour), &dl_info);
+    void *hUnity = dlopen("MelonLoader.Bootstrap.so", RTLD_NOW);
+    if (hUnity == nullptr)
+    {
+        printf("MelonLoader.Bootstrap.so");
+        return;
+    }
 
-    Init(dl_info.dli_fbase);
+    Init(hUnity);
 
     return original(a, b);
 }

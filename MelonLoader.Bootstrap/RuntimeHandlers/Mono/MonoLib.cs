@@ -39,6 +39,7 @@ internal class MonoLib
 
     public required ThreadCurrentFn ThreadCurrent { get; init; }
     public required DebugInitFn DebugInit { get; init; }
+    public required ConfigParseFn ConfigParse { get; init; }
     public required ThreadSetMainFn ThreadSetMain { get; init; }
     public required RuntimeInvokeFn RuntimeInvoke { get; init; }
     public required StringNewFn StringNew { get; init; }
@@ -82,6 +83,7 @@ internal class MonoLib
             || !NativeLibrary.TryGetExport(hRuntime, "mono_jit_parse_options", out var jitParseOptionsPtr)
             || !NativeLibrary.TryGetExport(hRuntime, "mono_debug_init", out var debugInitPtr)
             || !NativeLibrary.TryGetExport(hRuntime, "mono_image_open_from_data_with_name", out var imageOpenFromDataWithNamePtr)
+            || !NativeFunc.GetExport<ConfigParseFn>(hRuntime, "mono_config_parse", out var configParse)
             || !NativeFunc.GetExport<ThreadCurrentFn>(hRuntime, "mono_thread_current", out var threadCurrent)
             || !NativeFunc.GetExport<ThreadSetMainFn>(hRuntime, "mono_thread_set_main", out var threadSetMain)
             || !NativeFunc.GetExport<StringNewFn>(hRuntime, "mono_string_new", out var stringNew)
@@ -132,7 +134,8 @@ internal class MonoLib
             InstallAssemblyPreloadHook = installAssemblyPreloadHook,
             InstallAssemblySearchHook = installAssemblySearchHook,
             InstallAssemblyLoadHook = installAssemblyLoadHook,
-            DomainSetConfig = domainSetConfig
+            DomainSetConfig = domainSetConfig,
+            ConfigParse = configParse
         };
     }
 
@@ -261,7 +264,10 @@ internal class MonoLib
     public delegate nint DomainAssemblyOpenFn(nint domain, string path);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-    public delegate void DomainSetConfigFn(nint domain, string configPath, nint name);
+    public delegate void DomainSetConfigFn(nint domain, string configPath, string configFile);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+    public delegate void ConfigParseFn(string? configPath);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint AssemblyPreloadHookFn(ref AssemblyName name, nint assemblyPaths, nint userData);

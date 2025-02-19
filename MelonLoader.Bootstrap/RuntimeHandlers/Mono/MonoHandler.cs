@@ -144,10 +144,14 @@ internal static class MonoHandler
 
         if (Mono is { IsOld: false, DomainSetConfig: not null })
         {
-            MelonDebug.Log("Setting Mono Config");
+            string configFile = $"{Environment.ProcessPath}.config";
+            MelonDebug.Log($"Setting Mono Config paths: base_dir: {Core.GameDir}, config_file_name: {configFile}");
 
-            Mono.DomainSetConfig(Domain, Core.GameDir, name);
+            Mono.DomainSetConfig(Domain, Core.GameDir, configFile);
         }
+        
+        MelonDebug.Log("Parsing default Mono config");
+        Mono.ConfigParse(null);
 
         InitializeManaged();
         jitParseOptionsPatch?.Destroy();
