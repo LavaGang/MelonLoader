@@ -4,6 +4,7 @@ using System.Reflection;
 using System.IO;
 using bHapticsLib;
 using System.Threading;
+using HarmonyLib;
 using MelonLoader.Resolver;
 using MelonLoader.Utils;
 using MelonLoader.InternalUtils;
@@ -21,6 +22,70 @@ namespace MelonLoader
 
         internal static HarmonyLib.Harmony HarmonyInstance;
         internal static bool Is_ALPHA_PreRelease = false;
+        private static bool MonoCoreStartEntrypointAlreadyCalled = false;
+        private static MethodInfo MonoCoreStartHookMethod;
+
+        // First step of the Mono Core.Start entrypoint: Harmony patch the main Unity assembly with a suitable hook
+        private static void OnAssemblyLoad(object sender, AssemblyLoadEventArgs args)
+        {
+            const string sceneManagerTypeName = "UnityEngine.SceneManagement.SceneManager";
+            const string displayTypeName = "UnityEngine.Display";
+            
+            var assembly = args.LoadedAssembly;
+            var assemblyName = assembly.GetName().Name;
+
+            if (assemblyName is not ("UnityEngine.CoreModule" or "UnityEngine"))
+                return;
+
+            try 
+            { 
+                AppDomain.CurrentDomain.AssemblyLoad -= OnAssemblyLoad;
+
+                var sceneManagerType = assembly.GetType(sceneManagerTypeName, false);
+                if (sceneManagerType != null)
+                {
+                    MonoCoreStartHookMethod = sceneManagerType.GetMethod("Internal_ActiveSceneChanged", BindingFlags.NonPublic | BindingFlags.Static);
+                    HarmonyInstance.Patch(MonoCoreStartHookMethod, prefix: new HarmonyMethod(typeof(Core), nameof(Entrypoint)));
+                    MelonLogger.Msg($"Hooked into {MonoCoreStartHookMethod.FullDescription()}");
+                    return;
+                }
+
+                var displayType = assembly.GetType(displayTypeName, false);
+                if (displayType != null)
+                {
+                    MonoCoreStartHookMethod = displayType.GetMethod("RecreateDisplayList", BindingFlags.NonPublic | BindingFlags.Static);
+                    HarmonyInstance.Patch(MonoCoreStartHookMethod, postfix: new HarmonyMethod(typeof(Core), nameof(Entrypoint)));
+                    MelonLogger.Msg($"Hooked into {MonoCoreStartHookMethod.FullDescription()}");
+                    return;
+                }
+
+                MelonLogger.Error($"Couldn't find a suitable Core.Start entrypoint in the {assemblyName} assembly because " +
+                                  $"{sceneManagerTypeName} or {displayTypeName} do not exist in the assembly");
+            }
+            catch (Exception e)
+            {
+                MelonLogger.Error($"Unexpected error occured when trying to hook into {assemblyName}: {e}");
+            }
+        }
+
+        // Second step of the Mono Core.Start entrypoint: undo the Harmony patch and call the Core.Start method
+        private static void Entrypoint()
+        {
+            if (MonoCoreStartEntrypointAlreadyCalled)
+                return;
+
+            MonoCoreStartEntrypointAlreadyCalled = true;
+            try
+            {
+                HarmonyInstance.Unpatch(MonoCoreStartHookMethod, HarmonyPatchType.All, BuildInfo.Name);
+            }
+            catch (Exception e)
+            {
+                MelonLogger.Error($"Unexpected error when trying to unhook the Core.Start entrypoint: {e}");
+            }
+
+            Start();
+        }
 
         internal static int Initialize()
         {
@@ -120,6 +185,12 @@ namespace MelonLoader
 
             MelonEvents.MelonHarmonyEarlyInit.Invoke();
             MelonEvents.OnPreInitialization.Invoke();
+
+#if !NET6_0_OR_GREATER
+            // Set up the Core.Start entrypoint which harmony patches the main Unity assembly as soon as possible and
+            // unpatch it in our hooking method before calling the Core.Start method
+            AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoad;
+#endif
 
             return 0;
         }
