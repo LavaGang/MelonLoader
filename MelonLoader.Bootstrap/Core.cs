@@ -16,9 +16,6 @@ public static class Core
     public static string DataDir { get; private set; } = null!;
     public static string GameDir { get; private set; } = null!;
 
-#if LINUX
-    [System.Runtime.InteropServices.UnmanagedCallersOnly(EntryPoint = "Init")]
-#endif
     [RequiresDynamicCode("Calls InitConfig")]
     public static void Init(nint moduleHandle)
     {
