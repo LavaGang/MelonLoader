@@ -141,11 +141,6 @@ namespace MelonLoader.Melons
                 if (!Directory.Exists(dir))
                     continue;
 
-                // Validate Manifest
-                string manifestPath = Path.Combine(dir, "manifest.json");
-                if (!File.Exists(manifestPath))
-                    continue;
-
                 // Check for Deeper UserLibs
                 string userLibsPath = Path.Combine(dir, "UserLibs");
                 if (Directory.Exists(userLibsPath))
