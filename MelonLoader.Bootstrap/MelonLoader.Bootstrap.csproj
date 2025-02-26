@@ -14,15 +14,15 @@
     
     <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
         <ExportsFile>linuxexports.def</ExportsFile>
-        <LinuxEntryPath>Deps/$(RuntimeIdentifier)/linuxentry.o</LinuxEntryPath>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'">
         <LinkerArg Include="/DEF:Exports.def" />
     </ItemGroup>
 
+    <!-- This is needed by libnethost.a, not doing this will result in a runtime crash on boot -->
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
-        <LinkerArg Include="-lstdc++" />
+        <LinkerArg Include="-Wl,-lstdc++" Visible="false" />
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
@@ -64,20 +64,18 @@
         <NativeLibrary Include="Deps/$(RuntimeIdentifier)/$(LibPrefix)dobby$(LibExt)" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
-        <NativeLibrary Include="$(LinuxEntryPath)" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ClCompile Include="LinuxEntry\LinuxEntry.cpp" />
-    </ItemGroup>
+    <!-- For some reasons, the linux export file .NET auto generate after compilation contains a hardcoded
+         version being "V1.0". This is bad for us because it means every symbols we export will have "@@V1.0"
+         appended. Our entrypoint on linux REQUIRES to expose "__libc_start_main" without any version suffix.
+         To workaround this, we can remove the string in the file before linking, but after compile -->
+    <Target Name="Replace" BeforeTargets="LinkNative" DependsOnTargets="IlcCompile">
+        <WriteLinesToFile File="$(ExportsFile)"
+                          Lines="$([System.IO.File]::ReadAllText($(ExportsFile)).Replace('V1.0',''))"
+                          Overwrite="true"/>
+    </Target>
 
     <Target Name="PublishAsBuildAfterTarget" AfterTargets="Build" DependsOnTargets="Publish" />
     
-    <Target Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'" Name="BuildLinuxEntry" BeforeTargets="Build">
-        <Exec Command="g++ -c -O2 -fPIC LinuxEntry/LinuxEntry.cpp -o $(LinuxEntryPath)" />
-    </Target>
-
     <Target Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'" Name="RenameBinary" AfterTargets="Build">
         <Move SourceFiles="$(PublishDir)/$(TargetName).dll" DestinationFiles="$(PublishDir)/version.dll" />
     </Target>
