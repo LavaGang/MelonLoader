@@ -8,12 +8,10 @@ internal static class MonoHandler
     private static Dobby.Patch<MonoLib.JitInitVersionFn>? initPatch;
     private static Dobby.Patch<MonoLib.JitParseOptionsFn>? jitParseOptionsPatch;
     private static Dobby.Patch<MonoLib.DebugInitFn>? debugInitPatch;
-    private static Dobby.Patch<MonoLib.RuntimeInvokeFn>? invokePatch;
     private static Dobby.Patch<MonoLib.ImageOpenFromDataWithNameFn>? imageOpenFromDataWithNamePatch;
 
     private static nint assemblyManagerResolve;
     private static nint assemblyManagerLoadInfo;
-    private static nint coreStart;
     private static bool debugInitCalled;
 
     internal static nint Domain { get; private set; }
@@ -223,7 +221,7 @@ internal static class MonoHandler
         var interopClass = Mono.ClassFromName(image, "MelonLoader.InternalUtils", "BootstrapInterop");
 
         var initMethod = Mono.ClassGetMethodFromName(interopClass, "Initialize", 1);
-        coreStart = Mono.ClassGetMethodFromName(interopClass, "Start", 0);
+        Mono.ClassGetMethodFromName(interopClass, "Start", 0);
 
         var assemblyManagerClass = Mono.ClassFromName(image, "MelonLoader.Resolver", "AssemblyManager");
 
@@ -239,39 +237,6 @@ internal static class MonoHandler
             &bootstrapHandle
         };
         Mono.RuntimeInvoke(initMethod, 0, (void**)initArgs, ref ex);
-        if (ex != 0)
-            return;
-
-        MelonDebug.Log("Patching invoke");
-        invokePatch = Dobby.CreatePatch<MonoLib.RuntimeInvokeFn>(Mono.RuntimeInvokePtr, InvokeDetour);
-    }
-
-    private static unsafe nint InvokeDetour(nint method, nint obj, void** args, ref nint ex)
-    {
-        if (invokePatch == null)
-            return 0;
-
-        var result = invokePatch.Original(method, obj, args, ref ex);
-
-        var name = Mono.GetMethodName(method);
-        if (name == null ||
-            ((!Mono.IsOld || (!name.Contains("Awake") && !name.Contains("DoSendMouseEvents")))
-             && !name.Contains("Internal_ActiveSceneChanged")
-             && !name.Contains("UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize")))
-            return result;
-
-        MelonDebug.Log("Invoke hijacked");
-        invokePatch.Destroy();
-
-        Start();
-
-        return result;
-    }
-
-    private static unsafe void Start()
-    {
-        nint ex = 0;
-        Mono.RuntimeInvoke(coreStart, 0, null, ref ex);
     }
 
     private static nint CastManagedAssemblyPtrImpl(nint ptr)
