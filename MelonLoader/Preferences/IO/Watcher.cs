@@ -10,6 +10,8 @@ namespace MelonLoader.Preferences.IO
         private static bool ShouldDisableFileWatcherFunctionality = false;
         private FileSystemWatcher FileWatcher = null;
         private readonly File PrefFile = null;
+        private object SyncLock = new();
+        private DateTime LastReadTimeUtc = DateTime.MinValue;
 
         internal Watcher(File preffile)
         {
@@ -51,6 +53,7 @@ namespace MelonLoader.Preferences.IO
                 return;
             try
             {
+                FileWatcher.EnableRaisingEvents = false;
                 FileWatcher.EndInit();
                 FileWatcher.Dispose();
             }
@@ -69,7 +72,16 @@ namespace MelonLoader.Preferences.IO
                 PrefFile.IsSaving = false;
                 return;
             }
-            MelonPreferences.LoadFileAndRefreshCategories(PrefFile);
+
+            lock (SyncLock)
+            {
+                DateTime lastWriteUtc = System.IO.File.GetLastWriteTimeUtc(PrefFile.FilePath);
+                if (lastWriteUtc > LastReadTimeUtc)
+                {
+                    MelonPreferences.LoadFileAndRefreshCategories(PrefFile);
+                    LastReadTimeUtc = DateTime.UtcNow;
+                }
+            }
         }
     }
 }

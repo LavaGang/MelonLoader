@@ -270,7 +270,10 @@ namespace MelonLoader
         internal static void Quit()
         {
             MelonDebug.Msg("[ML Core] Received Quit Request! Shutting down...");
-            
+
+            foreach (var prefFile in MelonPreferences.PrefFiles)
+                prefFile.FileWatcher.Destroy();
+            MelonPreferences.DefaultFile.FileWatcher.Destroy();
             MelonPreferences.Save();
 
             HarmonyInstance.UnpatchSelf();
