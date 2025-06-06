@@ -111,6 +111,12 @@ namespace MelonLoader
         public static bool IsUnix => GetPlatform is PlatformID.Unix;
         public static bool IsWindows => GetPlatform is PlatformID.Win32NT or PlatformID.Win32S or PlatformID.Win32Windows or PlatformID.WinCE;
         public static bool IsMac => GetPlatform is PlatformID.MacOSX;
+        public static bool IsAndroid =>
+#if ANDROID // This is what .NET does internally for OperatingSystem.IsAndroid, this just prevents errors on net35
+            true;
+#else
+            false;
+#endif
 
 #if NET6_0_OR_GREATER
         private static PlatformID GetPlatformFromRuntimeInformation()
@@ -515,14 +521,19 @@ namespace MelonLoader
 
 
         public static unsafe bool IsGame32Bit() =>
-#if X64
+#if X64 || ANDROID // NOTE: This will need to be refactored if other arches are ever supported on Android
             false;
 #else
             true;
 #endif
 
 
-        public static bool IsGameIl2Cpp() => Directory.Exists(MelonEnvironment.Il2CppDataDirectory);
+        public static bool IsGameIl2Cpp() =>
+#if !ANDROID
+            Directory.Exists(MelonEnvironment.Il2CppDataDirectory);
+#else
+            APKAssetManager.DoesAssetExist(Path.Combine(Path.Combine(MelonEnvironment.Il2CppDataDirectory, "Metadata"), "global-metadata.dat"));
+#endif
 
         public static bool IsOldMono()
         {
@@ -532,7 +543,9 @@ namespace MelonLoader
             return libs.Select(Path.GetFileName).Contains("libmono.0.dylib");
 #else
             return File.Exists(MelonEnvironment.UnityGameDataDirectory + "\\Mono\\mono.dll") || 
-                   File.Exists(MelonEnvironment.UnityGameDataDirectory + "\\Mono\\libmono.so");
+                   File.Exists(MelonEnvironment.UnityGameDataDirectory + "\\Mono\\libmono.so") ||
+                   Process.GetCurrentProcess().Modules.OfType<ProcessModule>() // Android support
+                        .Any(x => x.FileName.Contains("libmono.so"));
 #endif
         }
 
@@ -619,6 +632,23 @@ namespace MelonLoader
 
         internal static string GetOSVersion()
         {
+            if (IsAndroid)
+            {
+                StringBuilder sb = new();
+                sb.Append("Android ");
+                int apiLevel = Environment.OSVersion.Version.Major;
+                // https://apilevels.com/
+                string androidVersion = apiLevel switch
+                {
+                    27 => "8.1", 28 => "9", 29 => "10",
+                    30 => "11", 31 => "12", 32 => "12L", 33 => "13", 34 => "14", 35 => "15", 36 => "16",
+                    _ => $"API Level {apiLevel}"
+                };
+                sb.Append(androidVersion);
+
+                return sb.ToString();
+            }
+
             if (IsUnix || IsMac)
                 return Environment.OSVersion.VersionString;
 

@@ -192,11 +192,13 @@ namespace MelonLoader.Fixes
                     null,
                     new HarmonyMethod(_systemTypeFromIl2CppType_Transpiler));
 
+#if !ANDROID // On Android this patch causes MissingMethodExceptions for an unknown reason
                 LogDebugMsg("Patching Il2CppInterop ClassInjector.RegisterTypeInIl2Cpp...");
                 Core.HarmonyInstance.Patch(_registerTypeInIl2Cpp,
                     null,
                     null,
                     new HarmonyMethod(_registerTypeInIl2Cpp_Transpiler));
+#endif
 
                 LogDebugMsg("Patching Il2CppInterop ClassInjector.IsTypeSupported...");
                 Core.HarmonyInstance.Patch(_isTypeSupported,
