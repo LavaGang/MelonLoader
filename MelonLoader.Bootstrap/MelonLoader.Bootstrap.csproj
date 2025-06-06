@@ -12,6 +12,8 @@
         <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
 
+    <Import Condition="'$(RuntimeIdentifier.StartsWith(`linux-bionic-`))' == 'true'" Project="BionicNativeAot.targets" />
+
     <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
         <ExportsFile>linuxexports.def</ExportsFile>
         <LinkStandardCPlusPlusLibrary>true</LinkStandardCPlusPlusLibrary>
@@ -21,6 +23,10 @@
         <OSXEntryPath>Deps/$(RuntimeIdentifier)/osxentry.o</OSXEntryPath>
         <LinkStandardCPlusPlusLibrary>true</LinkStandardCPlusPlusLibrary>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-bionic-`))' == 'true'">
+		<ExportsFile>androidexports.def</ExportsFile>
+        <LinkStandardCPlusPlusLibrary>true</LinkStandardCPlusPlusLibrary>
+	</PropertyGroup>
     
     <Target Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'" Name="BuildOSXEntry" BeforeTargets="Build">
         <Exec Command="g++ -c -O2 -fPIC OSXEntry/osxentry.cpp -o $(OSXEntryPath)" />
@@ -62,6 +68,8 @@
 
     <ItemGroup>
         <Compile Include="$(SolutionDir)/MelonLoader/LoaderConfig.cs" />
+        <Compile Include="$(SolutionDir)/MelonLoader/JNI/*" Link="JNI/%(Filename)%(Extension)" />
+        <Compile Include="$(SolutionDir)/MelonLoader/Utils/APKAssetManager.cs" Link="Proxy/Android/%(Filename)%(Extension)" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'">
@@ -84,9 +92,13 @@
                           Overwrite="true"/>
     </Target>
 
-    <Target Name="PublishAsBuildAfterTarget" AfterTargets="Build" DependsOnTargets="Publish" />
+    <Target Condition="'$(RuntimeIdentifier.StartsWith(`linux-bionic-`))' == 'false'" Name="PublishAsBuildAfterTarget" AfterTargets="Build" DependsOnTargets="Publish" />
 
     <Target Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'" Name="RenameBinary" AfterTargets="Build">
         <Move SourceFiles="$(PublishDir)/$(TargetName).dll" DestinationFiles="$(PublishDir)/version.dll" />
+    </Target>
+
+    <Target Condition="'$(RuntimeIdentifier.StartsWith(`linux-bionic-`))' == 'true'" Name="RenameBinary" AfterTargets="Publish">
+        <Move SourceFiles="$(PublishDir)/$(TargetName).so" DestinationFiles="$(PublishDir)/libmain.so" />
     </Target>
 </Project>

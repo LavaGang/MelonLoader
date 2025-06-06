@@ -1,0 +1,17 @@
+{
+    global:
+        DotNetRuntimeDebugHeader;
+        NativeHookAttach;
+        NativeHookDetach;
+        LogMsg;
+        LogError;
+        LogMelonInfo;
+        MonoInstallHooks;
+        MonoGetDomainPtr;
+        MonoGetRuntimeHandle;
+        IsConsoleOpen;
+        GetLoaderConfig;
+        GetJavaVM;
+        JNI_OnLoad;
+    local: *;
+};

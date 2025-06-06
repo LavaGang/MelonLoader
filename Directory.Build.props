@@ -24,6 +24,15 @@
         <LibExt>.a</LibExt>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-bionic`))' == 'true'">
+		<RuntimeIdentifiers>linux-bionic-arm64</RuntimeIdentifiers>
+		<RuntimeIdentifier>linux-bionic-arm64</RuntimeIdentifier>
+		<PlatformTarget>arm64</PlatformTarget>
+		<DefineConstants>$(DefineConstants);ANDROID</DefineConstants>
+		<LibPrefix>lib</LibPrefix>
+		<LibExt>.a</LibExt>
+	</PropertyGroup>
+
     <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
         <!-- TODO: split x64 and arm64 -->
         <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
@@ -34,7 +43,8 @@
         <LibExt>.a</LibExt>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$([MSBuild]::IsOSUnixLike())' == 'false'">
+    <!-- The second condition is required for cross-compiling Android to prevent issues -->
+    <PropertyGroup Condition="'$([MSBuild]::IsOSUnixLike())' == 'false' and '$(RuntimeIdentifier)' == ''">
         <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
         <RuntimeIdentifier>win-$(Platform)</RuntimeIdentifier>
         <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>

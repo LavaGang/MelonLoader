@@ -73,3 +73,22 @@ internal partial class LibcNative
     public static partial int FClose(nint stream);
 }
 #endif
+
+#if ANDROID
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+namespace MelonLoader.Bootstrap;
+
+internal partial class LibcNative
+{
+    internal const int Stdout = 1;
+    internal const int Stderr = 2;
+
+    internal const int SeekEnd = 2;
+    
+    [LibraryImport("libdl", EntryPoint = "dlsym", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial nint Dlsym(nint handle, string symbol);
+}
+#endif

@@ -18,6 +18,8 @@ internal static partial class Dotnet
         StringMarshalling.Utf8;
 #endif
 
+    private const string ANDROID_DOTNET_VERSION = "8.0.6";
+
     public static bool LoadHostfxr()
     {
         var path = GetHostfxrPath();
@@ -26,10 +28,20 @@ internal static partial class Dotnet
 
     private static string? GetHostfxrPath()
     {
+#if ANDROID
+        if (string.IsNullOrEmpty(MelonLoader.Bootstrap.Proxy.Android.AndroidBootstrap.DotnetDir))
+        {
+            MelonDebug.Log("DotnetDir is not set, cannot find hostfxr.");
+            return null;
+        }
+
+        return Path.Combine(MelonLoader.Bootstrap.Proxy.Android.AndroidBootstrap.DotnetDir, "host", "fxr", ANDROID_DOTNET_VERSION, "libhostfxr.so");
+#else
         var buffer = new StringBuilder(1024);
         var bufferSize = (nint)buffer.Capacity;
         var result = get_hostfxr_path(buffer, ref bufferSize, 0);
         return result != 0 ? null : buffer.ToString();
+#endif
     }
 
     public static bool InitializeForRuntimeConfig(string runtimeConfigPath, out nint context)
