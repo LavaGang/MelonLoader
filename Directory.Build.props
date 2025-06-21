@@ -1,7 +1,7 @@
 <Project>
     <PropertyGroup>
         <Version>0.7.1</Version>
-        <Il2CppInteropVersion>1.4.6-ci.579</Il2CppInteropVersion>
+        <Il2CppInteropVersion>1.5.0-ci.625</Il2CppInteropVersion>
 
         <Authors>Lava Gang</Authors>
         <Company>discord.gg/2Wn3N2P</Company>

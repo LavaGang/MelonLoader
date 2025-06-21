@@ -131,6 +131,10 @@ internal static class MelonFolderHandler
         ref List<string> pluginDirectories,
         ref List<string> modDirectories)
     {
+        string directoryName = Path.GetFileName(path);
+        if (directoryName.StartsWith("~"))
+            return;
+
         // Get Directories
         string[] directories = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
         if (directories.Length <= 0)
@@ -141,6 +145,10 @@ internal static class MelonFolderHandler
         {
             // Validate Path
             if (!Directory.Exists(dir))
+                continue;
+
+            directoryName = Path.GetFileName(dir);
+            if (directoryName.StartsWith("~"))
                 continue;
 
             List<string> dirList = scanType switch

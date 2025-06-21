@@ -1,6 +1,7 @@
 ﻿using MelonLoader.Logging;
 using System.Runtime.InteropServices;
 using System.Text;
+using MelonLoader.Bootstrap.Utils;
 
 namespace MelonLoader.Bootstrap;
 
@@ -27,9 +28,11 @@ internal static class ConsoleHandler
     public static void OpenConsole(bool onTop, string? title)
     {
 #if WINDOWS
-        // Do not create a new window if a window already exists
+        // Do not create a new window if a window already exists or the output is being redirected.
+        // On Wine, we always want to show the window because it's possible the handle isn't null due to Wine itself
         var consoleWindow = WindowsNative.GetConsoleWindow();
-        if (consoleWindow == 0)
+        var stdOut = WindowsNative.GetStdHandle(WindowsNative.StdOutputHandle);
+        if (consoleWindow == 0 && (stdOut == 0 || WineUtils.IsWine))
         {
             WindowsNative.AllocConsole();
             consoleWindow = WindowsNative.GetConsoleWindow();

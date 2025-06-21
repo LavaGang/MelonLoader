@@ -1,5 +1,6 @@
 | Versions: |
 | - |
+| [v0.7.1](#v071) |
 | [v0.7.0](#v070) |
 | [v0.6.6](#v066) |
 | [v0.6.5](#v065) |
@@ -36,6 +37,94 @@
 | [v0.0.3](#v003) |
 | [v0.0.2](#v002) |
 | [v0.0.1](#v001) |
+
+---
+
+### v0.7.1
+
+1. Added Warning Text When Classdata.Tpk is Outdated   (Credits to [data-bomb](https://github.com/data-bomb) :D)
+2. Implemented a mono debug server feature   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+3. Reworked the solution configs to allow building x86 and x64 on Windows   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+4. Adjusted the workflow to work with the new solution configs   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+5. Added Directory.Build.Props in solution items and removed a non-existent file   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+6. Implemented a workaround for the old mono "fixed" with string issue   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+7. Replaced AssetRipper.VersionUtilities by Asset AssetRipper.Primitives   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+8. Fixed an issue with NetStandardPatches assemblies not loading even on old mono   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+9. Changed ``System.Configuration.dll`` to not be a reference assembly   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+10. Fixed an incorrect config default in the [README](https://github.com/LavaGang/MelonLoader/blob/master/README.md)   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+11. Changed MelonLogger to just use marshalling to pass strings   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+12. Fixed SystemTypeFromIl2CppType patch   (Credits to [slxdy](https://github.com/slxdy) :D)
+13. Added "ExcludeAssets" runtime to AssetRipper.Primitives   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+14. Attempt to find another stream object for streamwriter if it has been stripped   (Credits to [DaxxTrias](https://github.com/DaxxTrias) :D)
+15. Removed System.Drawing as a dependency   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+16. Fixed an issue with an incorrect set domain config file and missing mono_parse_config call   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+17. Correctly obtain the bootstrap handle in the linux entrypoint   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+18. Implemented a hook to mono_image_open_from_data_with_name to redirect assemblies if overriden   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+19. Offloaded the Core.Start entrypoint for Mono to the managed side   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+20. Rewrote the linux bootstrap entrypoint method   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+21. Improved the stability of the FileSystemWatcher   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+22. Removed "manifest.json" Requirement for Recursive Melon Subfolder scanning
+23. Added PltHook to the project   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+24. Added utilities for Linux in LibcNative   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+25. Moved some Windows native stuff into its own class and add some utilities   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+26. Add a setting to opt into capturing player logs   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+27. Implemented hooks to prevent stdout / stderr to be closed while in use   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+28. Ensured we are always appending to the end of a log file or stream   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+29. Added a unity player logs InternalLogger   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+30. Null the std handles only if we don't want player logs on Windows   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+31. Implemented unity player logs capture when the setting is turned on   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+32. Changed Bootstrap to only use plt hooks as native detouring method   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+33. Fixed an issue with DebugMode setting being forced on debug builds   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+34. Made every mono projects use ppdb instead of embedded pdb   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+35. Added a custom post build task that converts ppdb to mdb to support net35 mono debugging   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+36. Added the XTermFix to prevent console driver throws on linux   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+37. Implemented a setting to capture harmony logs   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+38. Prevented the GC from collecting plt hooks delegates   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+39. Implemented MacOS bootstrap compilation   (Credits to [aldelaro5](https://github.com/aldelaro5) and [TrevTV](https://github.com/TrevTV) :D)
+40. Added OSX specific entry point using DYLD_INTERPOSE   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+41. Implemented LinkStandardCPlusPlusLibrary instead of linking with c++ directly   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+42. Added dobby for macos   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+43. Added plt hooks support for macos   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+44. Added some needed libc calls for macos   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+45. Integrated the new osx entrypoint and refactor everything in common with linux   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+46. Adjusted some bootstrapping logic for macos   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+47. Added a check in-case the xtermfix does not apply   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+48. Added a macos specific fix for the Process.Modules api   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+49. Added a NativeLibrary fix for macos so il2cppinterop can find ``GameAssembly.dylib``   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+50. Disabled the GetTypeInfoFromTypeDefinitionIndexHook on macos due to instabilities caused by inlining   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+51. Reordered and applied the new fixes on startup   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+52. Fixed several pathing issues on macos   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+53. Adjusted the linux player logs mirroring to work on macos   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+54. Implemented a ``chmod+x`` on Cpp2IL before usage on macos   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+55. Help il2cppinterop to locate GameAssembly on macos with a native dll resolver   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+56. Fixed broken platform detection for macos on CoreCLR   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+57. Added macOS builds to the GitHub Workflow   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+58. Made the launch_debugger option wait for a debugger on non Windows platforms   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+59. Redesigned the resolver and split it into a Search and Resolve part   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+60. Simplified the directory scanning and revised the default ordering   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+61. Fixed an issue with attempting to preprocess assemblies which aren't melon in the plugins and mods folder   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+62. Fixed an issue where the incorrect path would be sent to ``ImageOpenFromDataWithName``   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+63. Changed some classes to use file scoped namespaces   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+64. Reimplemented Support Module Component Registration
+65. Changed the TFM of the mdb task to standard 2.0   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+66. Fixed an issue with attempting to modify LD_LIBRARY_PATH if no value was set   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+67. Fixed SetAsLastSibling Invoking for Support Module Component Registration
+68. Fixed MelonModule Deletion Conflict
+69. Changed Support Module Component SiblingFix to use a Delegate on Mono Games
+70. Added WindowsUnhandledQuit fix   (Credits to [HAHOOS](https://github.com/HAHOOS) :D)
+71. Updated AsmResolver to 6.0.0-beta.3
+72. Updated Il2CppInterop to 1.5.0-ci.625
+73. Separated several Il2CppInterop fixes
+74. Removed broken Il2CppInterop fixes
+75. Fixed an issue with Il2CppInteropMacFix and Il2CppInteropExceptionLog using an incorrect type to get their Patch methods
+76. Suppressed a nullability warning in ColorRGB   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+77. Moved the Mono specific entrypoint to its own class   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+78. Fixed some CLI parsing arguments   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+79. Split the symbols redirects to their runtime handlers   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+80. Fixed an issue with preventing console window on Windows if running under wine   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+81. Simplified getting the base dir on MacOS   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+82. Reimplemented Tilde Exception for Melon Recursive Folder Scanning
+83. Minor Improvements to SearchDirectoryManager Logging
 
 ---
 

@@ -66,7 +66,7 @@ internal static class SearchDirectoryManager
             if (folderPath.ContainsExtension() || !Directory.Exists(folderPath))
                 continue;
 
-            MelonDebug.Msg($"Searching directory {folderPath}");
+            MelonDebug.Msg($"[MelonAssemblyResolver] Searching directory {folderPath}");
             string filepath = 
                 Directory.GetFiles(folderPath)
                     .FirstOrDefault(x => !string.IsNullOrEmpty(x) &&
@@ -78,12 +78,12 @@ internal static class SearchDirectoryManager
             if (string.IsNullOrEmpty(filepath))
                 continue;
 
-            MelonDebug.Msg($"[MelonAssemblyResolver] Loading from {filepath}...");
+            MelonDebug.Msg($"[MelonAssemblyResolver] Loading {requestedName} from {filepath}...");
 
 #if NET6_0_OR_GREATER
             return AssemblyLoadContext.Default.LoadFromAssemblyPath(filepath);
 #else
-                return Assembly.LoadFrom(filepath);
+            return Assembly.LoadFrom(filepath);
 #endif
         }
 

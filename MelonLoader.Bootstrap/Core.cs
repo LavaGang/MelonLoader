@@ -79,27 +79,10 @@ public static class Core
 #endif
     }
 
-
-    private static readonly Il2CppLib.InitFn Il2CPPInitDetour = Il2CppHandler.InitDetour;
-    private static readonly Il2CppLib.RuntimeInvokeFn InvokeDetour = Il2CppHandler.InvokeDetour;
-    private static readonly MonoLib.JitInitVersionFn MonoInitDetour = MonoHandler.InitDetour;
-    private static readonly MonoLib.JitParseOptionsFn JitParseOptionsDetour = MonoHandler.JitParseOptionsDetour;
-    private static readonly MonoLib.DebugInitFn DebugInitDetour = MonoHandler.DebugInitDetour;
-    private static readonly unsafe MonoLib.ImageOpenFromDataWithNameFn ImageOpenFromDataWithName = MonoHandler.ImageOpenFromDataWithNameDetour;
-
-    private static readonly Dictionary<string, (Action<nint> InitMethod, IntPtr detourPtr)> SymbolRedirects = new()
-    {
-        { "il2cpp_init", (Il2CppHandler.Initialize, Marshal.GetFunctionPointerForDelegate(Il2CPPInitDetour))},
-        { "il2cpp_runtime_invoke", (Il2CppHandler.Initialize, Marshal.GetFunctionPointerForDelegate(InvokeDetour))},
-        { "mono_jit_init_version", (MonoHandler.Initialize, Marshal.GetFunctionPointerForDelegate(MonoInitDetour))},
-        { "mono_jit_parse_options", (MonoHandler.Initialize, Marshal.GetFunctionPointerForDelegate(JitParseOptionsDetour))},
-        { "mono_debug_init", (MonoHandler.Initialize, Marshal.GetFunctionPointerForDelegate(DebugInitDetour))},
-        { "mono_image_open_from_data_with_name", (MonoHandler.Initialize, Marshal.GetFunctionPointerForDelegate(ImageOpenFromDataWithName))}
-    };
-
     private static nint RedirectSymbol(nint handle, string symbolName, nint originalSymbolAddress)
     {
-        if (!SymbolRedirects.TryGetValue(symbolName, out var redirect))
+        if (!MonoHandler.SymbolRedirects.TryGetValue(symbolName, out var redirect)
+            && !Il2CppHandler.SymbolRedirects.TryGetValue(symbolName, out redirect))
             return originalSymbolAddress;
 
         MelonDebug.Log($"Redirecting {symbolName}");
@@ -124,20 +107,25 @@ public static class Core
     }
 #endif
 
+#if OSX
+    private static string GetParentDirectory(string path, int level)
+    {
+        string parentPath = path;
+        for (int i = 0; i < level; i++)
+            parentPath = Path.GetDirectoryName(parentPath)!;
+        return parentPath;
+    }
+#endif
+
     [RequiresDynamicCode("Dynamically accesses LoaderConfig properties")]
     private static void InitConfig()
     {
         var customBaseDir = ArgParser.GetValue("melonloader.basedir");
-        var baseDir = 
+        var baseDir = Path.GetDirectoryName(Environment.ProcessPath)!;
 #if OSX
-            Path.GetDirectoryName(
-                Path.GetDirectoryName(
-                    Path.GetDirectoryName(
-                        Path.GetDirectoryName(Process.GetCurrentProcess().MainModule!.FileName)!))!)!;
+        baseDir = GetParentDirectory(baseDir, 3);
 #elif ANDROID
-            DataDir; // Android doesn't work with the GetCurrentProcess system so we use the cached DataDir
-#else
-            Path.GetDirectoryName(Process.GetCurrentProcess().MainModule!.FileName)!;
+        baseDir = DataDir; // Android doesn't work with the GetCurrentProcess system so we use the cached DataDir
 #endif
         if (Directory.Exists(customBaseDir))
             baseDir = Path.GetFullPath(customBaseDir);
@@ -171,10 +159,10 @@ public static class Core
         if (ArgParser.IsDefined("melonloader.debug"))
             LoaderConfig.Current.Loader.DebugMode = true;
 
-        if (ArgParser.IsDefined("--melonloader.captureplayerlogs"))
+        if (ArgParser.IsDefined("melonloader.captureplayerlogs"))
             LoaderConfig.Current.Loader.CapturePlayerLogs = true;
 
-        if (Enum.TryParse<LoaderConfig.CoreConfig.HarmonyLogVerbosity>(ArgParser.GetValue("--melonloader.harmonyloglevel"), out var harmonyLogLevel))
+        if (Enum.TryParse<LoaderConfig.CoreConfig.HarmonyLogVerbosity>(ArgParser.GetValue("melonloader.harmonyloglevel"), out var harmonyLogLevel))
             LoaderConfig.Current.Loader.HarmonyLogLevel = harmonyLogLevel;
 
         if (ArgParser.IsDefined("no-mods"))

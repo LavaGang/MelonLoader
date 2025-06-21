@@ -22,7 +22,19 @@ internal static class MonoHandler
     private const string MonoDebugArgsStart = "--debugger-agent=transport=dt_socket,server=y,address=";
     private const string MonoDebugNoSuspendArg = ",suspend=n";
     private const string MonoDebugNoSuspendArgOldMono = ",suspend=n,defer=y";
-    
+
+    private static readonly MonoLib.JitInitVersionFn MonoInitDetourFn = InitDetour;
+    private static readonly MonoLib.JitParseOptionsFn JitParseOptionsDetourFn = JitParseOptionsDetour;
+    private static readonly MonoLib.DebugInitFn DebugInitDetourFn = DebugInitDetour;
+    private static readonly unsafe MonoLib.ImageOpenFromDataWithNameFn ImageOpenFromDataWithNameFn = ImageOpenFromDataWithNameDetour;
+    internal static readonly Dictionary<string, (Action<nint> InitMethod, IntPtr detourPtr)> SymbolRedirects = new()
+    {
+        { "mono_jit_init_version", (Initialize, Marshal.GetFunctionPointerForDelegate(MonoInitDetourFn))},
+        { "mono_jit_parse_options", (Initialize, Marshal.GetFunctionPointerForDelegate(JitParseOptionsDetourFn))},
+        { "mono_debug_init", (Initialize, Marshal.GetFunctionPointerForDelegate(DebugInitDetourFn))},
+        { "mono_image_open_from_data_with_name", (Initialize, Marshal.GetFunctionPointerForDelegate(ImageOpenFromDataWithNameFn))}
+    };
+
     public static void Initialize(nint handle)
     {
         var mono = MonoLib.TryLoad(handle);

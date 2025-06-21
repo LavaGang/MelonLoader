@@ -93,7 +93,9 @@ public readonly struct ColorARGB : IEquatable<ColorARGB>
     /// <returns>
     /// <see langword="true" /> if <paramref name="obj" /> is a <see cref="T:MelonLoader.Bootstrap.Logging.ColorARGB" /> structure equivalent to this <see cref="T:MelonLoader.Bootstrap.Logging.ColorARGB" /> structure; otherwise, <see langword="false" />.
     /// </returns>
+#pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
     public override bool Equals(object obj)
+#pragma warning restore CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
     {
         return obj is ColorARGB color && value == color.value;
     }

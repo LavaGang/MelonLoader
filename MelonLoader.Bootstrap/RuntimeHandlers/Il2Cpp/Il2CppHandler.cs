@@ -14,6 +14,14 @@ internal static class Il2CppHandler
     private static bool il2cppInitDone;
     private static bool invokeStarted;
 
+    private static readonly Il2CppLib.InitFn Il2CPPInitDetourFn = InitDetour;
+    private static readonly Il2CppLib.RuntimeInvokeFn InvokeDetourFn = InvokeDetour;
+    internal static readonly Dictionary<string, (Action<nint> InitMethod, IntPtr detourPtr)> SymbolRedirects = new()
+    {
+        { "il2cpp_init", (Initialize, Marshal.GetFunctionPointerForDelegate(Il2CPPInitDetourFn))},
+        { "il2cpp_runtime_invoke", (Initialize, Marshal.GetFunctionPointerForDelegate(InvokeDetourFn))},
+    };
+
     public static void Initialize(nint handle)
     {
         var il2cppLib = Il2CppLib.TryLoad(handle);
