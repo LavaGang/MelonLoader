@@ -26,36 +26,44 @@ public static class AndroidBootstrap
 
     public static void CopyMelonLoaderData(DateTimeOffset date)
     {
-        var baseDataDir = Core.DataDir;
-        var melonloaderFolder = Path.Combine(Core.DataDir, "MelonLoader");
-        var baseInternalFolder = $"/data/data/{PackageName}/";
-        var dotnetFolder = $"/data/data/{PackageName}/dotnet";
+        CopyAssetFolder("MelonLoader", Core.DataDir, Core.DataDir, date);
+        CopyAssetFolder("dotnet", $"/data/data/{PackageName}/", $"/data/data/{PackageName}/", date);
 
-        // TODO: put up toasts as initial copy can take awhile
+        DotnetDir = Path.Combine($"/data/data/{PackageName}/dotnet");
+    }
 
-        if (Directory.Exists(melonloaderFolder))
+    private static void CopyAssetFolder(string assetName, string copyBase, string targetBase, DateTimeOffset cutoffDate)
+    {
+        string targetFolder = Path.Combine(targetBase, assetName);
+        string markerFile = Path.Combine(targetFolder, ".copy_complete");
+
+        bool needsCopy = true;
+
+        if (Directory.Exists(targetFolder))
         {
-            var fileModTime = Directory.GetLastWriteTimeUtc(melonloaderFolder);
-            if (fileModTime > date)
-                AndroidProxy.Log("MelonLoader folder is already up-to-date");
-            else
-                APKAssetManager.SaveItemToDirectory("MelonLoader", baseDataDir, true);
+            if (File.Exists(markerFile))
+            {
+                DateTime lastComplete = File.GetLastWriteTimeUtc(markerFile);
+                if (lastComplete > cutoffDate)
+                {
+                    AndroidProxy.Log($"{assetName} folder is already up-to-date");
+                    needsCopy = false;
+                }
+            }
         }
-        else
-            APKAssetManager.SaveItemToDirectory("MelonLoader", baseDataDir, true);
 
-        if (Directory.Exists(dotnetFolder))
+        if (needsCopy)
         {
-            var fileModTime = Directory.GetLastWriteTimeUtc(dotnetFolder);
-            if (fileModTime > date)
-                AndroidProxy.Log("Dotnet folder is already up-to-date");
-            else
-                APKAssetManager.SaveItemToDirectory("dotnet", baseInternalFolder, true);
+            // TODO: put up toasts as initial copy can take awhile
+            AndroidProxy.Log($"Copying {assetName} assets...");
+            if (Directory.Exists(targetFolder))
+                Directory.Delete(targetFolder, true);
+
+            APKAssetManager.SaveItemToDirectory(assetName, copyBase, includeInitial: true);
+
+            Directory.CreateDirectory(targetFolder);
+            File.WriteAllText(markerFile, $"Copied at {DateTime.UtcNow:o}");
         }
-        else
-            APKAssetManager.SaveItemToDirectory("dotnet", baseInternalFolder, true);
-    
-        DotnetDir = Path.Combine(dotnetFolder);
     }
     
     public static string GetDataDir()

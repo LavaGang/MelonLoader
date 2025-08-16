@@ -17,14 +17,18 @@ public static class APKAssetManager
         GetAndroidAssetManager();
     }
 
-    public static void SaveItemToDirectory(string itemPath, string copyBase, bool includeInitial = true)
+    private static void EnsureInitialized()
     {
         if (assetManager == null || !assetManager.Valid())
-        {
             GetAndroidAssetManager();
-            if (assetManager == null || !assetManager.Valid())
-                throw new Exception("[APKAssetManager] Asset manager is not initialized.");
-        }
+
+        if (assetManager == null || !assetManager.Valid())
+            throw new InvalidOperationException("[APKAssetManager] Asset manager is not initialized.");
+    }
+
+    public static void SaveItemToDirectory(string itemPath, string copyBase, bool includeInitial = true)
+    {
+        EnsureInitialized();
 
         string[] contents = GetDirectoryContents(itemPath);
         if (contents.Length == 0)
@@ -60,16 +64,11 @@ public static class APKAssetManager
 
     public static byte[] GetAssetBytes(string path)
     {
-        if (assetManager == null || !assetManager.Valid())
-        {
-            GetAndroidAssetManager();
-            if (assetManager == null || !assetManager.Valid())
-                throw new Exception("[APKAssetManager] Asset manager is not initialized.");
-        }
-        
+        EnsureInitialized();
+
         using JString pathString = JNI.NewString(path);
-        JClass assetManagerClass = JNI.GetObjectClass(assetManager);
-        using JObject asset = JNI.CallObjectMethod<JObject>(assetManager, JNI.GetMethodID(assetManagerClass, "open", "(Ljava/lang/String;)Ljava/io/InputStream;"), new JValue(pathString));
+        JClass assetManagerClass = JNI.GetObjectClass(assetManager!);
+        using JObject asset = JNI.CallObjectMethod<JObject>(assetManager!, JNI.GetMethodID(assetManagerClass, "open", "(Ljava/lang/String;)Ljava/io/InputStream;"), new JValue(pathString));
         if (asset == null || !asset.Valid())
             return [];
 
@@ -96,12 +95,7 @@ public static class APKAssetManager
 
     public static Stream? GetAssetStream(string path)
     {
-        if (assetManager == null || !assetManager.Valid())
-        {
-            GetAndroidAssetManager();
-            if (assetManager == null || !assetManager.Valid())
-                throw new Exception("[APKAssetManager] Asset manager is not initialized.");
-        }
+        EnsureInitialized();
 
         using JString pathString = JNI.NewString(path);
         JClass assetManagerClass = JNI.GetObjectClass(assetManager);
@@ -116,12 +110,7 @@ public static class APKAssetManager
 
     public static string[] GetDirectoryContents(string directory)
     {
-        if (assetManager == null || !assetManager.Valid())
-        {
-            GetAndroidAssetManager();
-            if (assetManager == null || !assetManager.Valid())
-                throw new Exception("[APKAssetManager] Asset manager is not initialized.");
-        }
+        EnsureInitialized();
 
         using JString pathString = JNI.NewString(directory);
         JClass assetManagerClass = JNI.GetObjectClass(assetManager);
@@ -135,13 +124,8 @@ public static class APKAssetManager
 
     public static bool DoesAssetExist(string path)
     {
-        if (assetManager == null || !assetManager.Valid())
-        {
-            GetAndroidAssetManager();
-            if (assetManager == null || !assetManager.Valid())
-                throw new Exception("[APKAssetManager] Asset manager is not initialized.");
-        }
-        
+        EnsureInitialized();
+
         // using `list` isn't as fast as just calling open, but this allows the function to not crash on debuggable builds of apps
         string containingDir = path[..path.LastIndexOf('/')];
         using JString pathString = JNI.NewString(containingDir);
@@ -173,12 +157,17 @@ public static class APKAssetManager
         JClass unityClass = JNI.FindClass("com/unity3d/player/UnityPlayer");
         JFieldID activityFieldId = JNI.GetStaticFieldID(unityClass, "currentActivity", "Landroid/app/Activity;");
         using JObject currentActivityObj = JNI.GetStaticObjectField<JObject>(unityClass, activityFieldId);
+
         JClass activityClass = JNI.GetObjectClass(currentActivityObj);
-        JObject assetManagerObj = JNI.CallObjectMethod<JObject>(currentActivityObj, JNI.GetMethodID(activityClass, "getAssets", "()Landroid/content/res/AssetManager;"));
+        JObject localAssetManager = JNI.CallObjectMethod<JObject>(
+            currentActivityObj,
+            JNI.GetMethodID(activityClass, "getAssets", "()Landroid/content/res/AssetManager;")
+        );
+
+        // promote to global ref so GC can't kill it
+        assetManager = JNI.NewGlobalRef<JObject>(localAssetManager);
 
         HandleException();
-
-        assetManager = assetManagerObj;
     }
 
     public class APKAssetStream : Stream, IDisposable
