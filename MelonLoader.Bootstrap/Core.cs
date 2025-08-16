@@ -58,7 +58,11 @@ public static class Core
         if (!Directory.Exists(DataDir))
             return;
 
+#if !ANDROID
         LoaderConfig.Initialize();
+#else
+        LoaderConfig.Initialize(DataDir); // Android doesn't work with the GetCurrentProcess system so we use the cached DataDir
+#endif
 
         if (LoaderConfig.Current.Loader.Disable)
             return;

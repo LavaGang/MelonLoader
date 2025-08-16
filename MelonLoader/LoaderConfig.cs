@@ -25,10 +25,10 @@ public class LoaderConfig
 #endif
 
     [RequiresDynamicCode("Dynamically accesses LoaderConfig properties")]
-    internal static void Initialize()
+    internal static void Initialize(string? baseDir = null)
     {
         var customBaseDir = ArgParser.GetValue("melonloader.basedir");
-        var baseDir = Path.GetDirectoryName(Environment.ProcessPath)!;
+        baseDir ??= Path.GetDirectoryName(Environment.ProcessPath)!;
 
 #if OSX
         baseDir = GetParentDirectory(baseDir, 3);
