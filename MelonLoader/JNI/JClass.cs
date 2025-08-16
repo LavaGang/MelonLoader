@@ -5,15 +5,15 @@ namespace MelonLoader.Java;
 
 public class JClass : JObject
 {
-    private Dictionary<(string, string), JFieldID> FieldCache { get; set; } = new();
+    private Dictionary<CacheItem, JFieldID> FieldCache { get; set; } = new();
 
-    private Dictionary<(string, string), JMethodID> MethodCache { get; set; } = new();
+    private Dictionary<CacheItem, JMethodID> MethodCache { get; set; } = new();
 
     public JClass() : base() { }
 
     public JFieldID GetFieldID(string name, string sig)
     {
-        (string, string) key = new(name, sig);
+        CacheItem key = new(name, sig);
 
         if (this.FieldCache.TryGetValue(key, out JFieldID found))
         {
@@ -29,7 +29,7 @@ public class JClass : JObject
 
     public JFieldID GetStaticFieldID(string name, string sig)
     {
-        (string, string) key = new(name, sig);
+        CacheItem key = new(name, sig);
 
         if (this.FieldCache.TryGetValue(key, out JFieldID found))
         {
@@ -45,7 +45,7 @@ public class JClass : JObject
 
     public JMethodID GetMethodID(string name, string sig)
     {
-        (string, string) key = new(name, sig);
+        CacheItem key = new(name, sig);
 
         if (this.MethodCache.TryGetValue(key, out JMethodID found))
         {
@@ -61,7 +61,7 @@ public class JClass : JObject
 
     public JMethodID GetStaticMethodID(string name, string sig)
     {
-        (string, string) key = new(name, sig);
+        CacheItem key = new(name, sig);
 
         if (this.MethodCache.TryGetValue(key, out JMethodID found))
         {
@@ -143,6 +143,12 @@ public class JClass : JObject
     public T NewObject<T>(string name, string sig, params JValue[] args) where T : JObject, new()
     {
         return JNI.NewObject<T>(this, this.GetMethodID(name, sig), args);
+    }
+
+    private class CacheItem(string name, string value)
+    {
+        public string Name { get; private set; } = name;
+        public string Value { get; private set; } = value;
     }
 }
 #endif
