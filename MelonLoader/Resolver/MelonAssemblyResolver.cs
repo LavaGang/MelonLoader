@@ -20,6 +20,9 @@ public class MelonAssemblyResolver
 
         // Setup Search Directories
         AddSearchDirectory(MelonEnvironment.OurRuntimeDirectory);
+#if ANDROID // Needed for loading Cpp2IL and deps
+        AddSearchDirectory(Path.Combine(MelonEnvironment.DependenciesDirectory, "Il2CppAssemblyGenerator"));
+#endif
 
         // Setup Redirections
         OverrideBaseAssembly();

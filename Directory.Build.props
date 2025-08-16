@@ -13,6 +13,9 @@
         <Platforms>x86;x64</Platforms>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		
+        <!-- Workaround for `dotnet build` blocking the setting of RuntimeIdentifier -->
+        <RuntimeIdentifier Condition="'$(ForcedRID)' != ''">$(ForcedRID)</RuntimeIdentifier>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">
