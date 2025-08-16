@@ -1,0 +1,43 @@
+on:
+  workflow_call:
+    inputs:
+      VERSION:
+        required: true
+        type: string
+      SKIP_DEBUG:
+        required: true
+        type: boolean
+
+jobs:
+  compile_macos:
+    name: Build MacOS Binaries
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Debug for osx-x64
+        if: inputs.SKIP_DEBUG != true
+        run: dotnet build --no-restore -c Debug -p:Platform="x64" -p:Version="${{ inputs.VERSION }}"
+
+      - name: Upload Debug for osx-x64
+        if: inputs.SKIP_DEBUG != true
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.macOS.x64.CI.Debug
+          path: Output/Debug/osx-x64
+
+      - name: Build Release for osx-x64
+        run: dotnet build --no-restore -c Release -p:Platform="x64" -p:Version="${{ inputs.VERSION }}"
+
+      - name: Upload Release for osx-x64
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.macOS.x64.CI.Release
+          path: Output/Release/osx-x64

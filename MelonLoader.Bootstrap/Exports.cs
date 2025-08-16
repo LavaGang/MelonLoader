@@ -104,7 +104,7 @@ internal static class Exports
 #endif
 
             string newLibraryPath = string.Join(':', ldLibraryPaths
-                .Where(x => expectedLibFullPath != Path.TrimEndingDirectorySeparator(Path.GetFullPath(x))));
+                .Where(x => x.Length != 0 && expectedLibFullPath != Path.TrimEndingDirectorySeparator(Path.GetFullPath(x))));
             LibcNative.Setenv(LdPathEnvName, newLibraryPath, true);
             Environment.SetEnvironmentVariable(LdPathEnvName, newLibraryPath);
         }

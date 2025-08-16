@@ -1,10 +1,11 @@
+#if !WINDOWS && !NET6_0_OR_GREATER
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using HarmonyLib;
 
-namespace MelonLoader.Fixes;
+namespace MelonLoader.Fixes.NetFramework;
 
 internal static class XTermFix
 {
@@ -115,3 +116,4 @@ internal static class XTermFix
         return list;
     }
 }
+#endif

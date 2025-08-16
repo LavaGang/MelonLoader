@@ -1,0 +1,23 @@
+on:
+  workflow_call:
+  
+jobs:
+  upload_nuget:
+    name: Upload NuGet Package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+          
+      - name: Download NuGet Artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: MelonLoader.NuGet
+          path: ./compiled_release/
+      
+      - name: Publish NuGet Package
+        run: dotnet nuget push -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} ./compiled_release/*.nupkg

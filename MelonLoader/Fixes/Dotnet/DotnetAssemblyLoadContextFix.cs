@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
-namespace MelonLoader.Fixes
+namespace MelonLoader.Fixes.Dotnet
 {
     internal class DotnetAssemblyLoadContextFix
     {

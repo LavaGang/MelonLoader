@@ -1,0 +1,62 @@
+on:
+  workflow_call:
+    inputs:
+      VERSION:
+        required: true
+        type: string
+      SKIP_DEBUG:
+        required: true
+        type: boolean
+
+jobs:
+  compile_windows:
+    name: Build Windows Binaries
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Debug for win-x64
+        if: inputs.SKIP_DEBUG != true
+        run: dotnet build --no-restore -c Debug -p:Platform="x64" -p:Version="${{ inputs.VERSION }}"
+
+      - name: Upload Debug for win-x64
+        if: inputs.SKIP_DEBUG != true
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.Windows.x64.CI.Debug
+          path: Output/Debug/win-x64
+
+      - name: Build Release for win-x64
+        run: dotnet build --no-restore -c Release -p:Platform="x64" -p:Version="${{ inputs.VERSION }}"
+
+      - name: Upload Release for win-x64
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.Windows.x64.CI.Release
+          path: Output/Release/win-x64
+
+      - name: Build Debug for win-x86
+        if: inputs.SKIP_DEBUG != true
+        run: dotnet build --no-restore -c Debug -p:Platform="x86" -p:Version="${{ inputs.VERSION }}"
+
+      - name: Upload Debug for win-x86
+        if: inputs.SKIP_DEBUG != true
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.Windows.x86.CI.Debug
+          path: Output/Debug/win-x86
+
+      - name: Build Release for win-x86
+        run: dotnet build --no-restore -c Release -p:Platform="x86" -p:Version="${{ inputs.VERSION }}"
+
+      - name: Upload Release for win-x86
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.Windows.x86.CI.Release
+          path: Output/Release/win-x86

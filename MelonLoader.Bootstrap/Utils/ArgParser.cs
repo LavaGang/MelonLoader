@@ -62,7 +62,6 @@ internal static class ArgParser
     public static string? GetValue(string longName)
     {
         var arg = arguments.Find(x => x.Name.Equals(longName, StringComparison.OrdinalIgnoreCase));
-
         return arg?.Value;
     }
 

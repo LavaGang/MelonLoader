@@ -1,0 +1,57 @@
+env:
+  PACKAGE_NAME: MelonLoader
+  PACKAGE_DESC: The World's First Universal Mod Loader for Unity Games compatible with both Il2Cpp and Mono
+  PACKAGE_REPO: https://github.com/${{ github.repository }}
+
+on:
+  workflow_call:
+    inputs:
+      VERSION:
+        required: true
+        type: string
+  
+jobs:
+  upload_nuget:
+    name: Upload NuGet Package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        
+      - name: Download Windows x64 Artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: MelonLoader.Windows.x64.CI.Release
+          path: ./compiled_release/thunderstore
+          
+      - name: Copy Missing Files
+        run: |
+          cp icon.png compiled_release/thunderstore/icon.png
+          cp compiled_release/thunderstore/MelonLoader/Documentation/README.md compiled_release/thunderstore/README.md
+          
+      - name: Generate manifest.json
+        run: |
+          cat <<EOF > compiled_release/thunderstore/manifest.json
+          {
+              "name": "${{ env.PACKAGE_NAME }}",
+              "version_number": "${{ inputs.VERSION }}",
+              "website_url": "${{ env.PACKAGE_REPO }}",
+              "description": "${{ env.PACKAGE_DESC }}",
+              "dependencies": []
+          }
+          EOF
+          
+      - name: Package Zip Archive
+        run: |
+          cd compiled_release/thunderstore
+          zip -r ../${{ github.repository_owner }}-${{ env.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip ./
+          
+      - name: Upload to Thunderstore
+        uses: GreenTF/upload-thunderstore-package@v4.3
+        with:
+          community: ${{ vars.THUNDERSTORE_COMMUNITY }}
+          namespace: ${{ github.repository_owner }}
+          name: ${{ env.PACKAGE_NAME }}
+          version: ${{ inputs.VERSION }}
+          description: ${{ env.PACKAGE_DESC }}
+          token: ${{ secrets.THUNDERSTORE_API_KEY }}
+          file: ${{ github.repository_owner }}-${{ env.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip

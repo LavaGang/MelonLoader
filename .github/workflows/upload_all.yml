@@ -1,0 +1,30 @@
+on:
+  workflow_call:
+    inputs:
+      TAG:
+        required: true
+        type: string
+      RELEASE_NAME:
+        required: true
+        type: string
+      VERSION:
+        required: true
+        type: string
+
+jobs:
+  upload_github:
+    name: GitHub
+    uses: ./.github/workflows/upload_github.yml
+    with:
+      TAG: ${{ inputs.TAG }}
+      RELEASE_NAME: ${{ inputs.RELEASE_NAME }}
+  
+  upload_nuget:
+    name: NuGet
+    uses: ./.github/workflows/upload_nuget.yml
+    
+  upload_thunderstore:
+    name: Thunderstore
+    uses: ./.github/workflows/upload_thunderstore.yml
+    with:
+      VERSION: ${{ inputs.VERSION }}

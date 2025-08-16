@@ -6,6 +6,7 @@
         <OutputPath>$(MLOutDir)/MelonLoader/Dependencies/CompatibilityLayers</OutputPath>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DebugType>portable</DebugType>
+        <CETCompat>false</CETCompat>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false" />

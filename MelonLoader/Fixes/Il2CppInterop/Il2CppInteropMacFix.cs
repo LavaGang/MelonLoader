@@ -6,7 +6,7 @@ using HarmonyLib;
 using Il2CppInterop.HarmonySupport;
 using Il2CppInterop.Runtime.Injection;
 
-namespace MelonLoader.Fixes
+namespace MelonLoader.Fixes.Il2CppInterop
 {
     internal class Il2CppInteropMacFix
     {

@@ -1,0 +1,41 @@
+name: Release MelonLoader
+
+run-name: ${{ github.ref_name }} | Release
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  fix_tag_version:
+    name: Fix Tag Version
+    runs-on: ubuntu-latest
+    outputs:
+      clean_version: ${{ steps.set.outputs.clean_version }}
+      original_version: ${{ steps.set.outputs.original_version }}
+    steps:
+      - name: Run job
+        id: set
+        run: |
+          RAW_REF="${{ github.ref_name }}"
+          CLEAN_VERSION="${RAW_REF#v}"
+          echo "clean_version=$CLEAN_VERSION" >> $GITHUB_OUTPUT
+          echo "original_version=$RAW_REF" >> $GITHUB_OUTPUT
+
+  build:
+    name: Build
+    needs: fix_tag_version
+    uses: ./.github/workflows/compile_all.yml
+    with:
+      SKIP_DEBUG: true
+      VERSION: ${{ needs.fix_tag_version.outputs.clean_version }}
+    
+  upload:
+    name: Upload
+    needs: [ build, fix_tag_version ]
+    uses: ./.github/workflows/upload_all.yml
+    with:
+      TAG: ${{ github.ref_name }}
+      RELEASE_NAME: ${{ github.ref_name }} Open-Beta
+      VERSION: ${{ needs.fix_tag_version.outputs.clean_version }}

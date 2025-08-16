@@ -4,7 +4,7 @@ using System.Reflection;
 using HarmonyLib;
 using Il2CppInterop.HarmonySupport;
 
-namespace MelonLoader.Fixes
+namespace MelonLoader.Fixes.Il2CppInterop
 {
     internal class Il2CppInteropExceptionLog
     {

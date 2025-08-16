@@ -32,7 +32,8 @@ namespace MelonLoader.Utils
             ')',
             '?',
             '{',
-            '}'
+            '}',
+            '!'
         };
 
         [MethodImpl(MethodImplOptions.NoInlining)]

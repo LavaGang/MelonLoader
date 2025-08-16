@@ -72,7 +72,7 @@ public static class MonoCoreEntrypoint
         _monoCoreStartEntrypointAlreadyCalled = true;
         try
         {
-            Core.HarmonyInstance.Unpatch(_monoCoreStartHookMethod, HarmonyPatchType.All, BuildInfo.Name);
+            Core.HarmonyInstance.Unpatch(_monoCoreStartHookMethod, HarmonyPatchType.All, Properties.BuildInfo.Name);
         }
         catch (Exception e)
         {

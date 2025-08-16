@@ -213,6 +213,48 @@ namespace MelonLoader
             UnregisterMelons("MelonLoader is deinitializing.", true);
         }
 
+        private T SafeGetAttribute<T>(bool rotten = false)
+            where T : Attribute
+        {
+            try
+            {
+                var att = MelonUtils.PullAttributeFromAssembly<T>(Assembly);
+                return att;
+            }
+            catch (Exception ex)
+            {
+                if (rotten)
+                    rottenMelons.Add(new RottenMelon(Assembly, $"Failed to Pull Attribute '{typeof(T).Name}' from the Melon.", ex));
+                else
+                {
+                    MelonLogger.Error($"Failed to Pull Attribute '{typeof(T).Name}' from the Melon.");
+                    MelonLogger.Error(ex);
+                }
+                return null;
+            }
+        }
+
+        private T[] SafeGetAllAttributes<T>(bool rotten = false)
+            where T : Attribute
+        {
+            try
+            {
+                var att = MelonUtils.PullAttributesFromAssembly<T>(Assembly);
+                return att;
+            }
+            catch (Exception ex)
+            {
+                if (rotten)
+                    rottenMelons.Add(new RottenMelon(Assembly, $"Failed to Pull Attribute '{typeof(T).Name}' from the Melon.", ex));
+                else
+                {
+                    MelonLogger.Error($"Failed to Pull Attribute '{typeof(T).Name}' from the Melon.");
+                    MelonLogger.Error(ex);
+                }
+                return null;
+            }
+        }
+
         public void LoadMelons()
         {
             if (melonsLoaded)
@@ -235,9 +277,22 @@ namespace MelonLoader
 
 
             // \/ Default resolver \/
-            var info = MelonUtils.PullAttributeFromAssembly<MelonInfoAttribute>(Assembly);
-            if (info != null && info.SystemType != null && info.SystemType.IsSubclassOf(typeof(MelonBase)))
+            var baseType = typeof(MelonBase);
+            var info = SafeGetAttribute<MelonInfoAttribute>(true);
+            if ((info != null)
+                && (info.SystemType != null)
+                && info.SystemType.IsSubclassOf(baseType))
             {
+                var baseTypeMod = typeof(MelonMod);
+                var baseTypePlugin = typeof(MelonPlugin);
+                if ((info.SystemType == baseType)
+                    || (info.SystemType == baseTypeMod)
+                    || (info.SystemType == baseTypePlugin))
+                {
+                    rottenMelons.Add(new RottenMelon(Assembly, $"{info.SystemType.FullName} cannot be used for MelonInfoAttribute.SystemType"));
+                    return;
+                }
+
                 MelonBase melon;
                 try
                 {
@@ -251,20 +306,20 @@ namespace MelonLoader
 
                 if (melon != null)
                 {
-                    var priorityAttr = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(Assembly);
-                    var colorAttr = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(Assembly);
-                    var authorColorAttr = MelonUtils.PullAttributeFromAssembly<MelonAuthorColorAttribute>(Assembly);
-                    var additionalCreditsAttr = MelonUtils.PullAttributeFromAssembly<MelonAdditionalCreditsAttribute>(Assembly);
-                    var procAttrs = MelonUtils.PullAttributesFromAssembly<MelonProcessAttribute>(Assembly);
-                    var gameAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameAttribute>(Assembly);
-                    var optionalDependenciesAttr = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(Assembly);
-                    var idAttr = MelonUtils.PullAttributeFromAssembly<MelonIDAttribute>(Assembly);
-                    var gameVersionAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameVersionAttribute>(Assembly);
-                    var platformAttr = MelonUtils.PullAttributeFromAssembly<MelonPlatformAttribute>(Assembly);
-                    var domainAttr = MelonUtils.PullAttributeFromAssembly<MelonPlatformDomainAttribute>(Assembly);
-                    var mlVersionAttr = MelonUtils.PullAttributeFromAssembly<VerifyLoaderVersionAttribute>(Assembly);
-                    var mlBuildAttr = MelonUtils.PullAttributeFromAssembly<VerifyLoaderBuildAttribute>(Assembly);
-                    var harmonyDPAAttr = MelonUtils.PullAttributeFromAssembly<HarmonyDontPatchAllAttribute>(Assembly);
+                    var priorityAttr = SafeGetAttribute<MelonPriorityAttribute>();
+                    var colorAttr = SafeGetAttribute<MelonColorAttribute>();
+                    var authorColorAttr = SafeGetAttribute<MelonAuthorColorAttribute>();
+                    var additionalCreditsAttr = SafeGetAttribute<MelonAdditionalCreditsAttribute>();
+                    var procAttrs = SafeGetAllAttributes<MelonProcessAttribute>();
+                    var gameAttrs = SafeGetAllAttributes<MelonGameAttribute>();
+                    var optionalDependenciesAttr = SafeGetAttribute<MelonOptionalDependenciesAttribute>();
+                    var idAttr = SafeGetAttribute<MelonIDAttribute>();
+                    var gameVersionAttrs = SafeGetAllAttributes<MelonGameVersionAttribute>();
+                    var platformAttr = SafeGetAttribute<MelonPlatformAttribute>();
+                    var domainAttr = SafeGetAttribute<MelonPlatformDomainAttribute>();
+                    var mlVersionAttr = SafeGetAttribute<VerifyLoaderVersionAttribute>();
+                    var mlBuildAttr = SafeGetAttribute<VerifyLoaderBuildAttribute>();
+                    var harmonyDPAAttr = SafeGetAttribute<HarmonyDontPatchAllAttribute>();
 
                     melon.Info = info;
                     melon.AdditionalCredits = additionalCreditsAttr;
@@ -300,8 +355,11 @@ namespace MelonLoader
                 MelonLogger.Error($"Failed to load {rottenMelons.Count} {"Melon".MakePlural(rottenMelons.Count)} from {Path.GetFileName(Location)}:");
                 foreach (var r in rottenMelons)
                 {
-                    MelonLogger.Error($"Failed to load Melon '{r.type.FullName}': {r.errorMessage}");
-                    if (r.exception != null)
+                    if (r.type != null)
+                        MelonLogger.Error($"Failed to load Melon '{r.type.FullName}': {r.errorMessage}");
+                    else if (r.assembly != null)
+                        MelonLogger.Error($"Failed to load Melon '{r.assembly.GetName().Name}': {r.errorMessage}");
+                    if (!string.IsNullOrEmpty(r.exception))
                         MelonLogger.Error(r.exception);
                 }
             }

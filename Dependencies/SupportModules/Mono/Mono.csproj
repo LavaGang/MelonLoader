@@ -6,6 +6,7 @@
         <OutputPath>$(MLOutDir)/MelonLoader/Dependencies/SupportModules</OutputPath>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DebugType>portable</DebugType>
+        <CETCompat>false</CETCompat>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="UnityEngine" HintPath="Libs\UnityEngine.dll" Private="False" />

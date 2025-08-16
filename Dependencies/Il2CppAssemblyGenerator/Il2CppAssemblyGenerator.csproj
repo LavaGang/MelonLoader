@@ -8,6 +8,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DebugType>embedded</DebugType>
         <PreserveCompilationContext>false</PreserveCompilationContext>
+        <CETCompat>false</CETCompat>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />

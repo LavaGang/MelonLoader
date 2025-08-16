@@ -16,6 +16,7 @@
         <RepositoryType>git</RepositoryType>
         <PackageProjectUrl>https://github.com/LavaGang/MelonLoader</PackageProjectUrl>
         <Description>The World's First Universal Mod Loader for Unity Games compatible with both Il2Cpp and Mono.</Description>
+        <CETCompat>false</CETCompat>
     </PropertyGroup>
     <ItemDefinitionGroup>
         <PackageReference>
@@ -40,12 +41,12 @@
         <PackageReference Include="Samboy063.Tomlet" Version="5.4.0" />
         <PackageReference Include="bHapticsLib" Version="1.0.6" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="AsmResolver.DotNet" Version="6.0.0-beta.3" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
         <PackageReference Include="Mono.Cecil" Version="0.10.4" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net6'">
-        <PackageReference Include="AsmResolver.DotNet" Version="6.0.0-beta.3" />
         <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="3.1.512801" />
         <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
         <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
@@ -61,7 +62,7 @@
         <EmbeddedResource Include="Resources\classdata.tpk" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="$(SolutionDir)/MelonLoader.Bootstrap/Logging/ColorRGB.cs" Link="Utils\ColorRGB.cs" />
+        <Compile Include="$(SolutionDir)/MelonLoader.Bootstrap/Logging/ColorARGB.cs" Link="Utils\ColorARGB.cs" />
         <Compile Include="$(SolutionDir)/MelonLoader.Bootstrap/SharedDelegates.cs" Link="BootstrapUtils/SharedDelegates.cs" />
     </ItemGroup>
 </Project>

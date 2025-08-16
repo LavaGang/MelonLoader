@@ -1,5 +1,6 @@
 | Versions: |
 | - |
+| [v0.7.2](#v072) |
 | [v0.7.1](#v071) |
 | [v0.7.0](#v070) |
 | [v0.6.6](#v066) |
@@ -37,6 +38,35 @@
 | [v0.0.3](#v003) |
 | [v0.0.2](#v002) |
 | [v0.0.1](#v001) |
+
+---
+
+### v0.7.2
+
+1. Removed Unneeded AsmResolverFix
+2. Fixed an issue with Platform Specification being incorrect on Platforms other than Windows
+3. Fixed Incorrect BuildInfo Values
+4. Implemented Backwards Compatibility for MelonLoader.BuildInfo to use MelonLoader.Properties.BuildInfo
+5. Fixed ColorARGB File Name to match the Class
+6. Fixed an issue with capturing stdout / stderr when capture player logs is disabled   (Credits to [aldelaro5](https://github.com/aldelaro5) :D)
+7. Added "." as a starting exclusion for Melon Folders
+8. Implemented Exception Logging for Mono Invokes   (Credits to [slxdy](https://github.com/slxdy) :D)
+9. Reimplemented Il2CppInteropFixes
+10. Removed broken ClassInjector.SystemTypeFromIl2CppType Il2CppInterop fix
+11. Fixed an issue with Melon Attribute checks not gracefully failing when an Exception is Thrown
+12. Added AsmResolver.DotNet for Mono and MonoBleedingEdge Games
+13. Fixed an issue with MelonUtils.IsGameIl2Cpp sometimes returning incorrect values
+14. Reimplemented "manifest.json" Requirement for Recursive Melon Subfolder scanning
+15. Implemented Config Options for Subfolder Loading Customization
+16. Exposed "MelonFolderHandler" methods for Custom Melon Folder Exclusion
+17. Fixed an issue with empty strings in "PATH" Environment Variable causing crashes   (Credits to [Squaduck](https://github.com/Squaduck) :D)
+18. Fixed an issue with exposed Melon Folder Exclusion API not working correctly for Plugins
+19. Fixed an issue with Melon Subfolder Parent Context checks using an incorrect ScanType
+20. Implemented MelonInfoAttribute.SystemType Validation to prevent infinite loop during Melon Instantiation
+21. Fixed an issue with Infinite Loops from RottenMelon Instantiation calling MelonAssembly.LoadMelonAssembly
+22. Updated Cpp2IL to 2022.1.0-pre-release.20
+23. Implemented Il2CppInterop GetFieldDefaultValue Fix
+24. Allowed exclamation marks in namespaces/types   (Credits to [Emik03](<https://github.com/Emik03>) :D)
 
 ---
 

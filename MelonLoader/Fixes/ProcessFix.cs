@@ -1,6 +1,6 @@
-﻿using System;
+﻿#if WINDOWS
+using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using HarmonyLib;
@@ -102,3 +102,4 @@ namespace MelonLoader.Fixes
 		}
     }
 }
+#endif

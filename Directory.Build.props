@@ -1,11 +1,11 @@
 <Project>
     <PropertyGroup>
-        <Version>0.7.1</Version>
+        <Version>0.7.2</Version>
         <Il2CppInteropVersion>1.5.0-ci.625</Il2CppInteropVersion>
 
         <Authors>Lava Gang</Authors>
         <Company>discord.gg/2Wn3N2P</Company>
-        <Copyright>Copyright (c) 2022 Lava Gang</Copyright>
+        <Copyright>Copyright (c) 2020 - 2025 Lava Gang</Copyright>
 
         <LangVersion>Latest</LangVersion>
         <IsPackable>false</IsPackable>

@@ -82,7 +82,7 @@ public class MelonAssemblyResolver
             AddSearchDirectory(directory, priority);
     }
 
-    public static void AddSearchDirectories(params (string, int)[] directories)
+    public static void AddSearchDirectories(params LemonTuple<string, int>[] directories)
     {
         foreach (var pair in directories)
             AddSearchDirectory(pair.Item1, pair.Item2);

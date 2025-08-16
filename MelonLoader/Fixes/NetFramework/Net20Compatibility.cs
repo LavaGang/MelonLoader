@@ -4,7 +4,7 @@ using System;
 using System.Text.RegularExpressions;
 using MelonLoader.Logging;
 
-namespace MelonLoader.Fixes
+namespace MelonLoader.Fixes.NetFramework
 {
     internal static class Net20Compatibility
     {

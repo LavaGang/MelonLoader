@@ -8,6 +8,7 @@
         <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
         <DebugType>embedded</DebugType>
+        <CETCompat>false</CETCompat>
     </PropertyGroup>
 
     <ItemGroup>

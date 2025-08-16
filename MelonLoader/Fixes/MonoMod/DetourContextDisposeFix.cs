@@ -5,7 +5,7 @@ using System.Reflection.Emit;
 using MonoMod.RuntimeDetour;
 using HarmonyLib;
 
-namespace MelonLoader.Fixes
+namespace MelonLoader.Fixes.MonoMod
 {
     // fixes: https://github.com/MonoMod/MonoMod/pull/102
     // based-on: https://github.com/Hamunii/DetourContext.Dispose_Fix/blob/main/DetourContext_Dispose_Fix.cs
@@ -38,9 +38,9 @@ namespace MelonLoader.Fixes
             foreach (CodeInstruction instruction in instructions)
             {
                 if (!found
-                    && (lastInstruction != null)
+                    && lastInstruction != null
                     && lastInstruction.LoadsField(_isDisposed)
-                    && (instruction.opcode == OpCodes.Brtrue))
+                    && instruction.opcode == OpCodes.Brtrue)
                 {
                     found = true;
                     instruction.opcode = OpCodes.Brfalse_S;

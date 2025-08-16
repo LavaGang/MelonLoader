@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using HarmonyLib;
 using MelonLoader.Utils;
 
-namespace MelonLoader.Fixes;
+namespace MelonLoader.Fixes.Dotnet;
 
 // This fix helps il2cppinterop to find GameAssembly.dylib
 public class NativeLibraryFix

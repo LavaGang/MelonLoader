@@ -7,6 +7,7 @@
         <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DebugType>portable</DebugType>
+        <CETCompat>false</CETCompat>
     </PropertyGroup>
     <ItemGroup>
         <EmbeddedResource Include="Resources\Loading_Lemon.dat" />

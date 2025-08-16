@@ -5,7 +5,7 @@ using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 
-namespace MelonLoader.Fixes
+namespace MelonLoader.Fixes.NetFramework
 {
     internal static class ServerCertificateValidation
     {

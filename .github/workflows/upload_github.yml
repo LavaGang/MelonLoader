@@ -1,0 +1,77 @@
+on:
+  workflow_call:
+    inputs:
+      TAG:
+        required: true
+        type: string
+      RELEASE_NAME:
+        required: true
+        type: string
+  
+jobs:
+  upload_github:
+    name: Upload GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      
+      - name: Download Windows x86 Artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: MelonLoader.Windows.x86.CI.Release
+          path: ./compiled_release/windows_x86
+      - name: Package Windows x86 into Zip Archive
+        run: |
+          cd compiled_release/windows_x86
+          zip -r ../MelonLoader.x86.zip ./
+      
+      - name: Download Windows x64 Artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: MelonLoader.Windows.x64.CI.Release
+          path: ./compiled_release/windows_x64
+      - name: Package Windows x64 into Zip Archive
+        run: |
+          cd compiled_release/windows_x64
+          zip -r ../MelonLoader.x64.zip ./
+        
+      - name: Download Linux x64 Artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: MelonLoader.Linux.x64.CI.Release
+          path: ./compiled_release/linux_x64
+      - name: Package Linux x64 into Zip Archive
+        run: |
+          cd compiled_release/linux_x64
+          zip -r ../MelonLoader.Linux.x64.zip  ./
+        
+      - name: Download MacOS x64 Artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: MelonLoader.macOS.x64.CI.Release
+          path: ./compiled_release/macos_x64
+      - name: Package MacOS x64 into Zip Archive
+        run: |
+          cd compiled_release/macos_x64
+          zip -r ../MelonLoader.macOS.x64.zip  ./
+          
+      - name: Download MelonLoader Installer
+        run: |
+          curl -L https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.exe -o compiled_release/MelonLoader.Installer.exe
+          curl -L https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.Linux -o compiled_release/MelonLoader.Installer.Linux
+        #  curl -L https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.MacOS.x64.zip -o compiled_release/MelonLoader.Installer.MacOS.x64.zip
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE-NOTES.md
+          tag: ${{ inputs.TAG }}
+          release_name: ${{ inputs.RELEASE_NAME }}
+          files: |
+            compiled_release/MelonLoader.x86.zip
+            compiled_release/MelonLoader.x64.zip
+            compiled_release/MelonLoader.Linux.x64.zip
+            compiled_release/MelonLoader.macOS.x64.zip
+            compiled_release/MelonLoader.Installer.exe
+            compiled_release/MelonLoader.Installer.Linux
+          #  compiled_release/MelonLoader.Installer.MacOS.x64.zip

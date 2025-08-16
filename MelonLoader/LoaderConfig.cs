@@ -1,11 +1,72 @@
 using System.Runtime.InteropServices;
 using Tomlet.Attributes;
 
+#if BOOTSTRAP
+using Tomlet;
+using MelonLoader.Bootstrap.Utils;
+using System.Diagnostics.CodeAnalysis;
+#endif
+
 namespace MelonLoader;
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 public class LoaderConfig
 {
+#if BOOTSTRAP
+
+#if OSX
+    private static string GetParentDirectory(string path, int level)
+    {
+        string parentPath = path;
+        for (int i = 0; i < level; i++)
+            parentPath = Path.GetDirectoryName(parentPath)!;
+        return parentPath;
+    }
+#endif
+
+    [RequiresDynamicCode("Dynamically accesses LoaderConfig properties")]
+    internal static void Initialize()
+    {
+        var customBaseDir = ArgParser.GetValue("melonloader.basedir");
+        var baseDir = Path.GetDirectoryName(Environment.ProcessPath)!;
+
+#if OSX
+        baseDir = GetParentDirectory(baseDir, 3);
+#endif
+
+        if (Directory.Exists(customBaseDir))
+            baseDir = Path.GetFullPath(customBaseDir);
+
+        var path = Path.Combine(baseDir, "UserData", "Loader.cfg");
+
+        if (File.Exists(path))
+        {
+            try
+            {
+                var doc = TomlParser.ParseFile(path);
+
+                Current = TomletMain.To<LoaderConfig>(doc) ?? new();
+            }
+            catch { }
+        }
+
+        var doc2 = TomletMain.TomlStringFrom(Current);
+
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            File.WriteAllText(path, doc2);
+        }
+        catch { }
+
+        CoreConfig.Initialize(baseDir);
+        ConsoleConfig.Initialize();
+        LogsConfig.Initialize();
+        MonoDebugServerConfig.Initialize();
+        UnityEngineConfig.Initialize();
+    }
+#endif
+
     public static LoaderConfig Current { get; internal set; } = new();
 
     [TomlProperty("loader")]
@@ -26,6 +87,44 @@ public class LoaderConfig
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class CoreConfig
     {
+#if BOOTSTRAP
+        [RequiresDynamicCode("Dynamically accesses LoaderConfig properties")]
+        internal static void Initialize(string baseDir)
+        {
+            Current.Loader.BaseDirectory = baseDir;
+
+            if (ArgParser.IsDefined("melonloader.debug"))
+                Current.Loader.DebugMode = true;
+
+            if (ArgParser.IsDefined("melonloader.captureplayerlogs"))
+                Current.Loader.CapturePlayerLogs = true;
+
+            if (int.TryParse(ArgParser.GetValue("melonloader.harmonyloglevel"), out var harmonyLogLevel))
+                Current.Loader.HarmonyLogLevel = (HarmonyLogVerbosity)Math.Clamp(harmonyLogLevel, (int)HarmonyLogVerbosity.None, (int)HarmonyLogVerbosity.IL);
+
+            if (ArgParser.IsDefined("no-mods"))
+                Current.Loader.Disable = true;
+
+            if (ArgParser.IsDefined("quitfix"))
+                Current.Loader.ForceQuit = true;
+
+            if (ArgParser.IsDefined("melonloader.disablestartscreen"))
+                Current.Loader.DisableStartScreen = true;
+
+            if (ArgParser.IsDefined("melonloader.launchdebugger"))
+                Current.Loader.LaunchDebugger = true;
+
+            if (int.TryParse(ArgParser.GetValue("melonloader.consolemode"), out var valueint))
+                Current.Loader.Theme = (LoaderTheme)Math.Clamp(valueint, (int)LoaderTheme.Normal, (int)LoaderTheme.Lemon);
+
+            if (ArgParser.IsDefined("melonloader.nosfload"))
+                Current.Loader.DisableSubFolderLoad = true;
+
+            if (ArgParser.IsDefined("melonloader.nosfmanifest"))
+                Current.Loader.DisableSubFolderManifest = true;
+        }
+#endif
+
         [TomlNonSerialized]
         public string BaseDirectory { get; internal set; } = null!;
 
@@ -65,6 +164,14 @@ public class LoaderConfig
         [TomlPrecedingComment("Sets the loader theme. Currently, the only available themes are \"Normal\" and \"Lemon\". Equivalent to the '--melonloader.consolemode' launch option (0 for Normal, 4 for Lemon)")]
         public LoaderTheme Theme { get; internal set; }
 
+        [TomlProperty("disable_subfolder_load")]
+        [TomlPrecedingComment("Disables the loading of Melon Subfolders. Equivalent to the '--melonloader.nosfload' launch option")]
+        public bool DisableSubFolderLoad { get; internal set; }
+
+        [TomlProperty("disable_subfolder_manifest")]
+        [TomlPrecedingComment("Disables the requirement of needing a manifest json inside a Melon Subfolder for it to be loaded. Equivalent to the '--melonloader.nosfmanifest' launch option")]
+        public bool DisableSubFolderManifest { get; internal set; }
+
         public enum LoaderTheme
         {
             Normal,
@@ -88,6 +195,24 @@ public class LoaderConfig
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class ConsoleConfig
     {
+#if BOOTSTRAP
+        [RequiresDynamicCode("Dynamically accesses LoaderConfig properties")]
+        internal static void Initialize()
+        {
+            if (ArgParser.IsDefined("melonloader.hideconsole"))
+                Current.Console.Hide = true;
+
+            if (ArgParser.IsDefined("melonloader.consoleontop"))
+                Current.Console.AlwaysOnTop = true;
+
+            if (ArgParser.IsDefined("melonloader.consoledst"))
+                Current.Console.DontSetTitle = true;
+
+            if (ArgParser.IsDefined("melonloader.hidewarnings"))
+                Current.Console.HideWarnings = true;
+        }
+#endif
+
         [TomlProperty("hide_warnings")]
         [TomlPrecedingComment("Hides warnings from displaying. Equivalent to the '--melonloader.hidewarnings' launch option")]
         public bool HideWarnings { get; internal set; }
@@ -108,6 +233,15 @@ public class LoaderConfig
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class LogsConfig
     {
+#if BOOTSTRAP
+        [RequiresDynamicCode("Dynamically accesses LoaderConfig properties")]
+        internal static void Initialize()
+        {
+            if (uint.TryParse(ArgParser.GetValue("melonloader.maxlogs"), out var maxLogs))
+                Current.Logs.MaxLogs = maxLogs;
+        }
+#endif
+
         [TomlProperty("max_logs")]
         [TomlPrecedingComment("Sets the maximum amount of log files in the Logs folder (Default: 10). Equivalent to the '--melonloader.maxlogs' launch option")]
         public uint MaxLogs { get; internal set; } = 10;
@@ -116,6 +250,22 @@ public class LoaderConfig
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class MonoDebugServerConfig
     {
+#if BOOTSTRAP
+        [RequiresDynamicCode("Dynamically accesses LoaderConfig properties")]
+        internal static void Initialize()
+        {
+            if (ArgParser.IsDefined("melonloader.debugsuspend"))
+                Current.MonoDebugServer.DebugSuspend = true;
+
+            var debugIpAddress = ArgParser.GetValue("melonloader.debugipaddress");
+            if (debugIpAddress != null)
+                Current.MonoDebugServer.DebugIpAddress = debugIpAddress;
+
+            if (uint.TryParse(ArgParser.GetValue("melonloader.debugport"), out var debugPort))
+                Current.MonoDebugServer.DebugPort = debugPort;
+        }
+#endif
+
         [TomlProperty("debug_suspend")]
         [TomlPrecedingComment("Let the Mono debug server wait until a debugger is attached when debug_mode is true (only for Mono games). Equivalent to the '--melonloader.debugsuspend' launch option")]
         public bool DebugSuspend { get; internal set; }
@@ -132,6 +282,43 @@ public class LoaderConfig
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public class UnityEngineConfig
     {
+#if BOOTSTRAP
+        [RequiresDynamicCode("Dynamically accesses LoaderConfig properties")]
+        internal static void Initialize()
+        {
+            var unityVersionOverride = ArgParser.GetValue("melonloader.unityversion");
+            if (unityVersionOverride != null)
+                Current.UnityEngine.VersionOverride = unityVersionOverride;
+
+            if (ArgParser.IsDefined("melonloader.disableunityclc"))
+                Current.UnityEngine.DisableConsoleLogCleaner = true;
+
+            var monoSearchPathOverride = ArgParser.GetValue("melonloader.monosearchpathoverride");
+            if (monoSearchPathOverride != null)
+                Current.UnityEngine.MonoSearchPathOverride = monoSearchPathOverride;
+
+            if (ArgParser.IsDefined("melonloader.agfregenerate"))
+                Current.UnityEngine.ForceRegeneration = true;
+
+            if (ArgParser.IsDefined("melonloader.agfoffline"))
+                Current.UnityEngine.ForceOfflineGeneration = true;
+
+            var forceRegex = ArgParser.GetValue("melonloader.agfregex");
+            if (forceRegex != null)
+                Current.UnityEngine.ForceGeneratorRegex = forceRegex;
+
+            var forceDumperVersion = ArgParser.GetValue("melonloader.agfvdumper");
+            if (forceDumperVersion != null)
+                Current.UnityEngine.ForceIl2CppDumperVersion = forceDumperVersion;
+
+            if (ArgParser.IsDefined("cpp2il.callanalyzer"))
+                Current.UnityEngine.EnableCpp2ILCallAnalyzer = true;
+
+            if (ArgParser.IsDefined("cpp2il.nativemethoddetector"))
+                Current.UnityEngine.EnableCpp2ILNativeMethodDetector = true;
+        }
+#endif
+
         [TomlNonSerialized]
         private const string MonoPathSeparatorDescription =
 #if WINDOWS
@@ -139,7 +326,7 @@ public class LoaderConfig
 #elif LINUX || OSX || ANDROID
             "colon (:)";
 #endif
-
+        
         [TomlProperty("version_override")]
         [TomlPrecedingComment("Overrides the detected UnityEngine version. Equivalent to the '--melonloader.unityversion' launch option")]
         public string VersionOverride { get; internal set; } = "";

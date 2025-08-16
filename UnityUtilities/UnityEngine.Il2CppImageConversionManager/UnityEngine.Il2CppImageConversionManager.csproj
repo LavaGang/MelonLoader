@@ -4,6 +4,7 @@
         <RootNamespace>UnityEngine</RootNamespace>
         <OutputPath>$(MLOutDir)/MelonLoader</OutputPath>
         <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+        <CETCompat>false</CETCompat>
     </PropertyGroup>
 
     <ItemGroup>

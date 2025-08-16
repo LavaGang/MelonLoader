@@ -53,7 +53,7 @@ namespace MelonLoader
             Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
 
 #if NET35
-            Fixes.ServerCertificateValidation.Install();
+            Fixes.NetFramework.ServerCertificateValidation.Install();
 #endif
 
             Assertions.LemonAssertMapping.Setup();
@@ -67,10 +67,10 @@ namespace MelonLoader
             DetourHelper.Native = new DetourNativeMonoPosixPlatform(new DetourNativeX86Platform());
 #endif
 
-            HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
+            HarmonyInstance = new HarmonyLib.Harmony(Properties.BuildInfo.Name);
 
 #if !WINDOWS && !NET6_0_OR_GREATER
-            Fixes.XTermFix.Install();
+            Fixes.NetFramework.XTermFix.Install();
 #endif
 
 #if OSX
@@ -104,6 +104,7 @@ namespace MelonLoader
             }
 
             Environment.SetEnvironmentVariable("IL2CPP_INTEROP_DATABASES_LOCATION", MelonEnvironment.Il2CppAssembliesDirectory);
+            MelonAssemblyResolver.AddSearchDirectory(MelonEnvironment.Il2CppAssembliesDirectory);
 
 #else
 
@@ -124,50 +125,52 @@ namespace MelonLoader
 
 #endif
 
-            Fixes.DetourContextDisposeFix.Install();
+            Fixes.MonoMod.DetourContextDisposeFix.Install();
 
 #if NET6_0_OR_GREATER
             // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             //  NativeStackWalk.LogNativeStackTrace();
 
 #if !ANDROID
-            Fixes.DotnetAssemblyLoadContextFix.Install();
+            Fixes.Dotnet.DotnetAssemblyLoadContextFix.Install();
 #endif
-            Fixes.DotnetModHandlerRedirectionFix.Install();
+            Fixes.Dotnet.DotnetModHandlerRedirectionFix.Install();
 #endif
 
             Fixes.ForcedCultureInfo.Install();
-            Fixes.InstancePatchFix.Install();
+            Fixes.Harmony.InstancePatchFix.Install();
+
+#if WINDOWS
             Fixes.ProcessFix.Install();
-
-#if NET6_0_OR_GREATER
-            Fixes.AsmResolverFix.Install();
-            Fixes.Il2CppInteropExceptionLog.Install();
-
-#if OSX
-            Fixes.Il2CppInteropMacFix.Install();
-            Fixes.NativeLibraryFix.Install();
 #endif
 
-            //Fixes.Il2CppInteropFixes.Install();
+#if NET6_0_OR_GREATER
+            Fixes.Il2CppInterop.Il2CppInteropExceptionLog.Install();
 
-            Fixes.Il2CppICallInjector.Install();
+#if OSX
+            Fixes.Il2CppInterop.Il2CppInteropMacFix.Install();
+            Fixes.Dotnet.NativeLibraryFix.Install();
+#endif
+
+            Fixes.Il2CppInterop.Il2CppInteropFixes.Install();
+            Fixes.Il2CppInterop.Il2CppInteropGetFieldDefaultValueFix.Install();
+
+            Fixes.Il2CppInterop.Il2CppICallInjector.Install();
+
 #endif
 
             PatchShield.Install();
 
-            if (MelonUtils.CurrentPlatform == MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X86
-                || MelonUtils.CurrentPlatform == MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)
-            {
-                Fixes.WindowsUnhandledQuit.Install();
-                MelonEvents.OnUpdate.Subscribe(Fixes.WindowsUnhandledQuit.Update, int.MaxValue);
-            }
+#if WINDOWS
+            Fixes.WindowsUnhandledQuit.Install();
+            MelonEvents.OnUpdate.Subscribe(Fixes.WindowsUnhandledQuit.Update, int.MaxValue);
+#endif
 
             MelonPreferences.Load();
 
             MelonCompatibilityLayer.LoadModules();
 
-            bHapticsManager.Connect(BuildInfo.Name, UnityInformationHandler.GameName);
+            bHapticsManager.Connect(Properties.BuildInfo.Name, UnityInformationHandler.GameName);
 
             MelonFolderHandler.ScanForFolders();
             MelonFolderHandler.LoadMelons(MelonFolderHandler.ScanType.UserLibs);
@@ -227,7 +230,7 @@ namespace MelonLoader
         {
             var lemon = LoaderConfig.Current.Loader.Theme == LoaderConfig.CoreConfig.LoaderTheme.Lemon;
             var versionStr = $"{(lemon ? "Lemon" : "Melon")}Loader " +
-                             $"v{BuildInfo.Version} " +
+                             $"v{Properties.BuildInfo.Version} " +
                              $"{(Is_ALPHA_PreRelease ? "ALPHA Pre-Release" : "Open-Beta")}";
             return versionStr;
         }
@@ -270,8 +273,8 @@ namespace MelonLoader
             bHapticsManager.Disconnect();
 
 #if NET6_0_OR_GREATER
-            //Fixes.Il2CppInteropFixes.Shutdown();
-            Fixes.Il2CppICallInjector.Shutdown();
+            Fixes.Il2CppInterop.Il2CppInteropFixes.Shutdown();
+            Fixes.Il2CppInterop.Il2CppICallInjector.Shutdown();
 #endif
 
             Thread.Sleep(200);

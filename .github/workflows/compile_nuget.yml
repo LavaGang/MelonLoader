@@ -1,0 +1,28 @@
+on:
+  workflow_call:
+    inputs:
+      VERSION:
+        required: true
+        type: string
+
+jobs:
+  compile_nuget:
+    name: Create NuGet Package
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Pack NuGet Package
+        run: dotnet pack -c Release -p:Platform="x64" -p:Version="${{ inputs.VERSION }}"
+
+      - name: Upload NuGet Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.NuGet
+          path: Output/Release/win-x64/MelonLoader/LavaGang.MelonLoader.${{ inputs.VERSION }}.nupkg

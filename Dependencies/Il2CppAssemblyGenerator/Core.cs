@@ -32,7 +32,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Logger = LoggerInstance;
 
             webClient = new();
-            webClient.DefaultRequestHeaders.Add("User-Agent", $"{BuildInfo.Name} v{BuildInfo.Version}");
+            webClient.DefaultRequestHeaders.Add("User-Agent", $"{Properties.BuildInfo.Name} v{Properties.BuildInfo.Version}");
 
             AssemblyGenerationNeeded = LoaderConfig.Current.UnityEngine.ForceRegeneration;
 

@@ -1,6 +1,7 @@
 ﻿namespace MelonLoader
 {
-    public sealed class ResolvedMelons // This class only exists because I can't use Tuples
+    // TO-DO: Replace with LemonTuple<MelonBase[], RottenMelon[]>
+    public sealed class ResolvedMelons
     {
         public readonly MelonBase[] loadedMelons;
         public readonly RottenMelon[] rottenMelons;

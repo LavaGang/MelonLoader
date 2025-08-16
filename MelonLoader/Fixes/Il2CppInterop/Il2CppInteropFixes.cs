@@ -19,7 +19,10 @@ using Il2CppInterop.HarmonySupport;
 
 #pragma warning disable CS8632
 
-namespace MelonLoader.Fixes
+// Herp: This is extremely dirty way of implementing these fixes.
+//       These fixes are unfortunately required for Il2CppInterop Wrapper Generation to function correctly on a lot of Il2Cpp Games.
+//       DO NOT REMOVE!
+namespace MelonLoader.Fixes.Il2CppInterop
 {
     // fixes: https://github.com/BepInEx/Il2CppInterop/pull/103
     // fixes: https://github.com/BepInEx/Il2CppInterop/issues/135
@@ -38,9 +41,9 @@ namespace MelonLoader.Fixes
         private static MethodInfo _fixedAddTypeToLookup;
         private static MethodInfo _rewriteType;
         private static MethodInfo _rewriteType_Prefix;
-        private static MethodInfo _systemTypeFromIl2CppType;
-        private static MethodInfo _systemTypeFromIl2CppType_Prefix;
-        private static MethodInfo _systemTypeFromIl2CppType_Transpiler;
+        //private static MethodInfo _systemTypeFromIl2CppType;
+        //private static MethodInfo _systemTypeFromIl2CppType_Prefix;
+        //private static MethodInfo _systemTypeFromIl2CppType_Transpiler;
         private static MethodInfo _injectorHelpers_AddTypeToLookup;
         private static MethodInfo _registerTypeInIl2Cpp;
         private static MethodInfo _registerTypeInIl2Cpp_Transpiler;
@@ -96,9 +99,9 @@ namespace MelonLoader.Fixes
                 if (detourMethodPatcherType == null)
                     throw new Exception("Failed to get Il2CppDetourMethodPatcher");
 
-                _systemTypeFromIl2CppType = classInjectorType.GetMethod("SystemTypeFromIl2CppType", BindingFlags.NonPublic | BindingFlags.Static);
-                if (_systemTypeFromIl2CppType == null)
-                    throw new Exception("Failed to get ClassInjector.SystemTypeFromIl2CppType");
+                //_systemTypeFromIl2CppType = classInjectorType.GetMethod("SystemTypeFromIl2CppType", BindingFlags.NonPublic | BindingFlags.Static);
+                //if (_systemTypeFromIl2CppType == null)
+                //    throw new Exception("Failed to get ClassInjector.SystemTypeFromIl2CppType");
 
                 _getIl2CppTypeFullName = classInjectorType.GetMethod("GetIl2CppTypeFullName", BindingFlags.NonPublic | BindingFlags.Static);
                 if (_getIl2CppTypeFullName == null)
@@ -164,8 +167,8 @@ namespace MelonLoader.Fixes
                 _fixedAddTypeToLookup = thisType.GetMethod(nameof(FixedAddTypeToLookup), BindingFlags.NonPublic | BindingFlags.Static);
                 _fixedIsByRef = thisType.GetMethod(nameof(FixedIsByRef), BindingFlags.NonPublic | BindingFlags.Static);
                 _fixedFindAbstractMethods = thisType.GetMethod(nameof(FixedFindAbstractMethods), BindingFlags.NonPublic | BindingFlags.Static);
-                _systemTypeFromIl2CppType_Prefix = thisType.GetMethod(nameof(SystemTypeFromIl2CppType_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
-                _systemTypeFromIl2CppType_Transpiler = thisType.GetMethod(nameof(SystemTypeFromIl2CppType_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
+                //_systemTypeFromIl2CppType_Prefix = thisType.GetMethod(nameof(SystemTypeFromIl2CppType_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
+                //_systemTypeFromIl2CppType_Transpiler = thisType.GetMethod(nameof(SystemTypeFromIl2CppType_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
                 _rewriteType_Prefix = thisType.GetMethod(nameof(RewriteType_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
                 _registerTypeInIl2Cpp_Transpiler = thisType.GetMethod(nameof(RegisterTypeInIl2Cpp_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
                 _isTypeSupported_Transpiler = thisType.GetMethod(nameof(IsTypeSupported_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
@@ -176,11 +179,13 @@ namespace MelonLoader.Fixes
                 _rewriteGlobalContext_GetNewAssemblyForOriginal_Prefix = thisType.GetMethod(nameof(RewriteGlobalContext_GetNewAssemblyForOriginal_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
                 _rewriteGlobalContext_TryGetNewTypeForOriginal_Prefix = thisType.GetMethod(nameof(RewriteGlobalContext_TryGetNewTypeForOriginal_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
 
+                /*
                 LogDebugMsg("Patching Il2CppInterop ClassInjector.SystemTypeFromIl2CppType...");
                 Core.HarmonyInstance.Patch(_systemTypeFromIl2CppType,
                     new HarmonyMethod(_systemTypeFromIl2CppType_Prefix), 
                     null,
                     new HarmonyMethod(_systemTypeFromIl2CppType_Transpiler));
+                */
 
 #if !ANDROID // On Android this patch causes MissingMethodExceptions for an unknown reason
                 LogDebugMsg("Patching Il2CppInterop ClassInjector.RegisterTypeInIl2Cpp...");
@@ -419,6 +424,7 @@ namespace MelonLoader.Fixes
             return true;
         }
 
+        /*
         private static bool SystemTypeFromIl2CppType_Prefix(Il2CppTypeStruct* __0, ref Type __result)
         {
             if ((IntPtr)__0 == IntPtr.Zero)
@@ -499,6 +505,7 @@ namespace MelonLoader.Fixes
                 yield return instruction;
             }
         }
+        */
 
         private static IEnumerable<CodeInstruction> RegisterTypeInIl2Cpp_Transpiler(IEnumerable<CodeInstruction> instructions)
         {

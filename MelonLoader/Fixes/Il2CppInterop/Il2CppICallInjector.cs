@@ -12,7 +12,7 @@ using HarmonyLib;
 
 #pragma warning disable 0649
 
-namespace MelonLoader.Fixes
+namespace MelonLoader.Fixes.Il2CppInterop
 {
     internal static class Il2CppICallInjector
     {

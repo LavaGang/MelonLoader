@@ -1,9 +1,6 @@
 name: Build MelonLoader
 
-run-name: 0.7.1${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }} | ${{ github.event_name != 'workflow_dispatch' && (github.event.head_commit.message || format('`[PR]` {0}', github.event.pull_request.title)) || 'Manual Build' }}
-
-env:
-  DEVVERSION: "0.7.1"
+run-name: 0.7.2${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }} | ${{ github.event_name != 'workflow_dispatch' && (github.event.head_commit.message || format('`[PR]` {0}', github.event.pull_request.title)) || 'Manual Build' }}
 
 on:
   push:
@@ -13,122 +10,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_windows:
-    name: Build Windows Binaries
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.0.x
-
-      - name: Restore Dependencies
-        run: dotnet restore
-
-      - name: Build Debug for win-x64
-        run: dotnet build --no-restore -c Debug -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
-
-      - name: Upload Debug for win-x64
-        uses: actions/upload-artifact@v4
-        with:
-          name: MelonLoader.Windows.x64.CI.Debug
-          path: Output/Debug/win-x64
-
-      - name: Build Release for win-x64
-        run: dotnet build --no-restore -c Release -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
-
-      - name: Upload Release for win-x64
-        uses: actions/upload-artifact@v4
-        with:
-          name: MelonLoader.Windows.x64.CI.Release
-          path: Output/Release/win-x64
-
-      - name: Build Debug for win-x86
-        run: dotnet build --no-restore -c Debug -p:Platform="x86" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
-
-      - name: Upload Debug for win-x86
-        uses: actions/upload-artifact@v4
-        with:
-          name: MelonLoader.Windows.x86.CI.Debug
-          path: Output/Debug/win-x86
-
-      - name: Build Release for win-x86
-        run: dotnet build --no-restore -c Release -p:Platform="x86" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
-
-      - name: Upload Release for win-x86
-        uses: actions/upload-artifact@v4
-        with:
-          name: MelonLoader.Windows.x86.CI.Release
-          path: Output/Release/win-x86
-
-      - name: Pack NuGet Package
-        run: dotnet pack --no-build -c Release -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}"
-
-      - name: Upload NuGet Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: MelonLoader.NuGet
-          path: Output/Release/win-x64/MelonLoader/LavaGang.MelonLoader.${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}.nupkg
-  
-  build_linux:
-    name: Build Linux Binaries
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.0.x
-
-      - name: Restore Dependencies
-        run: dotnet restore
-
-      - name: Build Debug for linux-x64
-        run: dotnet build --no-restore -c Debug -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
-
-      - name: Upload Debug for linux-x64
-        uses: actions/upload-artifact@v4
-        with:
-          name: MelonLoader.Linux.x64.CI.Debug
-          path: Output/Debug/linux-x64
-
-      - name: Build Release for linux-x64
-        run: dotnet build --no-restore -c Release -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
-
-      - name: Upload Release for linux-x64
-        uses: actions/upload-artifact@v4
-        with:
-          name: MelonLoader.Linux.x64.CI.Release
-          path: Output/Release/linux-x64
-  
-  build_macos:
-    name: Build macOS Binaries
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.0.x
-
-      - name: Restore Dependencies
-        run: dotnet restore
-
-      - name: Build Debug for osx-x64
-        run: dotnet build --no-restore -c Debug -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
-
-      - name: Upload Debug for osx-x64
-        uses: actions/upload-artifact@v4
-        with:
-          name: MelonLoader.macOS.x64.CI.Debug
-          path: Output/Debug/osx-x64
-
-      - name: Build Release for osx-x64
-        run: dotnet build --no-restore -c Release -p:Platform="x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
-
-      - name: Upload Release for osx-x64
-        uses: actions/upload-artifact@v4
-        with:
-          name: MelonLoader.macOS.x64.CI.Release
-          path: Output/Release/osx-x64
+  build:
+    name: Build
+    uses: ./.github/workflows/compile_all.yml
+    with:
+      SKIP_DEBUG: false
+      VERSION: "0.7.2${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"

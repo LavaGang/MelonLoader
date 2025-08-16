@@ -312,7 +312,13 @@ namespace MelonLoader
 
         public Incompatibility[] FindIncompatiblitiesFromContext()
         {
-            return FindIncompatiblities(MelonUtils.CurrentGameAttribute, Process.GetCurrentProcess().ProcessName, UnityInformationHandler.GameVersion, BuildInfo.VersionNumber, MelonUtils.HashCode, MelonUtils.CurrentPlatform, MelonUtils.CurrentDomain);
+            return FindIncompatiblities(MelonUtils.CurrentGameAttribute,
+                Process.GetCurrentProcess().ProcessName, 
+                UnityInformationHandler.GameVersion, 
+                Properties.BuildInfo.VersionNumber, 
+                MelonUtils.HashCode, 
+                MelonUtils.CurrentPlatform,
+                MelonUtils.CurrentDomain);
         }
 
         public static void PrintIncompatibilities(Incompatibility[] incompatibilities, MelonBase melon)

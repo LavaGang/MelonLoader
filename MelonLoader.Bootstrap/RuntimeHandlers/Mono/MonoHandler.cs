@@ -62,7 +62,7 @@ internal static class MonoHandler
 
         if (foundOverridenFile == null)
             return Mono.ImageOpenFromDataWithName(data, dataLen, needCopy, ref status, refonly, name);
-        
+
         MelonDebug.Log($"Overriding the image load of {name} to {foundOverridenFile}");
         byte[] newDataArray = File.ReadAllBytes(foundOverridenFile);
         uint newDataLen = (uint)newDataArray.Length;
@@ -211,15 +211,21 @@ internal static class MonoHandler
 
         assemblyManagerSearchAssembly = Mono.ClassGetMethodFromName(assemblyManagerClass, "SearchAssembly", 5);
 
-        nint ex = 0;
         MelonDebug.Log("Invoking managed core init");
 
+        nint ex = 0;
         var bootstrapHandle = Core.LibraryHandle;
         var initArgs = stackalloc nint*[]
         {
             &bootstrapHandle
         };
         Mono.RuntimeInvoke(initMethod, 0, (void**)initArgs, ref ex);
+
+        if (ex != 0)
+        {
+            Core.Logger.Error("Failed to invoke the managed init function");
+            Mono.LogMonoException(ex);
+        }
     }
 
     internal static void InstallHooks()

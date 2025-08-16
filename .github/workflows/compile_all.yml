@@ -1,0 +1,37 @@
+on:
+  workflow_call:
+    inputs:
+      VERSION:
+        required: true
+        type: string
+      SKIP_DEBUG:
+        required: true
+        type: boolean
+
+jobs:
+  compile_windows:
+    name: Windows
+    uses: ./.github/workflows/compile_windows.yml
+    with:
+      VERSION: ${{ inputs.VERSION }}
+      SKIP_DEBUG: ${{ inputs.SKIP_DEBUG }}
+      
+  compile_linux:
+    name: Linux
+    uses: ./.github/workflows/compile_linux.yml
+    with:
+      VERSION: ${{ inputs.VERSION }}
+      SKIP_DEBUG: ${{ inputs.SKIP_DEBUG }}
+      
+  compile_macos:
+    name: MacOS
+    uses: ./.github/workflows/compile_macos.yml
+    with:
+      VERSION: ${{ inputs.VERSION }}
+      SKIP_DEBUG: ${{ inputs.SKIP_DEBUG }}
+      
+  compile_nuget:
+    name: NuGet
+    uses: ./.github/workflows/compile_nuget.yml
+    with:
+      VERSION: ${{ inputs.VERSION }}
