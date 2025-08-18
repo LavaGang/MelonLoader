@@ -1,0 +1,81 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <!--This is needed in order to build successfully bionic binaries-->
+        <IsAndroid>$(RuntimeIdentifier.ToLower().StartsWith('android'))</IsAndroid>
+        <IsAndroid Condition="'$(IsAndroid)'=='false'">$(RuntimeIdentifier.ToLower().StartsWith('linux-bionic'))</IsAndroid>
+        <IsWindowsHost>$([MSBuild]::IsOSPlatform('Windows'))</IsWindowsHost>
+        <IsLinuxHost>$([MSBuild]::IsOSPlatform('Linux'))</IsLinuxHost>
+        <IsOSXHost>$([MSBuild]::IsOSPlatform('OSX'))</IsOSXHost>
+        <RemoveSections Condition="'$(RemoveSections)' != '' And $([System.String]::ToLower('$(RemoveSections)')) != 'false'">true</RemoveSections>
+    </PropertyGroup>
+
+    <!--Following blocks are exclusive for NKD building-->
+    <PropertyGroup Condition="$(IsAndroid) == 'true'">
+        <NdkPropertiesFile>$(ANDROID_NDK_ROOT)\source.properties</NdkPropertiesFile>
+        <NdkHost Condition="$(IsWindowsHost) == 'true'">windows-x86_64</NdkHost>
+        <NdkHost Condition="$(IsLinuxHost) == 'true'">linux-x86_64</NdkHost>
+        <NdkHost Condition="$(IsOSXHost) == 'true'">darwin-x86_64</NdkHost>
+        <SysRoot Condition="'$(SysRoot)' == ''">$(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/$(NdkHost)/sysroot</SysRoot>
+        <!--Retrieves NDK version-->
+        <BaseRevision>$([System.IO.File]::ReadAllText('$(NdkPropertiesFile)'))</BaseRevision>
+        <NdkVersion>$([System.Text.RegularExpressions.Regex]::Match('$(BaseRevision)', 'Pkg.Revision\s*=\s*(\S+)').Groups[1].Value.Split('.')[0])</NdkVersion>
+        <NdkVersion Condition="'$(NdkVersion)' == ''">0</NdkVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="$(IsAndroid) == 'true'">
+        <!--OSX and Linux can use NDK directly-->
+        <CppCompilerAndLinker Condition="$(IsWindowsHost) != 'true'">$(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/$(NdkHost)/bin/clang</CppCompilerAndLinker>
+        <ObjCopyName Condition="$(IsWindowsHost) != 'true'">$(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/$(NdkHost)/bin/llvm-objcopy</ObjCopyName>
+        <!--Windows should use batch files to work with NDK-->
+        <CppCompilerAndLinker Condition="$(IsWindowsHost) == 'true'">android_clang.cmd</CppCompilerAndLinker>
+        <ObjCopyName Condition="$(IsWindowsHost) == 'true'">android_llvm-objcopy.cmd</ObjCopyName>
+    </PropertyGroup>
+
+    <ItemGroup Condition="$(IsAndroid) == 'true'">
+        <!--JNI libs needs to be compiled with -z noexecstack-->
+        <LinkerArg Include="-z noexecstack"/>
+        <!--Hack for passing a valid target argument on NDK linker invocation-->
+        <LinkerArg Condition="$(RuntimeIdentifier.ToLower().EndsWith('-x64'))" Include="--target=x86_64-linux-android21"/>
+        <LinkerArg Condition="$(RuntimeIdentifier.ToLower().EndsWith('-arm64'))" Include="--target=aarch64-linux-android21"/>
+    </ItemGroup>
+
+    <!-- .NET SDK versions post Jan. 2025 are based on NDK 27 and can cause problems if built with older verisons -->
+    <Target Condition="$(IsAndroid) == 'true'" Name="CheckNdkVersion" BeforeTargets="Build">
+        <!-- Extract the major version (before the first dot) -->
+        <PropertyGroup>
+            <NdkMajorVersion>$([System.Int32]::Parse($([System.String]::Copy('$(NdkVersion)').Split('.')[0])))</NdkMajorVersion>
+        </PropertyGroup>
+        
+        <!-- Fail the build if the major version is less than 27 -->
+        <Error Condition="'$(NdkMajorVersion)' &lt; 27"
+            Text="The specified NDK version ($(NdkVersion)) is not supported. Please use NDK version 27.0.0 or higher." />
+    </Target>
+
+    <!--Hack for using NDK executables on Windows-->
+    <Target Condition="$(IsAndroid) == 'true'" Name="PrepareNdkBatches" AfterTargets="Build" BeforeTargets="IlcCompile">
+        <PropertyGroup>
+            <NdkHostBin Condition="$(IsWindowsHost) == 'true'">$(ANDROID_NDK_ROOT)\toolchains\llvm\prebuilt\$(NdkHost)\bin\</NdkHostBin>
+            <NdkHostBin Condition="$(IsWindowsHost) != 'true'">$(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/$(NdkHost)/bin/</NdkHostBin>
+        </PropertyGroup>
+        <!--Create Windows .cmd files-->
+        <WriteLinesToFile Condition="$(IsWindowsHost) == 'true'" File="android_clang.cmd" Lines="&quot;$(NdkHostBin)clang.exe&quot; %*" Overwrite="true"/>
+        <WriteLinesToFile Condition="$(IsWindowsHost) == 'true'" File="android_llvm-objcopy.cmd" Lines="&quot;$(NdkHostBin)llvm-objcopy.exe&quot; %*" Overwrite="true"/>
+    </Target>
+    <Target Condition="$(IsAndroid) == 'true'" Name="RemoveBatchFiles" AfterTargets="LinkNative">
+        <!--Remove batch files-->
+        <ItemGroup>
+            <BatchFiles Condition="$(IsWindowsHost) == 'true'" Include="android_clang.cmd"/>
+            <BatchFiles Condition="$(IsWindowsHost) == 'true'" Include="android_llvm-objcopy.cmd"/>
+        </ItemGroup>
+        <Delete Files="@(BatchFiles)"/>
+    </Target>
+
+    <!--Hack for removing _init and _fini sections into the exports file-->
+    <Target Name="RemoveSections" Condition="$(IsAndroid) == 'true'" AfterTargets="IlcCompile" BeforeTargets="LinkNative">
+        <PropertyGroup Condition="$(RemoveSections) != 'true'">
+            <RemoveSections Condition="$([System.Int32]::Parse($(NdkVersion.Split('.')[0]))) >= 26">true</RemoveSections>
+        </PropertyGroup>
+        <WriteLinesToFile Condition="$(RemoveSections) == 'true'" File="$(ExportsFile)" Lines="$([System.IO.File]::ReadAllText($(ExportsFile)).Replace('global: _init; _fini;','global: '))" Overwrite="true"/>
+    </Target>
+</Project>

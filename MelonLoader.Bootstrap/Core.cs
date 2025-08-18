@@ -12,7 +12,7 @@ namespace MelonLoader.Bootstrap;
 
 public static class Core
 {
-#if LINUX || OSX
+#if LINUX || OSX || ANDROID
     [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private delegate nint DlsymFn(nint handle, string symbol);
     private static readonly DlsymFn HookDlsymDelegate = HookDlsym;
@@ -40,15 +40,29 @@ public static class Core
         var exePath = Environment.ProcessPath!;
         GameDir = Path.GetDirectoryName(exePath)!;
 
-#if !OSX
-        DataDir = Path.Combine(GameDir, Path.GetFileNameWithoutExtension(exePath) + "_Data");
-#else
+#if ANDROID
+        DataDir = Proxy.Android.AndroidBootstrap.GetDataDir();
+        if (!Proxy.Android.AndroidBootstrap.EnsurePerms())
+            throw new Exception("Permissions not granted! MelonLoader cannot continue without permissions.");
+
+        MelonLoader.Utils.APKAssetManager.Initialize();
+        Proxy.Android.AndroidProxy.Log("JNI initialized!");
+
+        Proxy.Android.AndroidBootstrap.CopyMelonLoaderData(Proxy.Android.AndroidBootstrap.GetApkModificationDate());
+        Proxy.Android.AndroidProxy.Log("APK assets copied!");
+#elif OSX
         DataDir = Path.Combine(Path.GetDirectoryName(GameDir)!, "Resources", "Data");
+#else
+        DataDir = Path.Combine(GameDir, Path.GetFileNameWithoutExtension(exePath) + "_Data");
 #endif
         if (!Directory.Exists(DataDir))
             return;
 
+#if !ANDROID
         LoaderConfig.Initialize();
+#else
+        LoaderConfig.Initialize(DataDir); // Android doesn't work with the GetCurrentProcess system so we use the cached DataDir
+#endif
 
         if (LoaderConfig.Current.Loader.Disable)
             return;
@@ -57,7 +71,7 @@ public static class Core
         if (!LoaderConfig.Current.Loader.CapturePlayerLogs)
             ConsoleHandler.NullHandles();
 
-#if LINUX || OSX
+#if LINUX || OSX || ANDROID
         PltHook.InstallHooks
         ([
             ("dlsym", Marshal.GetFunctionPointerForDelegate(HookDlsymDelegate))
@@ -90,7 +104,7 @@ public static class Core
         return redirect.detourPtr;
     }
 
-#if LINUX || OSX
+#if LINUX || OSX || ANDROID
     private static nint HookDlsym(nint handle, string symbol)
     {
         nint originalSymbolAddress = LibcNative.Dlsym(handle, symbol);

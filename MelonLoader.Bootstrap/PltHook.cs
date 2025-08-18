@@ -35,8 +35,13 @@ internal static partial class PltHook
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial nint PlthookError();
 
+#if !ANDROID
     private static readonly string? PlayerFileName = Process.GetCurrentProcess().Modules.OfType<ProcessModule>()
         .FirstOrDefault(x => x.FileName.Contains("UnityPlayer"))?.FileName;
+#else
+    private static readonly string? PlayerFileName = Process.GetCurrentProcess().Modules.OfType<ProcessModule>()
+        .FirstOrDefault(x => x.FileName.Contains("libunity.so"))?.FileName;
+#endif
     
     internal static void InstallHooks(List<(string functionName, nint hookFunctionPtr)> hooks)
     {

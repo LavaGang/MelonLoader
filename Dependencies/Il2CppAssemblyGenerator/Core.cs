@@ -1,9 +1,13 @@
-﻿using System.IO;
-using System.Net.Http;
-using MelonLoader.Il2CppAssemblyGenerator.Packages;
+﻿using MelonLoader.Il2CppAssemblyGenerator.Packages;
 using MelonLoader.Il2CppAssemblyGenerator.Packages.Models;
 using MelonLoader.Modules;
 using MelonLoader.Utils;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+#if ANDROID
+using MelonLoader.Java;
+#endif
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
@@ -31,7 +35,18 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             Logger = LoggerInstance;
 
+#if ANDROID
+            // Android has problems with SSL, which prevents any connections. This is the workaround.
+            HttpClientHandler handler = new()
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+                ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+            };
+
+            webClient = new(handler);
+#else
             webClient = new();
+#endif
             webClient.DefaultRequestHeaders.Add("User-Agent", $"{Properties.BuildInfo.Name} v{Properties.BuildInfo.Version}");
 
             AssemblyGenerationNeeded = LoaderConfig.Current.UnityEngine.ForceRegeneration;
@@ -46,6 +61,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
 #if OSX
             GameAssemblyPath = Path.Combine(MelonEnvironment.GameExecutablePath, "Contents", "Frameworks", gameAssemblyName);
+#elif ANDROID
+            GameAssemblyPath = GetLibIl2CppPath();
 #else
             GameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, gameAssemblyName);
 #endif
@@ -60,12 +77,17 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             if (!LoaderConfig.Current.UnityEngine.ForceOfflineGeneration)
                 RemoteAPI.Contact();
 
-            Cpp2IL cpp2IL_netcore = new Cpp2IL();
+            Packages.Cpp2IL cpp2IL_netcore = new();
             if (MelonUtils.IsWindows
-                && (cpp2IL_netcore.VersionSem < Cpp2IL.NetCoreMinVersion))
+                && (cpp2IL_netcore.VersionSem < Packages.Cpp2IL.NetCoreMinVersion))
                 cpp2il = new Cpp2IL_NetFramework();
             else
                 cpp2il = cpp2IL_netcore;
+
+#if ANDROID
+            cpp2il = new Cpp2IL_Android();
+#endif
+
             cpp2il_scrs = new Cpp2IL_StrippedCodeRegSupport(cpp2il);
 
             il2cppinterop = new Packages.Il2CppInterop();
@@ -132,6 +154,44 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             return 0;
         }
+
+#if ANDROID
+        private string GetLibIl2CppPath()
+        {
+            // get player activity
+            using JClass unityClass = JNI.FindClass("com/unity3d/player/UnityPlayer");
+            JFieldID activityFieldId = JNI.GetStaticFieldID(unityClass, "currentActivity", "Landroid/app/Activity;");
+            using JObject currentActivityObj = JNI.GetStaticObjectField<JObject>(unityClass, activityFieldId);
+
+            // get applicationinfo
+            using JClass activityType = JNI.GetObjectClass(currentActivityObj);
+            JMethodID getAppInfoId = JNI.GetMethodID(activityType, "getApplicationInfo", "()Landroid/content/pm/ApplicationInfo;");
+            using JObject applicationInfoObj = JNI.CallObjectMethod<JObject>(currentActivityObj, getAppInfoId);
+
+            // get nativelibrarydir
+            JFieldID filesFieldId = JNI.GetFieldID(JNI.GetObjectClass(applicationInfoObj), "nativeLibraryDir", "Ljava/lang/String;");
+            using JString pathJString = JNI.GetObjectField<JString>(applicationInfoObj, filesFieldId);
+
+            if (pathJString == null || !pathJString.Valid())
+            {
+                MelonLogger.Msg("Unable to get libil2cpp path.");
+                if (JNI.ExceptionCheck())
+                {
+                    var ex = JNI.ExceptionOccurred();
+                    JNI.ExceptionClear();
+                    MelonLogger.Msg(ex.GetMessage());
+                }
+
+                return "";
+            }
+
+            string nativePath = JNI.GetJStringString(pathJString);
+            string[] directoryLibs = Directory.GetFiles(nativePath, "*.so");
+
+            string libil2Path = directoryLibs.FirstOrDefault(s => s.EndsWith("libil2cpp.so"));
+            return libil2Path;
+        }
+#endif
 
         private static void OldFiles_Cleanup()
         {

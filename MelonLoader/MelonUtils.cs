@@ -105,6 +105,12 @@ namespace MelonLoader
         public static bool IsUnix => GetPlatform is PlatformID.Unix;
         public static bool IsWindows => GetPlatform is PlatformID.Win32NT or PlatformID.Win32S or PlatformID.Win32Windows or PlatformID.WinCE;
         public static bool IsMac => GetPlatform is PlatformID.MacOSX;
+        public static bool IsAndroid =>
+#if ANDROID // This is what .NET does internally for OperatingSystem.IsAndroid, this just prevents errors on net35
+            true;
+#else
+            false;
+#endif
 
 #if NET6_0_OR_GREATER
         private static PlatformID GetPlatformFromRuntimeInformation()
@@ -569,6 +575,23 @@ namespace MelonLoader
 
         internal static string GetOSVersion()
         {
+            if (IsAndroid)
+            {
+                StringBuilder sb = new();
+                sb.Append("Android ");
+                int apiLevel = Environment.OSVersion.Version.Major;
+                // https://apilevels.com/
+                string androidVersion = apiLevel switch
+                {
+                    27 => "8.1", 28 => "9", 29 => "10",
+                    30 => "11", 31 => "12", 32 => "12L", 33 => "13", 34 => "14", 35 => "15", 36 => "16",
+                    _ => $"API Level {apiLevel}"
+                };
+                sb.Append(androidVersion);
+
+                return sb.ToString();
+            }
+
             if (IsUnix || IsMac)
                 return Environment.OSVersion.VersionString;
 

@@ -296,6 +296,9 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [WebSocketDotNet](https://github.com/SamboyCoding/WebSocketDotNet) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/WebSocketDotNet/blob/master/LICENSE) for the full License.
 - [Pastel](https://github.com/silkfire/Pastel) is licensed under the MIT License. See [LICENSE](https://github.com/silkfire/Pastel/blob/master/LICENSE) for the full License.
 - [Il2CppInterop](https://github.com/BepInEx/Il2CppInterop) is licensed under the LGPLv3 License. See [LICENSE](https://github.com/BepInEx/Il2CppInterop/blob/master/LICENSE) for the full License.
+- [JNISharp](https://github.com/WarrenUlrich/JNISharp) is licensed under the MIT License. See [LICENSE](https://github.com/WarrenUlrich/JNISharp/blob/master/LICENSE) for the full License.
+- [OpenSSL](https://github.com/openssl/openssl) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/openssl/openssl/blob/master/LICENSE.txt) for the full License.
+- [NativeAOT-AndroidHelloJniLib](https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib) is licensed under the MIT License. See [LICENSE](https://github.com/josephmoresena/NativeAOT-AndroidHelloJniLib/blob/main/LICENSE) for the full License. 
 
 External Libraries and Tools that are downloaded and used at Runtime:
 - [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/Cpp2IL/blob/master/LICENSE) for the full License.

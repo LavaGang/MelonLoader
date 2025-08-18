@@ -212,7 +212,7 @@ internal static class Exports
             return;
         }
 
-        var mMsg = new ReadOnlySpan<char>(msg, msgLength);
+        var mMsg = PointerToSpan(msg, msgLength);
 
         if (sectionColor == null || section == null)
         {
@@ -220,13 +220,15 @@ internal static class Exports
             return;
         }
 
-        MelonLogger.Log(*msgColor, mMsg, *sectionColor, new(section, sectionLength));
+        var mSect = PointerToSpan(section, sectionLength);
+
+        MelonLogger.Log(*msgColor, mMsg, *sectionColor, mSect);
     }
 
     [UnmanagedCallersOnly(EntryPoint = "LogError")]
     public static unsafe void LogError(char* msg, int msgLength, char* section, int sectionLength, bool warning)
     {
-        var mMsg = new ReadOnlySpan<char>(msg, msgLength);
+        var mMsg = PointerToSpan(msg, msgLength);
         if (section == null)
         {
             if (warning)
@@ -237,10 +239,22 @@ internal static class Exports
             return;
         }
 
+        var mSect = PointerToSpan(section, sectionLength);
+
         if (warning)
-            MelonLogger.LogWarning(mMsg, new(section, sectionLength));
+            MelonLogger.LogWarning(mMsg, mSect);
         else
-            MelonLogger.LogError(mMsg, new(section, sectionLength));
+            MelonLogger.LogError(mMsg, mSect);
+    }
+
+    private static unsafe ReadOnlySpan<char> PointerToSpan(char* c, int length)
+    {
+#if !ANDROID
+        return new(c, length);
+#else
+        // Required to prevent strings from being mangled when logged on Android.
+        return System.Text.Encoding.UTF8.GetString(new ReadOnlySpan<byte>(c, length)).TrimEnd('\0', '\n', '\r');
+#endif
     }
 
     [UnmanagedCallersOnly(EntryPoint = "LogMelonInfo")]
@@ -279,4 +293,12 @@ internal static class Exports
     {
         Marshal.StructureToPtr(LoaderConfig.Current, *pConfig, false);
     }
+
+#if ANDROID
+    [UnmanagedCallersOnly(EntryPoint = "GetJavaVM")]
+    public static unsafe IntPtr GetJavaVM()
+    {
+        return (IntPtr)MelonLoader.Java.JNI.VM;
+    }
+#endif
 }

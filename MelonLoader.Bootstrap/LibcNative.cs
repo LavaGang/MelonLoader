@@ -1,4 +1,4 @@
-#if LINUX || OSX
+#if LINUX || OSX || ANDROID
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -13,8 +13,17 @@ internal partial class LibcNative
 
     internal const int RtldLazy = 0x1;
     internal const int RtldNoLoad = 0x10;
-    
-    [LibraryImport("libc", EntryPoint = "__libc_start_main")]
+
+    const string DL_LIB =
+#if !ANDROID
+        "libc";
+#else
+        "libdl";
+#endif
+
+    const string C_LIB = "libc";
+
+    [LibraryImport(C_LIB, EntryPoint = "__libc_start_main")]
     public static unsafe partial int LibCStartMain(
         delegate* unmanaged[Cdecl]<int, char**, char**, int> main,
         int argc,
@@ -24,51 +33,51 @@ internal partial class LibcNative
         nint rtLdFini,
         nint stackEnd);
 
-    [LibraryImport("libc", EntryPoint = "dlopen", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(DL_LIB, EntryPoint = "dlopen", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial nint Dlopen(string handle, int flags);
 
-    [LibraryImport("libc", EntryPoint = "dlsym", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(DL_LIB, EntryPoint = "dlsym", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial nint Dlsym(nint handle, string symbol);
 
-    [LibraryImport("libc", EntryPoint = "setenv", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(C_LIB, EntryPoint = "setenv", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int Setenv(string name, string value,[MarshalAs(UnmanagedType.Bool)] bool overwrite);
 
-    [LibraryImport("libc", EntryPoint = "dup2")]
+    [LibraryImport(C_LIB, EntryPoint = "dup2")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int Dup2(int oldFd, int newFd);
 
 #if OSX
-    [LibraryImport("libc", EntryPoint = "fopen", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(C_LIB, EntryPoint = "fopen", StringMarshalling = StringMarshalling.Utf8)]
 #else
-    [LibraryImport("libc", EntryPoint = "fopen64", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(C_LIB, EntryPoint = "fopen64", StringMarshalling = StringMarshalling.Utf8)]
 #endif
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial nint Fopen64(string pathName, string modes);
 
-    [LibraryImport("libc", EntryPoint = "vfprintf", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(C_LIB, EntryPoint = "vfprintf", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int Vfprintf(nint stream, string format, nint vList);
 
-    [LibraryImport("libc", EntryPoint = "vsnprintf", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(C_LIB, EntryPoint = "vsnprintf", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial int Vsnprintf(byte* s, int maxLen, string format, nint arg);
 
-    [LibraryImport("libc", EntryPoint = "fseek", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(C_LIB, EntryPoint = "fseek", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int Fseek(nint stream, long offset, int whence);
 
-    [LibraryImport("libc", EntryPoint = "fwrite", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(C_LIB, EntryPoint = "fwrite", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial int Fwrite(byte* ptr, int size, int nItems, nint stream);
 
-    [LibraryImport("libc", EntryPoint = "fileno")]
+    [LibraryImport(C_LIB, EntryPoint = "fileno")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int Fileno(nint stream);
 
-    [LibraryImport("libc", EntryPoint = "fclose")]
+    [LibraryImport(C_LIB, EntryPoint = "fclose")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int FClose(nint stream);
 }

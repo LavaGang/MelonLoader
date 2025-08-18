@@ -27,6 +27,11 @@ namespace MelonLoader
 
         internal static int Initialize()
         {
+#if ANDROID
+            Java.JNI.Initialize(BootstrapInterop.Library.GetJavaVM());
+            APKAssetManager.Initialize();
+#endif
+
             // The config should be set before running anything else due to static constructors depending on it
             // Don't ask me how this works, because I don't know either. -slxdy
             var config = new LoaderConfig();
@@ -126,7 +131,9 @@ namespace MelonLoader
             // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             //  NativeStackWalk.LogNativeStackTrace();
 
+#if !ANDROID
             Fixes.Dotnet.DotnetAssemblyLoadContextFix.Install();
+#endif
             Fixes.Dotnet.DotnetModHandlerRedirectionFix.Install();
 #endif
 
@@ -146,7 +153,9 @@ namespace MelonLoader
 #endif
 
             Fixes.Il2CppInterop.Il2CppInteropFixes.Install();
+#if !ANDROID
             Fixes.Il2CppInterop.Il2CppInteropGetFieldDefaultValueFix.Install();
+#endif
 
             Fixes.Il2CppInterop.Il2CppICallInjector.Install();
 

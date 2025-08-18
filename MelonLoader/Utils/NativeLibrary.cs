@@ -1,3 +1,4 @@
+using MelonLoader.Utils;
 using System;
 using System.IO;
 using System.Reflection;
@@ -27,8 +28,16 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(filepath))
                 throw new ArgumentNullException(nameof(filepath));
             IntPtr ptr = AgnosticLoadLibrary(filepath);
+#if !ANDROID
             if (ptr == IntPtr.Zero)
                 throw new Exception($"Unable to Load Native Library {filepath}!");
+#else
+            if (ptr == IntPtr.Zero)
+            {
+                var error = Marshal.PtrToStringAnsi(dlerror());
+                throw new DlErrorException($"Unable to Load Native Library {filepath}!\ndlerror: {error}");
+            }
+#endif
             return ptr;
         }
 
@@ -68,6 +77,27 @@ namespace MelonLoader
                 name += ".dylib";
 
             return dlopen(name, RTLD_NOW);
+#elif ANDROID
+            // Workaround that allows us to bypass Android's security that prevents libraries from being loaded from outside APKs
+            string path = name;
+            if (File.Exists(path))
+            {
+                string fileName = Path.GetFileName(path);
+                path = Path.Combine("/data/data/", MelonEnvironment.PackageName);
+                path = Path.Combine(path, fileName);
+
+                FileInfo newLib = new(name);
+                FileInfo copiedLib = new(path);
+                if (copiedLib.Exists && newLib.LastWriteTime > copiedLib.LastWriteTime)
+                {
+                    copiedLib.Delete();
+                    File.Copy(name, path);
+                }
+                else if (!copiedLib.Exists)
+                    File.Copy(name, path);
+            }
+
+            return dlopen(path, RTLD_NOW);
 #endif
         }
 
@@ -75,7 +105,7 @@ namespace MelonLoader
         {
 #if WINDOWS
             return GetProcAddress(hModule, lpProcName);
-#elif LINUX || OSX
+#elif LINUX || OSX || ANDROID
             return dlsym(hModule, lpProcName);
 #endif
         }
@@ -95,6 +125,17 @@ namespace MelonLoader
         protected static extern IntPtr dlsym(IntPtr handle, string symbol);
 
         const int RTLD_NOW = 2; // for dlopen's flags
+#elif ANDROID
+        [DllImport("libdl.so")]
+        protected static extern IntPtr dlopen(string filename, int flags);
+
+        [DllImport("libdl.so")]
+        protected static extern IntPtr dlsym(IntPtr handle, string symbol);
+
+        [DllImport("libdl.so")]
+        protected static extern IntPtr dlerror();
+
+        const int RTLD_NOW = 2; // for dlopen's flags 
 #elif OSX
         [DllImport("libSystem.B.dylib")]
         protected static extern IntPtr dlopen(string filename, int flags);
@@ -147,4 +188,13 @@ namespace MelonLoader
             }
         }
     }
+
+#if ANDROID
+    public class DlErrorException : Exception
+    {
+        public DlErrorException() { }
+        public DlErrorException(string message) : base(message) { }
+        public DlErrorException(string message, Exception inner) : base(message, inner) { }
+    }
+#endif
 }

@@ -12,11 +12,15 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />
-        <PackageReference Include="AssetRipper.Primitives" Version="3.1.4" ExcludeAssets="Runtime" />
+        <PackageReference Include="AssetRipper.Primitives" Version="3.1.6" ExcludeAssets="Runtime" />
         <PackageReference Include="Iced" Version="1.21.0" ExcludeAssets="Runtime" />
         <PackageReference Include="Il2CppInterop.Generator" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
         <PackageReference Include="Il2CppInterop.Common" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
         <PackageReference Include="Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" ExcludeAssets="Runtime" />
         <PackageReference Include="Mono.Cecil" Version="0.11.6" ExcludeAssets="Runtime" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(DefineConstants)' != '' and $(DefineConstants.Contains('ANDROID'))">
+        <PackageReference Include="Samboy063.Cpp2IL.Core" Version="2022.1.0-development.1374+d526068 " />
+	<PackageReference Include="Samboy063.LibCpp2IL" Version="2022.1.0-development.1374+d526068 " />
     </ItemGroup>
 </Project>

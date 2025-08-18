@@ -30,3 +30,8 @@ internal delegate bool BoolRetFn();
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 internal delegate void GetLoaderConfigFn(ref LoaderConfig config);
+
+#if ANDROID
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+internal delegate System.IntPtr GetJavaVM();
+#endif

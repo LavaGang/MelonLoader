@@ -2,6 +2,7 @@
     <PropertyGroup>
         <Version>0.7.2</Version>
         <Il2CppInteropVersion>1.5.0-ci.625</Il2CppInteropVersion>
+        <Il2CppInteropAndroidVersion>1.5.0-ci.5-arm64</Il2CppInteropAndroidVersion>
 
         <Authors>Lava Gang</Authors>
         <Company>discord.gg/2Wn3N2P</Company>
@@ -13,6 +14,9 @@
         <Platforms>x86;x64</Platforms>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		
+        <!-- Workaround for `dotnet build` blocking the setting of RuntimeIdentifier -->
+        <RuntimeIdentifier Condition="'$(ForcedRID)' != ''">$(ForcedRID)</RuntimeIdentifier>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">
@@ -24,6 +28,18 @@
         <LibExt>.a</LibExt>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-bionic`))' == 'true'">
+		<RuntimeIdentifiers>linux-bionic-arm64</RuntimeIdentifiers>
+		<RuntimeIdentifier>linux-bionic-arm64</RuntimeIdentifier>
+		<PlatformTarget>arm64</PlatformTarget>
+		<DefineConstants>$(DefineConstants);ANDROID</DefineConstants>
+		<LibPrefix>lib</LibPrefix>
+		<LibExt>.a</LibExt>
+
+		<!-- Overriding the Interop version here as a clean way tox override dependencies in all of the projects -->
+		<Il2CppInteropVersion>$(Il2CppInteropAndroidVersion)</Il2CppInteropVersion>
+	</PropertyGroup>
+
     <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
         <!-- TODO: split x64 and arm64 -->
         <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
@@ -34,7 +50,8 @@
         <LibExt>.a</LibExt>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$([MSBuild]::IsOSUnixLike())' == 'false'">
+    <!-- The second condition is required for cross-compiling Android to prevent issues -->
+    <PropertyGroup Condition="'$([MSBuild]::IsOSUnixLike())' == 'false' and '$(RuntimeIdentifier)' == ''">
         <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
         <RuntimeIdentifier>win-$(Platform)</RuntimeIdentifier>
         <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>

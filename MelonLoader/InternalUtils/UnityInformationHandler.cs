@@ -49,9 +49,11 @@ namespace MelonLoader.InternalUtils
             ReadGameInfo(assetsManager, gameDataPath);
             assetsManager.UnloadAll();
 
+#if !ANDROID // app.info doesn't exist on Android
             if (string.IsNullOrEmpty(GameDeveloper)
                 || string.IsNullOrEmpty(GameName))
                 ReadGameInfoFallback();
+#endif
 
             if (EngineVersion == UnityVersion.MinVersion)
                 EngineVersion = ReadVersionFallback(gameDataPath);
@@ -78,20 +80,33 @@ namespace MelonLoader.InternalUtils
             try
             {
                 string bundlePath = Path.Combine(gameDataPath, "globalgamemanagers");
-                if (!File.Exists(bundlePath))
+                if (!FileExists(bundlePath))
                     bundlePath = Path.Combine(gameDataPath, "mainData");
 
-                if (!File.Exists(bundlePath))
+                if (!FileExists(bundlePath))
                 {
                     bundlePath = Path.Combine(gameDataPath, "data.unity3d");
-                    if (!File.Exists(bundlePath))
+                    if (!FileExists(bundlePath))
                         return;
 
+#if !ANDROID
                     BundleFileInstance bundleFile = assetsManager.LoadBundleFile(bundlePath);
+#else
+                    Stream bundleStream = APKAssetManager.GetAssetStream(bundlePath);
+                    BundleFileInstance bundleFile = assetsManager.LoadBundleFile(bundleStream, bundlePath);
+#endif
                     instance = assetsManager.LoadAssetsFileFromBundle(bundleFile, "globalgamemanagers");
                 }
                 else
+                {
+#if !ANDROID
                     instance = assetsManager.LoadAssetsFile(bundlePath, true);
+#else
+                    Stream bundleStream = APKAssetManager.GetAssetStream(bundlePath);
+                    instance = assetsManager.LoadAssetsFile(bundleStream, bundlePath, true);
+#endif
+                }
+
                 if (instance == null)
                     return;
 
@@ -165,6 +180,7 @@ namespace MelonLoader.InternalUtils
 
         private static UnityVersion ReadVersionFallback(string gameDataPath)
         {
+#if !ANDROID
             string unityPlayerPath = MelonEnvironment.UnityPlayerPath;
             if (!File.Exists(unityPlayerPath))
                 unityPlayerPath = MelonEnvironment.GameExecutablePath;
@@ -174,12 +190,13 @@ namespace MelonLoader.InternalUtils
                 var unityVer = FileVersionInfo.GetVersionInfo(unityPlayerPath);
                 return TryParse(unityVer.FileVersion);
             }
+#endif
 
             try
             {
                 var globalgamemanagersPath = Path.Combine(gameDataPath, "globalgamemanagers");
-                if (File.Exists(globalgamemanagersPath))
-                    return GetVersionFromGlobalGameManagers(File.ReadAllBytes(globalgamemanagersPath));
+                if (FileExists(globalgamemanagersPath))
+                    return GetVersionFromGlobalGameManagers(FileReadAllBytes(globalgamemanagersPath));
             }
             catch (Exception ex)
             {
@@ -190,8 +207,8 @@ namespace MelonLoader.InternalUtils
             try
             {
                 var dataPath = Path.Combine(gameDataPath, "data.unity3d");
-                if (File.Exists(dataPath))
-                    return GetVersionFromDataUnity3D(File.OpenRead(dataPath));
+                if (FileExists(dataPath))
+                    return GetVersionFromDataUnity3D(FileOpenRead(dataPath));
             }
             catch (Exception ex)
             {
@@ -251,6 +268,33 @@ namespace MelonLoader.InternalUtils
             }
 
             return TryParse(verString.ToString().Trim());
+        }
+
+        private static bool FileExists(string path)
+        {
+#if !ANDROID
+            return File.Exists(path);
+#else
+            return APKAssetManager.DoesAssetExist(path);
+#endif
+        }
+
+        private static byte[] FileReadAllBytes(string path)
+        {
+#if !ANDROID
+            return File.ReadAllBytes(path);
+#else
+            return APKAssetManager.GetAssetBytes(path);
+#endif
+        }
+
+        private static Stream FileOpenRead(string path)
+        {
+#if !ANDROID
+            return File.OpenRead(path);
+#else
+            return APKAssetManager.GetAssetStream(path);
+#endif
         }
     }
 }
