@@ -2,6 +2,7 @@
     <PropertyGroup>
         <Version>0.7.2</Version>
         <Il2CppInteropVersion>1.5.0-ci.625</Il2CppInteropVersion>
+        <Il2CppInteropAndroidVersion>1.5.0-ci.5-arm64</Il2CppInteropAndroidVersion>
 
         <Authors>Lava Gang</Authors>
         <Company>discord.gg/2Wn3N2P</Company>
@@ -34,6 +35,9 @@
 		<DefineConstants>$(DefineConstants);ANDROID</DefineConstants>
 		<LibPrefix>lib</LibPrefix>
 		<LibExt>.a</LibExt>
+
+		<!-- Overriding the Interop version here as a clean way tox override dependencies in all of the projects -->
+		<Il2CppInteropVersion>$(Il2CppInteropAndroidVersion)</Il2CppInteropVersion>
 	</PropertyGroup>
 
     <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">

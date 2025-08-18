@@ -9,7 +9,6 @@
         <DebugType>embedded</DebugType>
         <PreserveCompilationContext>false</PreserveCompilationContext>
         <CETCompat>false</CETCompat>
-	<RestoreSources Condition="'$(DefineConstants)' != '' and $(DefineConstants.Contains('ANDROID'))">https://nuget.samboy.dev/v3/index.json;$(RestoreSources)</RestoreSources>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />

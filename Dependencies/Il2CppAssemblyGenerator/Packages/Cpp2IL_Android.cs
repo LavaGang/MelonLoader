@@ -20,7 +20,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         {
             Version = "2022.1.0-pre-release.20";
 
-            Name = nameof(Cpp2IL_Android);
+            Name = nameof(Cpp2IL);
             Destination = Path.Combine(Core.BasePath, Name);
             OutputFolder = Path.Combine(Destination, "cpp2il_out");
         }

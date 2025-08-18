@@ -153,7 +153,9 @@ namespace MelonLoader
 #endif
 
             Fixes.Il2CppInterop.Il2CppInteropFixes.Install();
+#if !ANDROID
             Fixes.Il2CppInterop.Il2CppInteropGetFieldDefaultValueFix.Install();
+#endif
 
             Fixes.Il2CppInterop.Il2CppICallInjector.Install();
 
