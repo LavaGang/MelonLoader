@@ -1,4 +1,8 @@
 ﻿using MelonLoader.Bootstrap.Utils;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
@@ -65,7 +69,17 @@ internal static class Il2CppHandler
             return;
         }
 
-        MelonDebug.Log("Attempting to load hostfxr");
+        // 1) First try to use a portable .NET runtime in the game root
+        MelonDebug.Log("Checking for portable .NET runtime in game root");
+        if (TryConfigurePortableDotnet())
+        {
+            MelonDebug.Log("Attempting to load hostfxr using portable .NET runtime");
+            if (Dotnet.LoadHostfxr())
+                goto HostfxrLoaded;
+        }
+
+        // 2) If no portable runtime is found or it fails, use the normal system detection/installation
+        MelonDebug.Log("Attempting to load hostfxr from system");
         if (!Dotnet.LoadHostfxr())
         {
             DotnetInstaller.AttemptInstall();
@@ -75,6 +89,8 @@ internal static class Il2CppHandler
                 return;
             }
         }
+
+    HostfxrLoaded:
 
         MelonDebug.Log("Initializing domain");
         if (!Dotnet.InitializeForRuntimeConfig(runtimeConfigPath, out var context))
@@ -107,6 +123,55 @@ internal static class Il2CppHandler
         }
 
         startFunc = Marshal.GetDelegateForFunctionPointer<Action>(startFuncPtr);
+    }
+
+    private static bool TryConfigurePortableDotnet()
+    {
+#if WINDOWS
+        try
+        {
+            var process = Process.GetCurrentProcess();
+            var exePath = process?.MainModule?.FileName;
+            if (string.IsNullOrEmpty(exePath))
+                return false;
+
+            var gameRoot = Path.GetDirectoryName(exePath);
+            if (string.IsNullOrEmpty(gameRoot) || !Directory.Exists(gameRoot))
+                return false;
+
+            var candidateDirs = Directory.GetDirectories(gameRoot, "*", SearchOption.TopDirectoryOnly);
+            var portableDir = candidateDirs
+                .FirstOrDefault(d =>
+                {
+                    var name = Path.GetFileName(d);
+                    return name != null && name.IndexOf("dotnet", StringComparison.OrdinalIgnoreCase) >= 0;
+                });
+
+            if (portableDir == null)
+                return false;
+
+            var hostfxrPath = Directory.GetFiles(portableDir, "hostfxr.dll", SearchOption.AllDirectories).FirstOrDefault();
+            if (hostfxrPath == null)
+                return false;
+
+            Environment.SetEnvironmentVariable("DOTNET_ROOT", portableDir);
+
+            var path = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+            var pathEntries = path.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries);
+            if (!pathEntries.Any(p => string.Equals(p, portableDir, StringComparison.OrdinalIgnoreCase)))
+                Environment.SetEnvironmentVariable("PATH", portableDir + Path.PathSeparator + path);
+
+            Core.Logger.Msg($"Using portable .NET runtime from game root: '{portableDir}'");
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+#else
+        return false;
+#endif
     }
 
     internal static nint InvokeDetour(nint method, nint obj, nint args, nint exc)
