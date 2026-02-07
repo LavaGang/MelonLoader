@@ -33,8 +33,8 @@
         <PackageReference Include="HarmonyX" Version="$(HarmonyXVersion)" />
         <PackageReference Include="Mono.Cecil" Version="$(MonoCecilVersion)" />
         <PackageReference Include="MonoMod" Version="$(MonoModVersion)" />
-        <PackageReference Include="MonoMod.RuntimeDetour" Version="$(MonoModVersion)" />
-        <PackageReference Include="MonoMod.Utils" Version="$(MonoModVersion)" />
+        <PackageReference Include="MonoMod.RuntimeDetour" Version="$(MonoModRuntimeDetourVersion)" />
+        <PackageReference Include="MonoMod.Utils" Version="$(MonoModUtilsVersion)" />
         <PackageReference Include="Samboy063.Tomlet" Version="$(TomletVersion)" />
         <PackageReference Include="AsmResolver.DotNet" Version="$(AsmResolverVersion)" />
 		

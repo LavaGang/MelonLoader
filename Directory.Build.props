@@ -49,8 +49,10 @@
         <TomletVersion>6.1.0</TomletVersion>
         <PastelVersion>7.0.0</PastelVersion>
         <MonoModVersion>22.7.31.1</MonoModVersion>
+        <MonoModUtilsVersion>25.0.11</MonoModUtilsVersion>
+        <MonoModRuntimeDetourVersion>25.3.3</MonoModRuntimeDetourVersion>
         <MonoCecilVersion>0.11.6</MonoCecilVersion>
-        <HarmonyXVersion>2.10.2</HarmonyXVersion>
+        <HarmonyXVersion>2.16.0</HarmonyXVersion>
         <AssetToolsVersion>3.0.1</AssetToolsVersion>
         <AssetRipperVersion>3.2.0</AssetRipperVersion>
         <AsmResolverVersion>6.0.0-beta.3</AsmResolverVersion>
