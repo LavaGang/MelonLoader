@@ -159,6 +159,7 @@ internal static class MelonLogger
 
             Console.ForegroundColor = ConsoleHandler.GetClosestConsoleColor(msgColor);
             Console.Out.WriteLine(msg);
+            Console.ResetColor();
 
             return;
         }
@@ -201,6 +202,7 @@ internal static class MelonLogger
 
             Console.ForegroundColor = ConsoleHandler.GetClosestConsoleColor(msgColor);
             Console.Out.WriteLine(msg);
+            Console.ResetColor();
 
             return;
         }
@@ -253,6 +255,7 @@ internal static class MelonLogger
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"[{time}] {msg}");
+            Console.ResetColor();
 
             return;
         }
@@ -277,6 +280,8 @@ internal static class MelonLogger
                 Console.WriteLine($"[{time}] [{sectionName}] {msg}");
             else
                 Console.WriteLine($"[{time}] {msg}");
+
+            Console.ResetColor();
 
             return;
         }
@@ -313,6 +318,7 @@ internal static class MelonLogger
 
             Console.ResetColor();
             Console.Out.WriteLine(info);
+            Console.ResetColor();
 
             return;
         }
