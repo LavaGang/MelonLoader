@@ -84,7 +84,7 @@ namespace MelonLoader.MelonStartScreen
             if (isIncludedID && !ThemeID.Equals(includedThemeIDs[1]))
             {
                 // Lemon
-                IsLemon = (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON);
+                IsLemon = (LoaderConfig.Current.Loader.Theme == LoaderConfig.CoreConfig.LoaderTheme.Lemon);
                 if (!IsLemon)
                 {
                     // Pumpkin
