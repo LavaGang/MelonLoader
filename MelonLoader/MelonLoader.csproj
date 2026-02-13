@@ -56,7 +56,7 @@
         <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
         <PackageReference Include="System.Security.Permissions" Version="9.0.10" />
 		
-        <PackageReference Include="Iced" Version="$(IcedVersion)" />
+        <PackageReference Include="Iced" Version="$(IcedVersion)" Aliases="Iced" />
         <PackageReference Include="Il2CppInterop.Common" Version="$(Il2CppInteropVersion)" />
         <PackageReference Include="Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" />
         <PackageReference Include="Il2CppInterop.Generator" Version="$(Il2CppInteropVersion)" />
