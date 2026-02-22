@@ -22,7 +22,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = RemoteAPI.Info.ForceDumperVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = $"2022.1.0-pre-release.20";
+                Version = $"2022.1.0-pre-release.21";
             VersionSem = SemVersion.Parse(Version);
 
             Name = nameof(Cpp2IL);
