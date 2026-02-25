@@ -131,7 +131,7 @@ namespace MelonLoader
 #endif
 
             Fixes.ForcedCultureInfo.Install();
-            Fixes.Harmony.InstancePatchFix.Install();
+            Fixes.MonoMod.InstancePatchFix.Install();
 
 #if WINDOWS
             Fixes.ProcessFix.Install();
