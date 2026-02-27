@@ -28,7 +28,7 @@ jobs:
 
       - name: Upload Debug for osx-x64
         if: inputs.SKIP_DEBUG != true
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: MelonLoader.macOS.x64.CI.Debug
           path: Output/Debug/osx-x64
@@ -37,7 +37,7 @@ jobs:
         run: dotnet build --no-restore -c Release -p:Platform="x64" -p:Version="${{ inputs.VERSION }}"
 
       - name: Upload Release for osx-x64
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: MelonLoader.macOS.x64.CI.Release
           path: Output/Release/osx-x64
