@@ -26,3 +26,4 @@ jobs:
     with:
       VERSION: "0.7.2${{ github.event_name != 'workflow_dispatch' && format('{0}', github.run_number) || '' }}"
       PACKAGE_NAME: MelonLoader.Nightly
+    secrets: inherit

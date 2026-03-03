@@ -24,10 +24,12 @@ jobs:
     with:
       TAG: ${{ inputs.TAG }}
       RELEASE_NAME: ${{ inputs.RELEASE_NAME }}
+    secrets: inherit
   
   upload_nuget:
     name: NuGet
     uses: ./.github/workflows/upload_nuget.yml
+    secrets: inherit
     
   #upload_thunderstore:
   #  name: Thunderstore
@@ -35,3 +37,4 @@ jobs:
   #  with:
   #    VERSION: ${{ inputs.PACKAGE_VERSION }}
   #    PACKAGE_NAME: ${{ inputs.PACKAGE_NAME }}
+  #  secrets: inherit

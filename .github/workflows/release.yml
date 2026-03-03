@@ -43,3 +43,4 @@ jobs:
       VERSION: ${{ needs.fix_tag_version.outputs.clean_version }}
       PACKAGE_VERSION: ${{ needs.fix_tag_version.outputs.clean_version }}
       PACKAGE_NAME: MelonLoader
+    secrets: inherit
