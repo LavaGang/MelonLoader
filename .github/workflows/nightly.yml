@@ -21,6 +21,7 @@ jobs:
       
   upload_thunderstore:
     name: Upload to Thunderstore
+    needs: [ build ]
     uses: ./.github/workflows/upload_thunderstore.yml
     with:
       VERSION: "0.7.2${{ github.event_name != 'workflow_dispatch' && format('{0}', github.run_number) || '' }}"
