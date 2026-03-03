@@ -40,7 +40,4 @@ jobs:
           description: ${{ env.PACKAGE_DESC }}
           token: ${{ secrets.TS_KEY }}
           file: ${{ github.repository_owner }}-${{ inputs.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip
-          
-      - name: Get URL
-      - run: echo ${{ steps.pub.outputs.url }}
       
