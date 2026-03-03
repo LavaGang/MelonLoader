@@ -4,9 +4,9 @@ run-name: 0.7.2${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}',
 
 on:
   push:
-    branches: [ master, alpha-development, v0.6.0-rewrite ]
+    branches: [ master, alpha-development ]
   pull_request:
-    branches: [ master, alpha-development, v0.6.0-rewrite ]
+    branches: [ master, alpha-development ]
   workflow_dispatch:
 
 jobs:
@@ -17,4 +17,11 @@ jobs:
       SKIP_DEBUG: false
       VERSION: "0.7.2${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
       PACKAGE_VERSION: "0.7.2${{ github.event_name != 'workflow_dispatch' && format('{0}', github.run_number) || '' }}"
+      PACKAGE_NAME: MelonLoader.Nightly
+      
+  upload_thunderstore:
+    name: Upload to Thunderstore
+    uses: ./.github/workflows/upload_thunderstore.yml
+    with:
+      VERSION: "0.7.2${{ github.event_name != 'workflow_dispatch' && format('{0}', github.run_number) || '' }}"
       PACKAGE_NAME: MelonLoader.Nightly
