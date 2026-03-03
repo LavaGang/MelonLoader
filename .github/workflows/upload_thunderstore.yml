@@ -23,20 +23,24 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: MelonLoader.Thunderstore
-          path: compiled_thunderstore/
+          path: ./compiled_thunderstore/
       - name: Package Artifact into Zip Archive
         run: |
           cd compiled_thunderstore
           zip -r ../${{ github.repository_owner }}-${{ inputs.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip ./
       
       - name: Publish Package
+        id: pub
         uses: GreenTF/upload-thunderstore-package@aef20d7e07a0858d0decae64872aa5526662ab8d
         with:
-          community: ${{ vars.THUNDERSTORE_COMMUNITY }}
+          community: ${{ vars.TS_COM }}
           namespace: ${{ github.repository_owner }}
           name: ${{ inputs.PACKAGE_NAME }}
           version: ${{ inputs.VERSION }}
           description: ${{ env.PACKAGE_DESC }}
-          token: ${{ secrets.THUNDERSTORE_API_KEY }}
+          token: ${{ secrets.TS_KEY }}
           file: ${{ github.repository_owner }}-${{ inputs.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip
+          
+      - name: Get URL
+      - run: echo ${{ steps.pub.outputs.url }}
       
