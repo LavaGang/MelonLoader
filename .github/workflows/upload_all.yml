@@ -31,10 +31,10 @@ jobs:
     uses: ./.github/workflows/upload_nuget.yml
     secrets: inherit
     
-  #upload_thunderstore:
-  #  name: Thunderstore
-  #  uses: ./.github/workflows/upload_thunderstore.yml
-  #  with:
-  #    VERSION: ${{ inputs.PACKAGE_VERSION }}
-  #    PACKAGE_NAME: ${{ inputs.PACKAGE_NAME }}
-  #  secrets: inherit
+  upload_thunderstore:
+    name: Thunderstore
+    uses: ./.github/workflows/upload_thunderstore.yml
+    with:
+      VERSION: ${{ inputs.PACKAGE_VERSION }}
+      PACKAGE_NAME: ${{ inputs.PACKAGE_NAME }}
+    secrets: inherit
