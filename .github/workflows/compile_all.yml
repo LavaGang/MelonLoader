@@ -7,6 +7,9 @@ on:
       SKIP_DEBUG:
         required: true
         type: boolean
+      PACKAGE_NAME:
+        required: true
+        type: string
 
 jobs:
   compile_windows:
@@ -42,3 +45,4 @@ jobs:
     needs: [ compile_windows ]
     with:
       VERSION: ${{ inputs.VERSION }}
+      PACKAGE_NAME: ${{ inputs.PACKAGE_NAME }}

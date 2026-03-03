@@ -1,5 +1,4 @@
 env:
-  PACKAGE_NAME: MelonLoader
   PACKAGE_DESC: The World's First Universal Mod Loader for Unity Games compatible with both Il2Cpp and Mono
   PACKAGE_REPO: https://github.com/${{ github.repository }}
 
@@ -7,6 +6,9 @@ on:
   workflow_call:
     inputs:
       VERSION:
+        required: true
+        type: string
+      PACKAGE_NAME:
         required: true
         type: string
   
@@ -32,7 +34,7 @@ jobs:
         run: |
           cat <<EOF > compiled_release/thunderstore/manifest.json
           {
-              "name": "${{ env.PACKAGE_NAME }}",
+              "name": "${{ inputs.PACKAGE_NAME }}",
               "version_number": "${{ inputs.VERSION }}",
               "website_url": "${{ env.PACKAGE_REPO }}",
               "description": "${{ env.PACKAGE_DESC }}",
@@ -40,13 +42,8 @@ jobs:
           }
           EOF
           
-      - name: Package Zip Archive
-        run: |
-          cd compiled_release/thunderstore
-          zip -r ../${{ github.repository_owner }}-${{ env.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip ./
-
       - name: Upload Thunderstore Artifact
         uses: actions/upload-artifact@v7
         with:
           name: MelonLoader.Thunderstore
-          path: compiled_release/${{ github.repository_owner }}-${{ env.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip
+          path: compiled_release/thunderstore

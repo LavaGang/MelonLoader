@@ -30,6 +30,7 @@ jobs:
     with:
       SKIP_DEBUG: true
       VERSION: ${{ needs.fix_tag_version.outputs.clean_version }}
+      PACKAGE_NAME: MelonLoader
     
   upload:
     name: Upload
@@ -39,3 +40,4 @@ jobs:
       TAG: ${{ github.ref_name }}
       RELEASE_NAME: ${{ github.ref_name }} Open-Beta
       VERSION: ${{ needs.fix_tag_version.outputs.clean_version }}
+      PACKAGE_NAME: MelonLoader

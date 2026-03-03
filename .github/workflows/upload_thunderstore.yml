@@ -1,5 +1,4 @@
 env:
-  PACKAGE_NAME: MelonLoader
   PACKAGE_DESC: The World's First Universal Mod Loader for Unity Games compatible with both Il2Cpp and Mono
   PACKAGE_REPO: https://github.com/${{ github.repository }}
 
@@ -7,6 +6,9 @@ on:
   workflow_call:
     inputs:
       VERSION:
+        required: true
+        type: string
+      PACKAGE_NAME:
         required: true
         type: string
   
@@ -21,16 +23,20 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: MelonLoader.Thunderstore
-          path: compiled_release/${{ github.repository_owner }}-${{ env.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip
+          path: compiled_thunderstore/
+      - name: Package Artifact into Zip Archive
+        run: |
+          cd compiled_thunderstore
+          zip -r ../${{ github.repository_owner }}-${{ inputs.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip ./
       
       - name: Publish Package
         uses: GreenTF/upload-thunderstore-package@aef20d7e07a0858d0decae64872aa5526662ab8d
         with:
           community: ${{ vars.THUNDERSTORE_COMMUNITY }}
           namespace: ${{ github.repository_owner }}
-          name: ${{ env.PACKAGE_NAME }}
+          name: ${{ inputs.PACKAGE_NAME }}
           version: ${{ inputs.VERSION }}
           description: ${{ env.PACKAGE_DESC }}
           token: ${{ secrets.THUNDERSTORE_API_KEY }}
-          file: ${{ github.repository_owner }}-${{ env.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip
+          file: ${{ github.repository_owner }}-${{ inputs.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip
       
