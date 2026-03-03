@@ -20,4 +20,5 @@ jobs:
           path: ./compiled_release/
       
       - name: Publish NuGet Package
+        continue-on-error: true
         run: dotnet nuget push -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} ./compiled_release/*.nupkg
