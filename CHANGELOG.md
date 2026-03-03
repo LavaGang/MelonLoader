@@ -64,7 +64,7 @@
 19. Fixed an issue with Melon Subfolder Parent Context checks using an incorrect ScanType
 20. Implemented MelonInfoAttribute.SystemType Validation to prevent infinite loop during Melon Instantiation
 21. Fixed an issue with Infinite Loops from RottenMelon Instantiation calling MelonAssembly.LoadMelonAssembly
-22. Updated Cpp2IL to 2022.1.0-pre-release.20
+22. Updated Cpp2IL to 2022.1.0-pre-release.21   (Credits to [IkariDevGIT](https://github.com/IkariDevGIT) :D)
 23. Implemented Il2CppInterop GetFieldDefaultValue Fix to allow custom signatures to be added to Il2CppInterop's Class::GetFieldDefaultValue Hook
 24. Allowed exclamation marks in namespaces/types   (Credits to [Emik03](https://github.com/Emik03) :D)
 25. Updated Tomlet to 6.1.0
@@ -94,6 +94,12 @@
 49. Fixed an issue with Command-Line Parsing sometimes failing   (Credits to [official-notfishvr](https://github.com/official-notfishvr) :D)
 50. Adjusted DotNet handling to initialize more reliably
 51. Implemented DotNet HostFXR Path Override config and launch options --melonloader.hostfxr
+52. Fixed an issue with Logging not validating Section   (Credits to [MrModification](https://github.com/MrModification) :D)
+53. Updated AssetTools.Net to 3.0.1   (Credits to [dommrogers](https://github.com/dommrogers) :D)
+54. Fixed Il2CppInterop RunFinalizer sometimes failing on certain Unity versions   (Credits to [Atmudia](https://github.com/Atmudia) :D)
+55. Fixed compilation issues with MelonStartScreen   (Credits to [official-notfishvr](https://github.com/official-notfishvr) :D)
+56. Fixed an issue with Wine console not resetting the colors after message output   (Credits to [bnfour](https://github.com/bnfour) :D)
+57. Removed broken InstancePatchFix patches   (Credits to [RaptorRush135](https://github.com/RaptorRush135) :D)
 
 ---
 
