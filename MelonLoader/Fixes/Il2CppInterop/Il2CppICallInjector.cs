@@ -1,7 +1,7 @@
 ﻿#if NET6_0_OR_GREATER
 
 using MelonLoader.NativeUtils;
-using MonoMod.RuntimeDetour;
+using MonoMod.Core.Platforms;
 using MonoMod.Utils;
 using System;
 using System.Collections.Generic;
@@ -233,8 +233,10 @@ namespace MelonLoader.Fixes.Il2CppInterop
                 return (null, null, null, IntPtr.Zero);
            
             // Return the New Method
-            MethodInfo newMethod = trampoline.Generate().Pin();
-            return (patcher, trampoline, newMethod, newMethod.GetNativeStart());
+            var triple = PlatformTriple.Current;
+            MethodInfo newMethod = trampoline.Generate();
+            triple.PinMethodIfNeeded(newMethod);
+            return (patcher, trampoline, newMethod, triple.Runtime.GetMethodEntryPoint(newMethod));
         }
     }
 }
