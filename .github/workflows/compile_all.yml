@@ -7,6 +7,9 @@ on:
       SKIP_DEBUG:
         required: true
         type: boolean
+      PACKAGE_VERSION:
+        required: true
+        type: string
       PACKAGE_NAME:
         required: true
         type: string
@@ -44,5 +47,5 @@ jobs:
     uses: ./.github/workflows/compile_thunderstore.yml
     needs: [ compile_windows ]
     with:
-      VERSION: ${{ inputs.VERSION }}
+      VERSION: ${{ inputs.PACKAGE_VERSION }}
       PACKAGE_NAME: ${{ inputs.PACKAGE_NAME }}

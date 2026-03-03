@@ -10,6 +10,9 @@ on:
       VERSION:
         required: true
         type: string
+      PACKAGE_VERSION:
+        required: true
+        type: string
       PACKAGE_NAME:
         required: true
         type: string
@@ -30,5 +33,5 @@ jobs:
   #  name: Thunderstore
   #  uses: ./.github/workflows/upload_thunderstore.yml
   #  with:
-  #    VERSION: ${{ inputs.VERSION }}
+  #    VERSION: ${{ inputs.PACKAGE_VERSION }}
   #    PACKAGE_NAME: ${{ inputs.PACKAGE_NAME }}
