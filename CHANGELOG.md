@@ -67,8 +67,8 @@
 22. Updated Cpp2IL to 2022.1.0-pre-release.21   (Credits to [IkariDevGIT](https://github.com/IkariDevGIT) :D)
 23. Implemented Il2CppInterop GetFieldDefaultValue Fix to allow custom signatures to be added to Il2CppInterop's Class::GetFieldDefaultValue Hook
 24. Allowed exclamation marks in namespaces/types   (Credits to [Emik03](https://github.com/Emik03) :D)
-25. Updated Tomlet to 6.1.0
-26. Updated Pastel to 7.0.0
+25. Updated Tomlet to 6.2.0
+26. Updated Pastel to 7.0.1
 27. Updated AssetRipper.Primitives to 3.2.0
 28. Updated Il2CppInterop to 1.5.1
 29. Fixed an issue with Melon Subfolder toggle being inverted
@@ -95,7 +95,7 @@
 50. Adjusted DotNet handling to initialize more reliably
 51. Implemented DotNet HostFXR Path Override config and launch options --melonloader.hostfxr
 52. Fixed an issue with Logging not validating Section   (Credits to [MrModification](https://github.com/MrModification) :D)
-53. Updated AssetTools.Net to 3.0.1   (Credits to [dommrogers](https://github.com/dommrogers) :D)
+53. Updated AssetTools.Net to 3.0.4   (Credits to [dommrogers](https://github.com/dommrogers) :D)
 54. Fixed Il2CppInterop RunFinalizer sometimes failing on certain Unity versions   (Credits to [Atmudia](https://github.com/Atmudia) :D)
 55. Fixed compilation issues with MelonStartScreen   (Credits to [official-notfishvr](https://github.com/official-notfishvr) :D)
 56. Fixed an issue with Wine console not resetting the colors after message output   (Credits to [bnfour](https://github.com/bnfour) :D)

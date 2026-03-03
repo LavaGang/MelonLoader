@@ -23,8 +23,8 @@
 * Updated Cpp2IL to 2022.1.0-pre-release.21   [[#1104](<https://github.com/LavaGang/MelonLoader/pull/1104)]
 * Implemented Il2CppInterop GetFieldDefaultValue Fix to allow custom signatures to be added to Il2CppInterop's Class::GetFieldDefaultValue Hook
 * Allowed exclamation marks in namespaces/types   [[#983](<https://github.com/LavaGang/MelonLoader/pull/983>)]
-* Updated Tomlet to 6.1.0
-* Updated Pastel to 7.0.0
+* Updated Tomlet to 6.2.0
+* Updated Pastel to 7.0.1
 * Updated AssetRipper.Primitives to 3.2.0
 * Updated Il2CppInterop to 1.5.1
 * Fixed an issue with Melon Subfolder toggle being inverted
@@ -52,7 +52,7 @@
 * Implemented DotNet HostFXR Path Override config and launch options --melonloader.hostfxr
 * Added missing Microsoft.Extensions.Logging packages
 * Fixed an issue with Logging not validating Section   [[#1070](<https://github.com/LavaGang/MelonLoader/pull/1070>)]
-* Updated AssetTools.Net to 3.0.1   [[#1071](<https://github.com/LavaGang/MelonLoader/pull/1071>)]
+* Updated AssetTools.Net to 3.0.4   [[#1071](<https://github.com/LavaGang/MelonLoader/pull/1071>)]
 * Fixed Il2CppInterop RunFinalizer sometimes failing on certain Unity versions   [[#1075](<https://github.com/LavaGang/MelonLoader/pull/1075>)]
 * Fixed compilation issues with MelonStartScreen   [[#1084](<https://github.com/LavaGang/MelonLoader/pull/1084>)]
 * Fixed an issue with Wine console not resetting the colors after message output   [[#1085](<https://github.com/LavaGang/MelonLoader/pull/1085>)]

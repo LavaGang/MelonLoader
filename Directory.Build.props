@@ -4,7 +4,7 @@
 	-->
     <PropertyGroup>
         <Version>0.7.2</Version>
-        <AppHostVersion>10.0.0-rc.2.25502.107</AppHostVersion>
+        <AppHostVersion>10.0.3</AppHostVersion>
 		
         <BootstrapTarget>net9</BootstrapTarget>
 		
@@ -46,12 +46,12 @@
 	-->
     <PropertyGroup>
         <IcedVersion>1.21.0</IcedVersion>
-        <TomletVersion>6.1.0</TomletVersion>
-        <PastelVersion>7.0.0</PastelVersion>
+        <TomletVersion>6.2.0</TomletVersion>
+        <PastelVersion>7.0.1</PastelVersion>
         <MonoModVersion>22.7.31.1</MonoModVersion>
         <MonoCecilVersion>0.11.6</MonoCecilVersion>
         <HarmonyXVersion>2.10.2</HarmonyXVersion>
-        <AssetToolsVersion>3.0.1</AssetToolsVersion>
+        <AssetToolsVersion>3.0.4</AssetToolsVersion>
         <AssetRipperVersion>3.2.0</AssetRipperVersion>
         <AsmResolverVersion>6.0.0-beta.3</AsmResolverVersion>
         <Il2CppInteropVersion>1.5.1</Il2CppInteropVersion>
