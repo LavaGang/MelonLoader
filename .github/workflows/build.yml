@@ -17,7 +17,7 @@ jobs:
       SKIP_DEBUG: false
       VERSION: "0.7.2${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
       PACKAGE_VERSION: "0.7.2${{ github.event_name != 'workflow_dispatch' && format('{0}', github.run_number) || '' }}"
-      PACKAGE_NAME: MelonLoader.Nightly
+      PACKAGE_NAME: MelonLoaderNightly
       
   upload_thunderstore:
     name: Upload to Thunderstore
@@ -25,5 +25,5 @@ jobs:
     uses: ./.github/workflows/upload_thunderstore.yml
     with:
       VERSION: "0.7.2${{ github.event_name != 'workflow_dispatch' && format('{0}', github.run_number) || '' }}"
-      PACKAGE_NAME: MelonLoader.Nightly
+      PACKAGE_NAME: MelonLoaderNightly
     secrets: inherit
