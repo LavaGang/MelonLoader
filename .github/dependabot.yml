@@ -12,12 +12,12 @@ updates:
       interval: "daily"
 
   - package-ecosystem: "cargo"
+    target-branch: "alpha-development"
     directory: "/"
     schedule:
       interval: "monthly"
     ignore:
       - dependency-name: "*"
-
 
   - package-ecosystem: "github-actions"
     target-branch: "alpha-development"

@@ -21,6 +21,7 @@ jobs:
       
   upload_thunderstore:
     name: Upload to Thunderstore
+    if: github.event_name != 'pull_request'
     needs: [ build ]
     uses: ./.github/workflows/upload_thunderstore.yml
     with:
