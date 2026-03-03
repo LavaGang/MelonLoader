@@ -50,7 +50,7 @@
         <PastelVersion>7.0.1</PastelVersion>
         <MonoModVersion>22.7.31.1</MonoModVersion>
         <MonoCecilVersion>0.11.6</MonoCecilVersion>
-        <HarmonyXVersion>2.10.2</HarmonyXVersion>
+        <HarmonyXVersion>2.16.0</HarmonyXVersion>
         <AssetToolsVersion>3.0.4</AssetToolsVersion>
         <AssetRipperVersion>3.2.0</AssetRipperVersion>
         <AsmResolverVersion>6.0.0-beta.3</AsmResolverVersion>
