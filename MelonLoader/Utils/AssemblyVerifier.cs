@@ -4,6 +4,7 @@ using AsmResolver.PE.DotNet.Metadata;
 using AsmResolver.PE.DotNet.Metadata.Tables;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -53,14 +54,31 @@ namespace MelonLoader.Utils
 
             foreach (char c in name)
             {
-                bool isOk = false;
-                isOk |= c is >= 'a' and <= 'z';
-                isOk |= c is >= 'A' and <= 'Z';
-                isOk |= c is >= '0' and <= '9';
-                isOk |= AllowedSymbols.Contains(c);
+                // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/lexical-structure#643-identifiers
+                if (CharUnicodeInfo.GetUnicodeCategory(c) is 
+                    // Letter_Character
+                    UnicodeCategory.UppercaseLetter // Lu
+                    or UnicodeCategory.LowercaseLetter // Ll
+                    or UnicodeCategory.TitlecaseLetter // Lt
+                    or UnicodeCategory.ModifierLetter  // Lm
+                    or UnicodeCategory.OtherLetter // Lo
+                    or UnicodeCategory.LetterNumber // Nl
+                    // Decimal_Digit_Character
+                    or UnicodeCategory.DecimalDigitNumber // Nd
+                    // Connecting_Character
+                    or UnicodeCategory.ConnectorPunctuation // Pc
+                    // Combining_Character
+                    or UnicodeCategory.NonSpacingMark // Mn
+                    or UnicodeCategory.SpacingCombiningMark // Mc
+                    // Formatting_Character
+                    or UnicodeCategory.Format // Cf
+                   )
+                    continue;
+                
+                if (AllowedSymbols.Contains(c))
+                    continue;
 
-                if (!isOk)
-                    return false;
+                return false;
             }
 
             return true;
