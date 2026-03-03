@@ -16,11 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: 9.0.x
           
       - name: Download Artifact
         uses: actions/download-artifact@v8
@@ -29,7 +24,7 @@ jobs:
           path: compiled_release/${{ github.repository_owner }}-${{ env.PACKAGE_NAME }}-${{ inputs.VERSION }}.zip
       
       - name: Publish Package
-        uses: GreenTF/upload-thunderstore-package@v4.3
+        uses: GreenTF/upload-thunderstore-package@aef20d7e07a0858d0decae64872aa5526662ab8d
         with:
           community: ${{ vars.THUNDERSTORE_COMMUNITY }}
           namespace: ${{ github.repository_owner }}
