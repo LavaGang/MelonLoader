@@ -31,6 +31,7 @@ jobs:
       
       - name: Publish Package
         id: pub
+        continue-on-error: true
         uses: GreenTF/upload-thunderstore-package@aef20d7e07a0858d0decae64872aa5526662ab8d
         with:
           community: ${{ vars.TS_COM }}
