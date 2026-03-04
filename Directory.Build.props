@@ -28,7 +28,7 @@
         <Configurations>Debug;Release</Configurations>
 		
         <Platforms>x86;x64</Platforms>
-        <RuntimeIdentifiers>win-x86;win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+        <RuntimeIdentifiers>win-x86;win-x64;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
 		
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -81,8 +81,7 @@
     </PropertyGroup>
 	
 	<PropertyGroup Condition="'$(RuntimeIdentifier)' == '' And '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
-		<!-- <RuntimeIdentifier>osx-$(Platform)</RuntimeIdentifier> -->
-		<RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+        <RuntimeIdentifier>osx-$(Platform)</RuntimeIdentifier> 
     </PropertyGroup>
 	
 	<!--
@@ -95,7 +94,6 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'">
-        <!-- TODO: split x64 and arm64 -->
         <DefineConstants>$(DefineConstants);OSX</DefineConstants>
         <LibPrefix>lib</LibPrefix>
         <LibExt>.a</LibExt>
