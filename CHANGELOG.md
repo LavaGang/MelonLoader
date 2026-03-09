@@ -44,7 +44,8 @@
 
 ### v0.7.3
 
-1.
+1. Updated AsmResolver to 6.0.0-beta.5
+2. Updated Il2CppInterop to 1.5.1-ci.829
 
 ---
 

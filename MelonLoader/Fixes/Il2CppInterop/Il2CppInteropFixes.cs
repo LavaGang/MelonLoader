@@ -43,9 +43,6 @@ namespace MelonLoader.Fixes.Il2CppInterop
         private static MethodInfo _fixedAddTypeToLookup;
         private static MethodInfo _rewriteType;
         private static MethodInfo _rewriteType_Prefix;
-        //private static MethodInfo _systemTypeFromIl2CppType;
-        //private static MethodInfo _systemTypeFromIl2CppType_Prefix;
-        //private static MethodInfo _systemTypeFromIl2CppType_Transpiler;
         private static MethodInfo _injectorHelpers_AddTypeToLookup;
         private static MethodInfo _registerTypeInIl2Cpp;
         private static MethodInfo _registerTypeInIl2Cpp_Transpiler;
@@ -67,8 +64,6 @@ namespace MelonLoader.Fixes.Il2CppInterop
         private static MethodInfo _rewriteGlobalContext_GetNewAssemblyForOriginal_Prefix;
         private static MethodInfo _rewriteGlobalContext_TryGetNewTypeForOriginal;
         private static MethodInfo _rewriteGlobalContext_TryGetNewTypeForOriginal_Prefix;
-        private static MethodInfo _garbageCollector_RunFinalizer_FindTargetMethod;
-        private static MethodInfo _garbageCollector_RunFinalizer_FindTargetMethod_Prefix;
         
         public static Type InjectorHelpersType { get; private set; }
         public static MethodInfo DecoderForAddress { get; private set; }
@@ -89,18 +84,10 @@ namespace MelonLoader.Fixes.Il2CppInterop
                 InjectorHelpersType = classInjectorType.Assembly.GetType("Il2CppInterop.Runtime.Injection.InjectorHelpers");
                 if (InjectorHelpersType == null)
                     throw new Exception("Failed to get InjectorHelpers");
-                
 
                 Type detourMethodPatcherType = harmonySupportType.Assembly.GetType("Il2CppInterop.HarmonySupport.Il2CppDetourMethodPatcher");
                 if (detourMethodPatcherType == null)
                     throw new Exception("Failed to get Il2CppDetourMethodPatcher");
-                
-                var runFinalizer = classInjectorType.Assembly.GetType("Il2CppInterop.Runtime.Injection.Hooks.GarbageCollector_RunFinalizer_Patch");
-                if (runFinalizer == null)
-                    throw new Exception("Failed to get GarbageCollector_RunFinalizer_Patch");
-                //_systemTypeFromIl2CppType = classInjectorType.GetMethod("SystemTypeFromIl2CppType", BindingFlags.NonPublic | BindingFlags.Static);
-                //if (_systemTypeFromIl2CppType == null)
-                //    throw new Exception("Failed to get ClassInjector.SystemTypeFromIl2CppType");
 
                 _getIl2CppTypeFullName = classInjectorType.GetMethod("GetIl2CppTypeFullName", BindingFlags.NonPublic | BindingFlags.Static);
                 if (_getIl2CppTypeFullName == null)
@@ -162,11 +149,6 @@ namespace MelonLoader.Fixes.Il2CppInterop
                 if (_rewriteGlobalContext_TryGetNewTypeForOriginal == null)
                     throw new Exception("Failed to get RewriteGlobalContext.TryGetNewTypeForOriginal");
 
-                _garbageCollector_RunFinalizer_FindTargetMethod = runFinalizer.GetMethod("FindTargetMethod"); 
-                if (_garbageCollector_RunFinalizer_FindTargetMethod == null)
-                    throw new Exception("Failed to get GarbageCollector.RunFinalizer.FindTargetMethod");
-
-                
                 DecoderForAddress = typeof(XrefScanner).GetMethod("DecoderForAddress", BindingFlags.NonPublic | BindingFlags.Static);
                 ExtractTargetAddress = typeof(XrefScanner).GetMethod("ExtractTargetAddress", BindingFlags.NonPublic | BindingFlags.Static);
 
@@ -174,8 +156,6 @@ namespace MelonLoader.Fixes.Il2CppInterop
                 _fixedAddTypeToLookup = thisType.GetMethod(nameof(FixedAddTypeToLookup), BindingFlags.NonPublic | BindingFlags.Static);
                 _fixedIsByRef = thisType.GetMethod(nameof(FixedIsByRef), BindingFlags.NonPublic | BindingFlags.Static);
                 _fixedFindAbstractMethods = thisType.GetMethod(nameof(FixedFindAbstractMethods), BindingFlags.NonPublic | BindingFlags.Static);
-                //_systemTypeFromIl2CppType_Prefix = thisType.GetMethod(nameof(SystemTypeFromIl2CppType_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
-                //_systemTypeFromIl2CppType_Transpiler = thisType.GetMethod(nameof(SystemTypeFromIl2CppType_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
                 _rewriteType_Prefix = thisType.GetMethod(nameof(RewriteType_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
                 _registerTypeInIl2Cpp_Transpiler = thisType.GetMethod(nameof(RegisterTypeInIl2Cpp_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
                 _isTypeSupported_Transpiler = thisType.GetMethod(nameof(IsTypeSupported_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
@@ -185,14 +165,6 @@ namespace MelonLoader.Fixes.Il2CppInterop
                 _rewriteGlobalContext_Dispose_Prefix = thisType.GetMethod(nameof(RewriteGlobalContext_Dispose_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
                 _rewriteGlobalContext_GetNewAssemblyForOriginal_Prefix = thisType.GetMethod(nameof(RewriteGlobalContext_GetNewAssemblyForOriginal_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
                 _rewriteGlobalContext_TryGetNewTypeForOriginal_Prefix = thisType.GetMethod(nameof(RewriteGlobalContext_TryGetNewTypeForOriginal_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
-                _garbageCollector_RunFinalizer_FindTargetMethod_Prefix = thisType.GetMethod(nameof(GarbageCollector_RunFinalizer_FindTargetMethod_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
-                /*
-                MelonDebug.Msg("Patching Il2CppInterop ClassInjector.SystemTypeFromIl2CppType...");
-                Core.HarmonyInstance.Patch(_systemTypeFromIl2CppType,
-                    new HarmonyMethod(_systemTypeFromIl2CppType_Prefix), 
-                    null,
-                    new HarmonyMethod(_systemTypeFromIl2CppType_Transpiler));
-                */
 
                 MelonDebug.Msg("Patching Il2CppInterop ClassInjector.RegisterTypeInIl2Cpp...");
                 Core.HarmonyInstance.Patch(_registerTypeInIl2Cpp,
@@ -235,14 +207,6 @@ namespace MelonLoader.Fixes.Il2CppInterop
                 MelonDebug.Msg("Patching Il2CppInterop RewriteGlobalContext.TryGetNewTypeForOriginal...");
                 Core.HarmonyInstance.Patch(_rewriteGlobalContext_TryGetNewTypeForOriginal,
                     new HarmonyMethod(_rewriteGlobalContext_TryGetNewTypeForOriginal_Prefix));
-                if (runFinalizer.GetField("s_signatures", BindingFlags.NonPublic | BindingFlags.Static) != null)
-                {
-                    MelonDebug.Msg("Patching Il2CppInterop GarbageCollector_RunFinalizer_Patch.FindTargetMethod...");
-                    Core.HarmonyInstance.Patch(_garbageCollector_RunFinalizer_FindTargetMethod, new HarmonyMethod(
-                        _garbageCollector_RunFinalizer_FindTargetMethod_Prefix
-                    ));
-                }
-                
             }
             catch (Exception e)
             {
@@ -405,13 +369,13 @@ namespace MelonLoader.Fixes.Il2CppInterop
         {
             if ((__instance == null)
                 || (__0 == null)
-                || (__0.Module == null)
-                || (__0.Module.Assembly == null)
+                || (__0.DeclaringModule == null)
+                || (__0.DeclaringModule.Assembly == null)
                 || !_assemblyLookup.TryGetValue(__instance, out Dictionary<string, AssemblyRewriteContext> contexts)
                 || (contexts == null))
                 return true;
 
-            string assemblyName = __0.Module.Assembly.Name;
+            string assemblyName = __0.DeclaringModule.Assembly.Name;
             if (string.IsNullOrEmpty(assemblyName)) 
                 return false;
 
@@ -436,89 +400,6 @@ namespace MelonLoader.Fixes.Il2CppInterop
 
             return true;
         }
-
-        /*
-        private static bool SystemTypeFromIl2CppType_Prefix(Il2CppTypeStruct* __0, ref Type __result)
-        {
-            if ((IntPtr)__0 == IntPtr.Zero)
-                return false;
-			
-            INativeTypeStruct wrappedType = UnityVersionHandler.Wrap(__0);
-            if ((IntPtr)wrappedType.TypePointer == IntPtr.Zero)
-                return false;
-			
-            if (_typeLookup.TryGetValue((IntPtr)wrappedType.TypePointer, out Type type))
-            {
-                __result = (Type)_rewriteType.Invoke(null, [type]);
-                return false;
-            }
-
-            IntPtr klass = IL2CPP.il2cpp_class_from_type((IntPtr)wrappedType.TypePointer);
-            if (klass == IntPtr.Zero)
-                return true;
-
-            IntPtr klassNamespace = IL2CPP.il2cpp_class_get_namespace(klass);
-            if (klassNamespace == IntPtr.Zero)
-                return true;
-
-            IntPtr klassName = IL2CPP.il2cpp_class_get_name(klass);
-            if (klassName == IntPtr.Zero)
-                return true;
-
-            string klassNameStr = Marshal.PtrToStringAnsi(klassName);
-            if (string.IsNullOrEmpty(klassNameStr))
-                return true;
-
-            string fullTypeName = klassNameStr;
-            if (klassNamespace != IntPtr.Zero)
-            {
-                string klassNamespaceStr = Marshal.PtrToStringAnsi(klassNamespace);
-                if (!string.IsNullOrEmpty(klassNamespaceStr))
-                    fullTypeName = $"{klassNamespaceStr}.{klassNameStr}";
-            }
-
-            var assemblyName = "Il2Cpp" + Marshal.PtrToStringAnsi(IL2CPP.il2cpp_class_get_assemblyname(klass));
-
-            Assembly asm;
-            try
-            {
-                asm = Assembly.Load(assemblyName);
-            }
-            catch
-            {
-                MelonLogger.Warning($"SystemTypeFromIl2CppType fix failed to resolve assembly '{assemblyName}'");
-                return true;
-            }
-
-            __result = (asm.GetType($"Il2Cpp.{fullTypeName}") ?? asm.GetType($"Il2Cpp{fullTypeName}")) ?? asm.GetType(fullTypeName);
-            if (__result != null)
-            {
-                MelonDebug.Msg($"SystemTypeFromIl2CppType fix resolved type: {__result.AssemblyQualifiedName}");
-                return false;
-            }
-
-            return true;
-        }
-
-        private static IEnumerable<CodeInstruction> SystemTypeFromIl2CppType_Transpiler(IEnumerable<CodeInstruction> instructions)
-        {
-            bool found = false;
-            foreach (CodeInstruction instruction in instructions)
-            {
-                if (!found 
-                    && instruction.Calls(_getType))
-                {
-                    found = true;
-                    instruction.opcode = OpCodes.Call;
-                    instruction.operand = _fixedFindType;
-
-                    MelonDebug.Msg("Patched Il2CppInterop ClassInjector.SystemTypeFromIl2CppType -> Type.GetType");
-                }
-
-                yield return instruction;
-            }
-        }
-        */
 
         private static IEnumerable<CodeInstruction> RegisterTypeInIl2Cpp_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
@@ -635,35 +516,6 @@ namespace MelonLoader.Fixes.Il2CppInterop
                         list.Remove(existing);
                 }
             }
-        }
-
-        private static bool GarbageCollector_RunFinalizer_FindTargetMethod_Prefix(ref IntPtr __result)
-        {
-            var getIl2cppExportMethod = InjectorHelpersType.GetMethod("GetIl2CppExport",  BindingFlags.NonPublic | BindingFlags.Static);
-            var unhandledException = (IntPtr)getIl2cppExportMethod.Invoke(null, new object[] { nameof(IL2CPP.il2cpp_unhandled_exception) })!;
-            var actualUnhandled = XrefScannerLowLevel.JumpTargets(unhandledException).FirstOrDefault();
-            if (actualUnhandled == IntPtr.Zero)
-                actualUnhandled = unhandledException;
-
-            MelonDebug.Msg($"Runtime::UnhandledException: 0x{actualUnhandled.ToInt64():X}");
-            var il2CppModule = (ProcessModule)InjectorHelpersType.GetField("Il2CppModule", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null);
-            var callers = FindCallersOf(
-                actualUnhandled,
-                il2CppModule.BaseAddress,
-                il2CppModule.ModuleMemorySize
-            ).ToList();
-
-            MelonDebug.Msg($"Found {callers.Count} callers of UnhandledException");
-
-            foreach (var caller in callers.Where(IsRunFinalizerPattern ))
-            {
-                __result = caller;
-                return false;
-            }
-
-            __result = IntPtr.Zero;
-            MelonDebug.Msg("Returning true because can't find pattern for finalizer");
-            return true;
         }
 
         public static int EstimateFunctionSize(IntPtr functionStart, int maxSize = 1000)
