@@ -29,43 +29,35 @@ internal static class UnixPlayerLogsMirroring
     
     private static readonly StringBuilder LogBuffer = new(2048);
 
-    private static PltNativeHook<Fopen64Fn>? FopenNativeHook;
-    private static PltNativeHook<VfprintfFn>? VfprintfNativeHook;
-    private static PltNativeHook<VfprintfChkFn>? VfprintfChkNativeHook;
-    private static PltNativeHook<Dup2Fn>? Dup2NativeHook;
-
     internal static void SetupPlayerLogMirroring()
     {
+        PltHook.InstallHooks(
+        [
 #if OSX
-        FopenNativeHook = PltNativeHook<Fopen64Fn>.RedirectUnityPlayer("fopen", Marshal.GetFunctionPointerForDelegate(HookFopen64Delegate));
+            ("fopen", Marshal.GetFunctionPointerForDelegate(HookFopen64Delegate)),
 #else
-        FopenNativeHook = PltNativeHook<Fopen64Fn>.RedirectUnityPlayer("fopen64", Marshal.GetFunctionPointerForDelegate(HookFopen64Delegate));
+            ("fopen64", Marshal.GetFunctionPointerForDelegate(HookFopen64Delegate)),
 #endif
-
-        VfprintfNativeHook = PltNativeHook<VfprintfFn>.RedirectUnityPlayer("vfprintf", Marshal.GetFunctionPointerForDelegate(HookVfprintfDelegate));
-        VfprintfChkNativeHook = PltNativeHook<VfprintfChkFn>.RedirectUnityPlayer("__vfprintf_chk", Marshal.GetFunctionPointerForDelegate(HookVfprintfChkDelegate));
-        Dup2NativeHook = PltNativeHook<Dup2Fn>.RedirectUnityPlayer("dup2", Marshal.GetFunctionPointerForDelegate(HookDup2Delegate));
-
-        FopenNativeHook?.Attach();
-        VfprintfNativeHook?.Attach();
-        VfprintfChkNativeHook?.Attach();
-        Dup2NativeHook?.Attach();
+            ("vfprintf", Marshal.GetFunctionPointerForDelegate(HookVfprintfDelegate)),
+            ("__vfprintf_chk", Marshal.GetFunctionPointerForDelegate(HookVfprintfChkDelegate)),
+            ("dup2", Marshal.GetFunctionPointerForDelegate(HookDup2Delegate))
+        ]);
     }
 
     private static nint HookFopen64(string pathName, string mode)
     {
         if (_foundPlayerLogsStream)
-            return FopenNativeHook?.Trampoline(pathName, mode) ?? 0;
+            return LibcNative.Fopen64(pathName, mode);
 
         if (mode.Contains('w') && (pathName.EndsWith("Player.log") || pathName.EndsWith("output_log.txt")))
         {
-            _streamPlayerLogs = FopenNativeHook?.Trampoline(pathName, mode) ?? 0;
+            _streamPlayerLogs = LibcNative.Fopen64(pathName, mode);
             MelonDebug.Log($"Found player logs file with fd {LibcNative.Fileno(_streamPlayerLogs)} at: {pathName}");
 
             _foundPlayerLogsStream = true;
             return _streamPlayerLogs;
         }
-        return FopenNativeHook?.Trampoline(pathName, mode) ?? 0;
+        return LibcNative.Fopen64(pathName, mode);
     }
 
     private static int HookDup2(int oldFd, int newFd)
@@ -76,7 +68,7 @@ internal static class UnixPlayerLogsMirroring
             return newFd;
         }
 
-        return Dup2NativeHook?.Trampoline(oldFd, newFd) ?? 0;
+        return LibcNative.Dup2(oldFd, newFd);
     }
 
     private static int HookVfprintfChk(nint stream, int flag, string format, nint vList)
@@ -107,7 +99,7 @@ internal static class UnixPlayerLogsMirroring
             LibcNative.Fseek(stream, 0, LibcNative.SeekEnd);
             return LibcNative.Fwrite(bufferSpan, 1, nbrBytesToWrite, stream);
         }
-        return VfprintfNativeHook?.Trampoline(stream, format, vList) ?? 0;
+        return LibcNative.Vfprintf(stream, format, vList);
     }
 }
 #endif
