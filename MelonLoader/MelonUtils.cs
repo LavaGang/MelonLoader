@@ -518,7 +518,7 @@ namespace MelonLoader
 
         public static void SetConsoleTitle(string title)
         {
-            if (LoaderConfig.Current.Console.DontSetTitle || !BootstrapInterop.Library.IsConsoleOpen())
+            if (!BootstrapInterop.Library.IsConsoleOpen())
                 return;
 
             // Using reflection to avoid resolver errors

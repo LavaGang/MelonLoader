@@ -46,6 +46,8 @@
 
 1. Updated AsmResolver to 6.0.0-beta.5
 2. Updated Il2CppInterop to 1.5.1-ci.829
+3. Fixed an issue with Debug Mode Identifier in Console Title not being appended when set with Game Information
+4. Fixed an issue with MelonUtils.SetConsoleTitle not working when DontSetTitle Console option is true
 
 ---
 

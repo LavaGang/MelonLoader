@@ -14,6 +14,9 @@ internal static unsafe class BootstrapInterop
 
     internal static void SetDefaultConsoleTitleWithGameName(string gameName, string gameVersion = null)
     {
+        if (LoaderConfig.Current.Console.DontSetTitle)
+            return;
+
         var versionStr = $"{Core.GetVersionString()} - {gameName} {gameVersion ?? ""}";
 
         if (LoaderConfig.Current.Loader.DebugMode)
