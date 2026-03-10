@@ -47,14 +47,12 @@ public class LoaderConfig
             try
             {
                 var doc = TomlParser.ParseFile(path);
-
                 Current = TomletMain.To<LoaderConfig>(doc) ?? new();
             }
             catch { }
         }
 
         var doc2 = TomletMain.TomlStringFrom(Current);
-
         try
         {
             File.WriteAllText(path, doc2);
@@ -95,7 +93,9 @@ public class LoaderConfig
         {
             Current.Loader.BaseDirectory = baseDir;
 
+#if !DEBUG
             if (ArgParser.IsDefined("melonloader.debug"))
+#endif
                 Current.Loader.DebugMode = true;
 
             if (ArgParser.IsDefined("melonloader.captureplayerlogs"))
@@ -131,7 +131,7 @@ public class LoaderConfig
         }
 #endif
 
-        [TomlNonSerialized]
+            [TomlNonSerialized]
         public string BaseDirectory { get; internal set; } = null!;
 
         // Technically, this will always return false, but it's still a config ¯\_(ツ)_/¯
@@ -142,9 +142,6 @@ public class LoaderConfig
         [TomlProperty("debug_mode")]
         [TomlPrecedingComment("Equivalent to the '--melonloader.debug' launch option")]
         public bool DebugMode { get; internal set; }
-#if DEBUG
-            = true;
-#endif
 
         [TomlProperty("capture_player_logs")]
         [TomlPrecedingComment("Capture all Unity player logs into MelonLoader's logs even if the game disabled them. NOTE: Depending on the game or Unity version, these logs can be overly verbose. Equivalent to the '--melonloader.captureplayerlogs' launch option")]
