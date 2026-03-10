@@ -9,6 +9,7 @@
         <PreserveCompilationContext>false</PreserveCompilationContext>
     </PropertyGroup>
     <ItemGroup>
+      <PackageReference Include="AsmResolver.DotNet" Version="6.0.0-rc.1" />
         <ProjectReference Include="$(SolutionDir)\MelonLoader\MelonLoader.csproj" Private="false" />
         <PackageReference Include="AssetRipper.Primitives" Version="$(AssetRipperVersion)" ExcludeAssets="Runtime" />
         <PackageReference Include="Iced" Version="$(IcedVersion)" ExcludeAssets="Runtime" />
