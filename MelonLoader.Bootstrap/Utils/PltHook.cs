@@ -34,4 +34,50 @@ internal static partial class PltHook
     [LibraryImport("*", EntryPoint = "plthook_error")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial nint PlthookError();
+
+    internal static readonly string? PlayerFileName = Process.GetCurrentProcess().Modules.OfType<ProcessModule>()
+        .FirstOrDefault(x => x.FileName.Contains("UnityPlayer"))?.FileName;
+
+    internal static void InstallHooks(List<(string functionName, nint hookFunctionPtr)> hooks)
+    {
+        nint pltHook = IntPtr.Zero;
+        bool pltHookOpened;
+#if OSX
+        string parentPlayerPath = Path.GetDirectoryName(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule!.FileName))!;
+        string playerLibPath = Path.Combine(parentPlayerPath, "Frameworks", "UnityPlayer.dylib");
+        if (File.Exists(playerLibPath))
+        {
+            nint libHandle = LibcNative.Dlopen(playerLibPath, LibcNative.RtldLazy | LibcNative.RtldNoLoad);
+            if (libHandle == IntPtr.Zero)
+            {
+                Console.WriteLine($"Failed to dlopen {playerLibPath}, cannot apply plt hooks");
+                return;
+            }
+            pltHookOpened = PlthookOpenByHandle(ref pltHook, libHandle) == 0;
+        }
+        else
+#else
+            pltHookOpened = PlthookOpen(ref pltHook, PlayerFileName) == 0;
+#endif
+
+        if (!pltHookOpened)
+        {
+            MelonLogger.LogError($"plthook_open error: {Marshal.PtrToStringAuto(PlthookError())}");
+            return;
+        }
+
+        foreach (var hook in hooks)
+        {
+            if (PlthookReplace(pltHook, hook.functionName, hook.hookFunctionPtr, IntPtr.Zero) != 0)
+            {
+                MelonDebug.Log($"plthook_replace error when hooking {hook.functionName}: " +
+                               $"{Marshal.PtrToStringAuto(PlthookError())}");
+                continue;
+            }
+
+            MelonDebug.Log($"Plt hooked {hook.functionName} successfully");
+        }
+
+        PlthookClose(pltHook);
+    }
 }
