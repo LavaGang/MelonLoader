@@ -12,8 +12,6 @@ namespace MelonLoader.Bootstrap.Utils
         internal string? ModuleFilePath { get; private set; }
         internal string? FunctionName { get; private set; }
 
-        private static readonly string? PlayerFileName = Process.GetCurrentProcess().Modules.OfType<ProcessModule>()
-            .FirstOrDefault(x => x.FileName.Contains("UnityPlayer"))?.FileName;
         internal static PltNativeHook<T>? RedirectUnityPlayer(string? functionName, nint detour)
         {
             PltNativeHook<T>? newHook = null;
@@ -34,7 +32,7 @@ namespace MelonLoader.Bootstrap.Utils
             }
             else
 #endif
-                newHook = new(PlayerFileName, functionName, detour);
+                newHook = new(PltHook.PlayerFileName, functionName, detour);
 
             return newHook;
         }
