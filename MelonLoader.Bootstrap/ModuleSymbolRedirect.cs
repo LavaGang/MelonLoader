@@ -10,12 +10,12 @@ namespace MelonLoader.Bootstrap
         private static bool _runtimeInitialised;
 
 #if LINUX || OSX
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 #endif
 #if WINDOWS
-        [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Ansi)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 #endif
-        private delegate nint DetourFn(nint handle, string symbol);
+        private delegate nint DetourFn(nint handle, nint symbol);
         private static readonly DetourFn DetourDelegate = SymbolDetour;
 
         private static PltNativeHook<DetourFn>? nativeHook;
@@ -35,13 +35,29 @@ namespace MelonLoader.Bootstrap
 #endif
 
             nativeHook?.Attach();
-            MelonDebug.Log("Symbol Redirect Attached!");
         }
 
         internal static void Detach()
         {
             nativeHook?.Detach();
             nativeHook = null;
+        }
+
+        internal static nint GetSymbol(nint handle, nint symbolNamePtr)
+        {
+            if (symbolNamePtr == nint.Zero)
+                return nint.Zero;
+
+            if ((nativeHook != null) && nativeHook.IsHooked)
+                return nativeHook.Trampoline(handle, symbolNamePtr);
+
+            string? symbolName = Marshal.PtrToStringAnsi(symbolNamePtr);
+            if (!string.IsNullOrEmpty(symbolName)
+                && !string.IsNullOrWhiteSpace(symbolName)
+                && NativeFunc.TryGetExport(handle, symbolName, out var export))
+                return export;
+
+            return nint.Zero;
         }
 
         internal static nint GetSymbol(nint handle, string symbolName)
@@ -51,7 +67,7 @@ namespace MelonLoader.Bootstrap
                 return nint.Zero;
 
             if ((nativeHook != null) && nativeHook.IsHooked)
-                return nativeHook.Trampoline(handle, symbolName);
+                return nativeHook.Trampoline(handle, Marshal.StringToHGlobalAnsi(symbolName));
 
             if (NativeLibrary.TryGetExport(handle, symbolName, out var export))
                 return export;
@@ -59,21 +75,18 @@ namespace MelonLoader.Bootstrap
             return nint.Zero;
         }
 
-        private static nint SymbolDetour(nint handle, string symbolName)
+        private static nint SymbolDetour(nint handle, nint symbol)
         {
-            nint originalSymbolAddress = GetSymbol(handle, symbolName);
-            if (originalSymbolAddress == nint.Zero)
-            {
-                MelonDebug.Log($"Unable to find Symbol: {symbolName}");
-                return nint.Zero;
-            }
+            nint originalSymbolAddress = GetSymbol(handle, symbol);
+
+            string? symbolName = Marshal.PtrToStringAnsi(symbol);
+            if (string.IsNullOrEmpty(symbolName)
+                || string.IsNullOrWhiteSpace(symbolName))
+                return originalSymbolAddress;
 
             if (!MonoHandler.SymbolRedirects.TryGetValue(symbolName, out var redirect)
                 && !Il2CppHandler.SymbolRedirects.TryGetValue(symbolName, out redirect))
-            {
-                MelonDebug.Log($"No Redirect Found for Symbol: {symbolName}");
                 return originalSymbolAddress;
-            }
 
             if (!_runtimeInitialised)
             {

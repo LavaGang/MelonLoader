@@ -43,16 +43,18 @@ public class LoaderConfig
 
         var path = Path.Combine(userDataFolder, "Loader.cfg");
         if (File.Exists(path))
+        {
             try
             {
                 var doc = TomlParser.ParseFile(path);
-                Current = TomletMain.To<LoaderConfig>(doc) ?? Current;
+                Current = TomletMain.To<LoaderConfig>(doc) ?? new();
             }
             catch { }
+        }
 
+        var doc2 = TomletMain.TomlStringFrom(Current);
         try
         {
-            var doc2 = TomletMain.TomlStringFrom(Current);
             File.WriteAllText(path, doc2);
         }
         catch { }
