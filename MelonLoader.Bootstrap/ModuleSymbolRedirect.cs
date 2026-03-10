@@ -22,6 +22,8 @@ namespace MelonLoader.Bootstrap
 
         internal static void Attach()
         {
+            MelonDebug.Log("Attaching Symbol Redirect...");
+
             IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate(DetourDelegate);
 
 #if LINUX || OSX
@@ -82,14 +84,13 @@ namespace MelonLoader.Bootstrap
                 || string.IsNullOrWhiteSpace(symbolName))
                 return originalSymbolAddress;
 
-            //MelonDebug.Log($"Looking for Symbol {symbolName}");
             if (!MonoHandler.SymbolRedirects.TryGetValue(symbolName, out var redirect)
                 && !Il2CppHandler.SymbolRedirects.TryGetValue(symbolName, out redirect))
                 return originalSymbolAddress;
 
             if (!_runtimeInitialised)
             {
-                MelonDebug.Log("Init");
+                MelonDebug.Log("Initializing Runtime...");
                 redirect.InitMethod(handle);
                 if (!LoaderConfig.Current.Loader.CapturePlayerLogs)
                     ConsoleHandler.ResetHandles();

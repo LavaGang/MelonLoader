@@ -37,8 +37,11 @@ public class LoaderConfig
         if (Directory.Exists(customBaseDir))
             baseDir = Path.GetFullPath(customBaseDir);
 
-        var path = Path.Combine(baseDir, "UserData", "Loader.cfg");
+        var userDataFolder = Path.Combine(baseDir, "UserData");
+        if (!Directory.Exists(userDataFolder))
+            Directory.CreateDirectory(userDataFolder);
 
+        var path = Path.Combine(userDataFolder, "Loader.cfg");
         if (File.Exists(path))
         {
             try
@@ -54,7 +57,6 @@ public class LoaderConfig
 
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
             File.WriteAllText(path, doc2);
         }
         catch { }

@@ -52,7 +52,11 @@ internal static class ConsoleHandler
 #endif
         {
             if (title != null)
+            {
+                if (LoaderConfig.Current.Loader.DebugMode)
+                    title = "[D] " + title;
                 Console.Title = title;
+            }
         }
 
 #if LINUX
