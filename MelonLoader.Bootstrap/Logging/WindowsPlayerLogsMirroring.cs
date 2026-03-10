@@ -1,5 +1,4 @@
 #if WINDOWS
-using MelonLoader.Bootstrap.Utils;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -22,17 +21,14 @@ internal static class WindowsPlayerLogsMirroring
 
     private static readonly CreateFileWFn HookCreateFileWDelegate = HookCreateFileW;
     private static readonly WriteFileFn HookWriteFileDelegate = HookWriteFile;
-    
+
     private static bool _foundPlayerLogsHandle;
     private static nint _logHandle;
-    
+
     private static readonly StringBuilder LogBuffer = new(2048);
 
     internal static void SetupPlayerLogMirroring()
     {
-        IntPtr HookCreateFileWDelegatePtr = Marshal.GetFunctionPointerForDelegate(HookCreateFileWDelegate);
-        IntPtr HookWriteFileDelegatePtr = Marshal.GetFunctionPointerForDelegate(HookWriteFileDelegate);
-
         PltHook.InstallHooks(
         [
             ("CreateFileW", Marshal.GetFunctionPointerForDelegate(HookCreateFileWDelegate)),

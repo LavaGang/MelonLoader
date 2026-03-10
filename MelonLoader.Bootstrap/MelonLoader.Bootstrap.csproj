@@ -65,7 +65,6 @@
 
     <ItemGroup>
         <Compile Include="$(SolutionDir)/MelonLoader/LoaderConfig.cs" />
-        <Compile Include="..\MelonLoader\NativeUtils\NativeHooks.cs" Link="NativeHooks.cs" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'">

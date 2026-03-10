@@ -1,11 +1,7 @@
-﻿#if BOOTSTRAP
-#pragma warning disable CS8618
-#else
-using MelonLoader.InternalUtils;
+﻿using MelonLoader.InternalUtils;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-#endif
 
 namespace MelonLoader.NativeUtils
 {
@@ -113,7 +109,8 @@ namespace MelonLoader.NativeUtils
             if (_detourHandle == IntPtr.Zero)
                 throw new NullReferenceException("The NativeHook's detour has not been set!");
 
-            HookAttach();
+            _trampolineHandle = HookAttach();
+            _trampoline = (T)Marshal.GetDelegateForFunctionPointer(_trampolineHandle, typeof(T));
             _gcProtect.Add(_trampoline);
             IsHooked = true;
         }
@@ -124,33 +121,26 @@ namespace MelonLoader.NativeUtils
                 return;
 
             HookDetach();
-            IsHooked = false;
             _gcProtect.Remove(_trampoline);
+            _trampoline = null;
+            _trampolineHandle = IntPtr.Zero;
+            IsHooked = false;
         }
 
-        internal virtual unsafe void HookAttach()
+        public virtual unsafe IntPtr HookAttach()
         {
-#if !BOOTSTRAP
             if (_targetHandle == IntPtr.Zero)
                 throw new NullReferenceException("The NativeHook's target has not been set!");
 
             IntPtr trampoline = _targetHandle;
             BootstrapInterop.NativeHookAttach((IntPtr)(&trampoline), _detourHandle);
-
-            _trampolineHandle = trampoline;
-            _trampoline = (T)Marshal.GetDelegateForFunctionPointer(_trampolineHandle, typeof(T));
-#endif
+            return trampoline;
         }
 
-        internal virtual unsafe void HookDetach()
+        public virtual unsafe void HookDetach()
         {
-#if !BOOTSTRAP
             IntPtr original = _targetHandle;
             BootstrapInterop.NativeHookDetach((IntPtr)(&original), _detourHandle);
-
-            _trampoline = null;
-            _trampolineHandle = IntPtr.Zero;
-#endif
         }
     }
 }
