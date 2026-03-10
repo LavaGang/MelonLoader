@@ -16,7 +16,9 @@ namespace MelonLoader.Bootstrap
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Ansi)]
 #endif
         private delegate nint DetourFn(nint handle, string symbol);
-        private static readonly DetourFn DetourDelegate = RedirectSymbol;
+        private static readonly DetourFn DetourDelegate = SymbolDetour;
+
+        private static PltNativeHook<DetourFn>? nativeHook;
 
         internal static void Attach()
         {
@@ -25,19 +27,21 @@ namespace MelonLoader.Bootstrap
             IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate(DetourDelegate);
 
 #if LINUX || OSX
-            PltHook.InstallHooks
-            ([
-                ("dlsym", detourPtr)
-            ]);
-#endif
-#if WINDOWS
-            PltHook.InstallHooks
-            ([
-                ("GetProcAddress", detourPtr)
-            ]);
+            nativeHook = PltNativeHook<DetourFn>.RedirectUnityPlayer("dlsym", detourPtr);
 #endif
 
+#if WINDOWS
+            nativeHook = PltNativeHook<DetourFn>.RedirectUnityPlayer("GetProcAddress", detourPtr);
+#endif
+
+            nativeHook?.Attach();
             MelonDebug.Log("Symbol Redirect Attached!");
+        }
+
+        internal static void Detach()
+        {
+            nativeHook?.Detach();
+            nativeHook = null;
         }
 
         internal static nint GetSymbol(nint handle, string symbolName)
@@ -46,26 +50,28 @@ namespace MelonLoader.Bootstrap
                 || string.IsNullOrWhiteSpace(symbolName))
                 return nint.Zero;
 
-#if WINDOWS
-            return WindowsNative.GetProcAddress(handle, symbolName);
-#elif LINUX || OSX
-            return LibcNative.Dlsym(handle, symbol);
-#endif
+            if ((nativeHook != null) && nativeHook.IsHooked)
+                return nativeHook.Trampoline(handle, symbolName);
+
+            if (NativeLibrary.TryGetExport(handle, symbolName, out var export))
+                return export;
+
+            return nint.Zero;
         }
 
-        private static nint RedirectSymbol(nint handle, string symbolName)
+        private static nint SymbolDetour(nint handle, string symbolName)
         {
             nint originalSymbolAddress = GetSymbol(handle, symbolName);
             if (originalSymbolAddress == nint.Zero)
             {
-                //MelonDebug.Log($"Unable to find Symbol: {symbolName}");
+                MelonDebug.Log($"Unable to find Symbol: {symbolName}");
                 return nint.Zero;
             }
 
             if (!MonoHandler.SymbolRedirects.TryGetValue(symbolName, out var redirect)
                 && !Il2CppHandler.SymbolRedirects.TryGetValue(symbolName, out redirect))
             {
-                //MelonDebug.Log($"No Redirect Found for Symbol: {symbolName}");
+                MelonDebug.Log($"No Redirect Found for Symbol: {symbolName}");
                 return originalSymbolAddress;
             }
 
