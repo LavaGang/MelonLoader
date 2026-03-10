@@ -25,6 +25,8 @@ internal static class MelonLogger
             {
                 // This is temporary, until managed sets it
                 title = (LoaderConfig.Current.Loader.Theme == LoaderConfig.CoreConfig.LoaderTheme.Lemon ? "LemonLoader" : "MelonLoader") + " v" + versionStr;
+                if (LoaderConfig.Current.Loader.DebugMode)
+                    title = "[D] " + title;
             }
 
             ConsoleHandler.OpenConsole(LoaderConfig.Current.Console.AlwaysOnTop, title);

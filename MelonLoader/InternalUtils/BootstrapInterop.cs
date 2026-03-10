@@ -16,6 +16,9 @@ internal static unsafe class BootstrapInterop
     {
         var versionStr = $"{Core.GetVersionString()} - {gameName} {gameVersion ?? ""}";
 
+        if (LoaderConfig.Current.Loader.DebugMode)
+            versionStr = "[D] " + versionStr;
+
         MelonUtils.SetConsoleTitle(versionStr);
     }
 

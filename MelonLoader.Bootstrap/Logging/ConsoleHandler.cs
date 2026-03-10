@@ -50,14 +50,8 @@ internal static class ConsoleHandler
 
         if (consoleWindow != 0)
 #endif
-        {
-            if (title != null)
-            {
-                if (LoaderConfig.Current.Loader.DebugMode)
-                    title = "[D] " + title;
+            if (!string.IsNullOrEmpty(title))
                 Console.Title = title;
-            }
-        }
 
 #if LINUX
         IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate(HookFCloseDelegate);
