@@ -211,14 +211,17 @@ namespace MelonLoader
             if (!SupportModule.Setup())
                 return false;
 
-            //AddUnityDebugLog();
+            AddUnityDebugLog();
 
 #if NET6_0_OR_GREATER
             RegisterTypeInIl2Cpp.SetReady();
             RegisterTypeInIl2CppWithInterfaces.SetReady();
 #endif
 
+            MelonDebug.Msg("Invoking MelonHarmonyInit");
             MelonEvents.MelonHarmonyInit.Invoke();
+
+            MelonDebug.Msg("Invoking OnApplicationStart");
             MelonEvents.OnApplicationStart.Invoke();
 
             return true;

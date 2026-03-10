@@ -333,11 +333,11 @@ namespace MelonLoader
                 //MelonLogger.Error($"Failed to get all types in assembly {asm.FullName} due to: {ex.Message}", ex);
                 returnval = ex.Types; 
             }
-            //catch (Exception ex)
-            //{
+            catch //(Exception ex)
+            {
                 //MelonLogger.Error($"Failed to get all types in assembly {asm.FullName} due to: {ex.Message}", ex);
-            //    returnval = null;
-            //}
+                //returnval = null;
+            }
             return returnval.Where(x => (x != null) && (predicate == null || predicate(x)));
         }
 
