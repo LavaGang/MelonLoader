@@ -211,8 +211,8 @@ namespace MelonLoader
             if (!SupportModule.Setup())
                 return false;
 
-            MelonDebug.Msg("Invoking AddUnityDebugLog");
-            AddUnityDebugLog();
+            //MelonDebug.Msg("Invoking AddUnityDebugLog");
+            //AddUnityDebugLog();
 
 #if NET6_0_OR_GREATER
             RegisterTypeInIl2Cpp.SetReady();
