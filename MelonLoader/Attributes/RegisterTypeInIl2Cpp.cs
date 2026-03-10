@@ -37,7 +37,12 @@ namespace MelonLoader
                 RegisterTypeInIl2Cpp att = (RegisterTypeInIl2Cpp)attTbl[0];
                 if (att == null)
                     continue;
-                InteropSupport.RegisterTypeInIl2CppDomain(type, att.LogSuccess);
+
+                bool shouldLogSuccess = MelonDebug.IsEnabled() 
+                    || att.LogSuccess;
+
+                InteropSupport.RegisterTypeInIl2CppDomain(type, 
+                    shouldLogSuccess);
             }
         }
 
