@@ -41,7 +41,8 @@ internal static partial class PltHook
     internal static void InstallHooks(List<(string functionName, nint hookFunctionPtr)> hooks)
     {
         nint pltHook = IntPtr.Zero;
-        bool pltHookOpened;
+        bool pltHookOpened = false;
+
 #if OSX
         string parentPlayerPath = Path.GetDirectoryName(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule!.FileName))!;
         string playerLibPath = Path.Combine(parentPlayerPath, "Frameworks", "UnityPlayer.dylib");
