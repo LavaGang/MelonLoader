@@ -34,7 +34,7 @@ namespace MelonLoader.Bootstrap.Utils
             }
             else
 #endif
-            newHook = new(PlayerFileName, functionName, detour);
+                newHook = new(PlayerFileName, functionName, detour);
 
             return newHook;
         }

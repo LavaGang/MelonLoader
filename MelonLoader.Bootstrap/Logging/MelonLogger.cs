@@ -9,29 +9,10 @@ internal static class MelonLogger
     private static readonly ColorARGB timeColor = ColorARGB.LimeGreen;
     private static readonly ConsoleColor legacyTimeColor = ConsoleColor.Green;
 
-    private static readonly List<StreamWriter> logFiles = [];
+    private static readonly List<StreamWriter> logFiles = new();
 
     public static void Init()
     {
-        if (!LoaderConfig.Current.Console.Hide)
-        {
-            var version = typeof(Core).Assembly.GetName().Version!;
-            var versionStr = version.ToString(3);
-            if (version.Revision != 0)
-                versionStr += "-ci." + version.Revision.ToString();
-
-            string? title = null;
-            if (!LoaderConfig.Current.Console.DontSetTitle)
-            {
-                // This is temporary, until managed sets it
-                title = (LoaderConfig.Current.Loader.Theme == LoaderConfig.CoreConfig.LoaderTheme.Lemon ? "LemonLoader" : "MelonLoader") + " v" + versionStr;
-                if (LoaderConfig.Current.Loader.DebugMode)
-                    title = "[D] " + title;
-            }
-
-            ConsoleHandler.OpenConsole(LoaderConfig.Current.Console.AlwaysOnTop, title);
-        }
-
         // Making logs from this point is ok, but only for console
 
         MelonDebug.Log($"Creating log files (Max logs: {LoaderConfig.Current.Logs.MaxLogs})");
@@ -76,7 +57,7 @@ internal static class MelonLogger
         var latestPath = Path.Combine(LoaderConfig.Current.Loader.BaseDirectory, "MelonLoader", "Latest.log");
         var cachedPath = Path.Combine(logsDir, $"{DateTime.Now:%y-%M-%d_%H-%m-%s}.log");
 
-        MelonDebug.Log("Opening stream to latest log");
+        //MelonDebug.Log("Opening stream to latest log");
         try
         {
             var latest = new FileStream(latestPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
@@ -91,7 +72,7 @@ internal static class MelonLogger
             Core.Logger.Warning($"Failed to create Latest.log. There might be another instance of the game");
         }
 
-        MelonDebug.Log("Opening stream to cached log");
+        //MelonDebug.Log("Opening stream to cached log");
         try
         {
             var cached = new FileStream(cachedPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
@@ -109,16 +90,6 @@ internal static class MelonLogger
         if (logFiles.Count == 0)
         {
             Core.Logger.Error("Failed to create any log files. Logging to console only");
-        }
-
-        if (LoaderConfig.Current.Loader.CapturePlayerLogs)
-        {
-#if LINUX || OSX
-            UnixPlayerLogsMirroring.SetupPlayerLogMirroring();
-#endif
-#if WINDOWS
-            WindowsPlayerLogsMirroring.SetupPlayerLogMirroring();
-#endif
         }
     }
 

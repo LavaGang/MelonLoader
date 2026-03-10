@@ -40,10 +40,47 @@ public static class Core
         if (LoaderConfig.Current.Loader.Disable)
             return;
 
+        SetupConsole();
         MelonLogger.Init();
-        if (!LoaderConfig.Current.Loader.CapturePlayerLogs)
-            ConsoleHandler.NullHandles();
-
+        SetupPlayerLogCapture();
         ModuleSymbolRedirect.Attach();
+    }
+
+    private static void SetupConsole()
+    {
+        if (LoaderConfig.Current.Console.Hide)
+            return;
+
+        var version = typeof(Core).Assembly.GetName().Version!;
+        var versionStr = version.ToString(3);
+        if (version.Revision != 0)
+            versionStr += "-ci." + version.Revision.ToString();
+
+        string? title = null;
+        if (!LoaderConfig.Current.Console.DontSetTitle)
+        {
+            // This is temporary, until managed sets it
+            title = (LoaderConfig.Current.Loader.Theme == LoaderConfig.CoreConfig.LoaderTheme.Lemon ? "LemonLoader" : "MelonLoader") + " v" + versionStr;
+            if (LoaderConfig.Current.Loader.DebugMode)
+                title = "[D] " + title;
+        }
+
+        ConsoleHandler.OpenConsole(LoaderConfig.Current.Console.AlwaysOnTop, title);
+    }
+
+    private static void SetupPlayerLogCapture()
+    {
+        if (!LoaderConfig.Current.Loader.CapturePlayerLogs)
+        {
+            ConsoleHandler.NullHandles();
+            return;
+        }
+
+#if LINUX || OSX
+            UnixPlayerLogsMirroring.SetupPlayerLogMirroring();
+#endif
+#if WINDOWS
+            WindowsPlayerLogsMirroring.SetupPlayerLogMirroring();
+#endif
     }
 }

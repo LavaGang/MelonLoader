@@ -7,10 +7,15 @@ internal static class NativeFunc
 {
     public static bool TryGetExport(nint hModule, string name, out nint export)
     {
-        export = ModuleSymbolRedirect.GetSymbol(hModule, name);
-        if (export == IntPtr.Zero)
-            return false;
-        return true;
+        try
+        {
+            export = ModuleSymbolRedirect.GetSymbol(hModule, name);
+            return true;
+        }
+        catch { }
+
+        export = nint.Zero;
+        return false;
     }
 
     public static T? GetExport<T>(nint hModule, string name) where T : Delegate
