@@ -4,7 +4,7 @@
 	-->
     <PropertyGroup>
         <Version>0.7.3</Version>
-        <AppHostVersion>10.0.3</AppHostVersion>
+        <AppHostVersion>10.0.5</AppHostVersion>
 		
         <BootstrapTarget>net9</BootstrapTarget>
 		
