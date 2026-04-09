@@ -3,8 +3,8 @@
 		Project
 	-->
     <PropertyGroup>
-        <Version>0.7.2</Version>
-        <AppHostVersion>10.0.0-rc.2.25502.107</AppHostVersion>
+        <Version>0.7.3</Version>
+        <AppHostVersion>10.0.5</AppHostVersion>
 		
         <BootstrapTarget>net9</BootstrapTarget>
 		
@@ -46,23 +46,23 @@
 	-->
     <PropertyGroup>
         <IcedVersion>1.21.0</IcedVersion>
-        <TomletVersion>6.1.0</TomletVersion>
-        <PastelVersion>7.0.0</PastelVersion>
+        <TomletVersion>6.2.0</TomletVersion>
+        <PastelVersion>7.0.1</PastelVersion>
         <MonoModVersion>22.7.31.1</MonoModVersion>
         <MonoModUtilsVersion>25.0.11</MonoModUtilsVersion>
         <MonoModRuntimeDetourVersion>25.3.3</MonoModRuntimeDetourVersion>
         <MonoCecilVersion>0.11.6</MonoCecilVersion>
         <HarmonyXVersion>2.16.0</HarmonyXVersion>
-        <AssetToolsVersion>3.0.1</AssetToolsVersion>
+        <AssetToolsVersion>3.0.4</AssetToolsVersion>
         <AssetRipperVersion>3.2.0</AssetRipperVersion>
-        <AsmResolverVersion>6.0.0-beta.3</AsmResolverVersion>
-        <Il2CppInteropVersion>1.5.1</Il2CppInteropVersion>
+        <AsmResolverVersion>6.0.0-beta.5</AsmResolverVersion>
+        <Il2CppInteropVersion>1.5.1-ci.833</Il2CppInteropVersion>
 	</PropertyGroup>
 	
 	<!--
 		Mono Overrides
 	-->
-    <PropertyGroup Condition="'$(TargetFramework)' == '$(MonoTarget)' Or '$(TargetFramework)' == '$(MonoBleedingEdgeTarget)'">
+    <PropertyGroup Condition="'$(TargetFramework)' == '$(MonoTarget)'">
         <MonoCecilVersion>0.10.4</MonoCecilVersion>
     </PropertyGroup>
 
@@ -113,7 +113,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <MLOutDir>$(SolutionDir)/Output/$(Configuration)/$(RuntimeIdentifier)</MLOutDir>
+        <MLOutDir>$(SolutionDir)Output/$(Configuration)/$(RuntimeIdentifier)</MLOutDir>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == '$(MonoTarget)' Or '$(TargetFramework)' == '$(MonoBleedingEdgeTarget)'">

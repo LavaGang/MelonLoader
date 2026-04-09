@@ -333,11 +333,11 @@ namespace MelonLoader
                 //MelonLogger.Error($"Failed to get all types in assembly {asm.FullName} due to: {ex.Message}", ex);
                 returnval = ex.Types; 
             }
-            //catch (Exception ex)
-            //{
+            catch //(Exception ex)
+            {
                 //MelonLogger.Error($"Failed to get all types in assembly {asm.FullName} due to: {ex.Message}", ex);
-            //    returnval = null;
-            //}
+                //returnval = null;
+            }
             return returnval.Where(x => (x != null) && (predicate == null || predicate(x)));
         }
 
@@ -396,22 +396,40 @@ namespace MelonLoader
         }
 
         public static void TryPatchAll(this HarmonyLib.Harmony harmony, Assembly assembly)
+            => TryPatchAll(harmony, assembly, false);
+        
+        public static List<MethodInfo> TryPatchAll(this HarmonyLib.Harmony harmony,
+            Assembly assembly, 
+            bool allowUnannotatedType)
         {
+            List<MethodInfo> patches = new();
             var allTypes = assembly.GetValidTypes();
             foreach (var type in allTypes)
-                harmony.TryPatchAll(type);
+            {
+                List<MethodInfo> newPatches = harmony.TryPatchAll(type, allowUnannotatedType);
+                if ((newPatches != null) && (newPatches.Count > 0))
+                    patches.AddRange(newPatches);
+            }
+            return patches;
         }
 
         public static void TryPatchAll(this HarmonyLib.Harmony harmony, Type type)
+            => TryPatchAll(harmony, type, true);
+        
+        public static List<MethodInfo> TryPatchAll(this HarmonyLib.Harmony harmony, 
+            Type type, 
+            bool allowUnannotatedType)
         {
             try
             {
-                var proc = harmony.CreateClassProcessor(type, allowUnannotatedType: true);
-                proc.Patch();
+                var proc = harmony.CreateClassProcessor(type, allowUnannotatedType);
+                return proc.Patch();
             }
             catch
             {
             }
+
+            return null;
         }
 
         public static HarmonyMethod ToNewHarmonyMethod(this MethodInfo methodInfo)
@@ -518,7 +536,7 @@ namespace MelonLoader
 
         public static void SetConsoleTitle(string title)
         {
-            if (LoaderConfig.Current.Console.DontSetTitle || !BootstrapInterop.Library.IsConsoleOpen())
+            if (!BootstrapInterop.Library.IsConsoleOpen())
                 return;
 
             // Using reflection to avoid resolver errors

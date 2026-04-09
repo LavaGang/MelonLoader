@@ -448,16 +448,23 @@ namespace MelonLoader
 
             var allTypes = MelonAssembly.Assembly.GetValidTypes();
             foreach (var type in allTypes)
+            {
                 try
                 {
-                    var proc = HarmonyInstance.CreateClassProcessor(type);
-                    proc.Patch();
+                    // Harmony.PatchAll(Assembly) sets allowUnannotatedType to false
+                    // Harmony.PatchAll(Type) sets allowUnannotatedType to true
+                    // This mimics the behavior of Harmony.PatchAll(Assembly)
+                    var proc = HarmonyInstance.CreateClassProcessor(type, false);
+                    var patches = proc.Patch();
+                    if (MelonDebug.IsEnabled() && (patches != null) && (patches.Count > 0))
+                        LoggerInstance.Msg($"HarmonyInit PatchAll: {type.FullName}");
                 }
                 catch (Exception ex)
                 {
-                    LoggerInstance.Error($"Failed to Harmony Patch {type.FullName}");
+                    LoggerInstance.Error($"Failed to HarmonyInit PatchAll: {type.FullName}");
                     LoggerInstance.Error(ex);
                 }
+            }
         }
 
         private void LoaderInitialized()

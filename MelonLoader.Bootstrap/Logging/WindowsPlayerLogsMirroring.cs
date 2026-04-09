@@ -28,40 +28,37 @@ internal static class WindowsPlayerLogsMirroring
     
     private static readonly StringBuilder LogBuffer = new(2048);
 
-    private static PltNativeHook<CreateFileWFn>? createFileNativeHook;
-    private static PltNativeHook<WriteFileFn>? writeFileNativeHook;
-
     internal static void SetupPlayerLogMirroring()
     {
         IntPtr HookCreateFileWDelegatePtr = Marshal.GetFunctionPointerForDelegate(HookCreateFileWDelegate);
         IntPtr HookWriteFileDelegatePtr = Marshal.GetFunctionPointerForDelegate(HookWriteFileDelegate);
 
-        createFileNativeHook = PltNativeHook<CreateFileWFn>.RedirectUnityPlayer("CreateFileW", HookCreateFileWDelegatePtr);
-        writeFileNativeHook = PltNativeHook<WriteFileFn>.RedirectUnityPlayer("WriteFile", HookWriteFileDelegatePtr);
-
-        createFileNativeHook?.Attach();
-        writeFileNativeHook?.Attach();
+        PltHook.InstallHooks(
+        [
+            ("CreateFileW", Marshal.GetFunctionPointerForDelegate(HookCreateFileWDelegate)),
+            ("WriteFile", Marshal.GetFunctionPointerForDelegate(HookWriteFileDelegate))
+        ]);
     }
 
     private static IntPtr HookCreateFileW(string lpfilename, uint dwdesiredaccess, int dwsharemode, IntPtr lpsecurityattributes, int dwcreationdisposition, int dwflagsandattributes, nint htemplatefile)
     {
         if (_foundPlayerLogsHandle)
         {
-            return createFileNativeHook?.Trampoline(lpfilename, dwdesiredaccess, dwsharemode, lpsecurityattributes,
-                dwcreationdisposition, dwflagsandattributes, htemplatefile) ?? 0;
+            return WindowsNative.CreateFileW(lpfilename, dwdesiredaccess, dwsharemode, lpsecurityattributes,
+                dwcreationdisposition, dwflagsandattributes, htemplatefile);
         }
 
         if (lpfilename.EndsWith("Player.log") || lpfilename.EndsWith("output_log.txt"))
         {
-            _logHandle = createFileNativeHook?.Trampoline(lpfilename, dwdesiredaccess, dwsharemode, lpsecurityattributes,
-                dwcreationdisposition, dwflagsandattributes, htemplatefile) ?? 0;
+            _logHandle = WindowsNative.CreateFileW(lpfilename, dwdesiredaccess, dwsharemode, lpsecurityattributes,
+                dwcreationdisposition, dwflagsandattributes, htemplatefile);
             MelonDebug.Log($"Found player logs file with handle 0x{_logHandle:X} at: {lpfilename}");
 
             _foundPlayerLogsHandle = true;
             return _logHandle;
         }
-        return createFileNativeHook?.Trampoline(lpfilename, dwdesiredaccess, dwsharemode, lpsecurityattributes,
-            dwcreationdisposition, dwflagsandattributes, htemplatefile) ?? 0;
+        return WindowsNative.CreateFileW(lpfilename, dwdesiredaccess, dwsharemode, lpsecurityattributes,
+            dwcreationdisposition, dwflagsandattributes, htemplatefile);
     }
 
     private static int HookWriteFile(nint hFile, nint lpBuffer, int nNumberOfBytesToWrite,
@@ -82,7 +79,7 @@ internal static class WindowsPlayerLogsMirroring
             if (writeToStandardHandles)
                 return 1;
         }
-        return writeFileNativeHook?.Trampoline(hFile, lpBuffer, nNumberOfBytesToWrite, ref lpNumberOfBytesWritten, lpOverlapped) ?? 0;
+        return WindowsNative.WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite, ref lpNumberOfBytesWritten, lpOverlapped);
     }
 }
 #endif

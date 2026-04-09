@@ -10,6 +10,12 @@ on:
       VERSION:
         required: true
         type: string
+      PACKAGE_VERSION:
+        required: true
+        type: string
+      PACKAGE_NAME:
+        required: true
+        type: string
 
 jobs:
   upload_github:
@@ -18,13 +24,17 @@ jobs:
     with:
       TAG: ${{ inputs.TAG }}
       RELEASE_NAME: ${{ inputs.RELEASE_NAME }}
+    secrets: inherit
   
   upload_nuget:
     name: NuGet
     uses: ./.github/workflows/upload_nuget.yml
+    secrets: inherit
     
-  #upload_thunderstore:
-  #  name: Thunderstore
-  #  uses: ./.github/workflows/upload_thunderstore.yml
-  #  with:
-  #    VERSION: ${{ inputs.VERSION }}
+  upload_thunderstore:
+    name: Thunderstore
+    uses: ./.github/workflows/upload_thunderstore.yml
+    with:
+      VERSION: ${{ inputs.PACKAGE_VERSION }}
+      PACKAGE_NAME: ${{ inputs.PACKAGE_NAME }}
+    secrets: inherit

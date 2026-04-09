@@ -206,6 +206,8 @@ namespace MelonLoader.Support
             
             private Delegate _target;
             private IntPtr _targetPtr;
+            
+            private GCHandle _pin;
 
             /// <summary>
             /// Original method
@@ -219,6 +221,7 @@ namespace MelonLoader.Support
             {
                 _detourFrom = detourFrom;
                 _target = target;
+                _pin = GCHandle.Alloc(_target);
 
                 // We have to apply immediately because we're gonna be asked for a trampoline right away
                 Apply();
@@ -229,10 +232,12 @@ namespace MelonLoader.Support
                 if (_targetPtr != IntPtr.Zero)
                     return;
 
-                _targetPtr = Marshal.GetFunctionPointerForDelegate(_target);
+                //_targetPtr = Marshal.GetFunctionPointerForDelegate(_target);
+                _targetPtr = CoreClrDelegateFixer.GetFixedPointerForDelegate(_target);
                 
                 var addr = _detourFrom;
                 nint addrPtr = (nint)(&addr);
+                
                 BootstrapInterop.NativeHookAttachDirect(addrPtr, _targetPtr);
                 NativeStackWalk.RegisterHookAddr((ulong)addrPtr, $"Il2CppInterop detour of 0x{addrPtr:X} -> 0x{_targetPtr:X}");
 
@@ -247,11 +252,15 @@ namespace MelonLoader.Support
                 var addr = _detourFrom;
                 nint addrPtr = (nint)(&addr);
 
-                BootstrapInterop.NativeHookDetach(addrPtr, _targetPtr);
+                BootstrapInterop.NativeHookDetachDirect(addrPtr, _targetPtr);
                 NativeStackWalk.UnregisterHookAddr((ulong)addrPtr);
+                CoreClrDelegateFixer.Unpin(_target.Method);
 
                 _targetPtr = IntPtr.Zero;
                 _originalPtr = IntPtr.Zero;
+                
+                if (_pin.IsAllocated)
+                    _pin.Free();
             }
 
             public T GenerateTrampoline<T>()

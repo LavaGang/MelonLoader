@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using MelonUnityEngine;
 
@@ -6,6 +7,13 @@ namespace MelonLoader.MelonStartScreen.UI
 {
     internal static class UI_Utils
     {
+        private static readonly Random RandomGenerator = new Random();
+
+        private static int RandomInt(int min, int max)
+        {
+            lock (RandomGenerator)
+                return RandomGenerator.Next(min, max);
+        }
         internal static Texture2D CreateColorTexture(Color color)
         {
             Texture2D texture = new Texture2D(2, 2);
@@ -56,7 +64,7 @@ namespace MelonLoader.MelonStartScreen.UI
             string[] files = Directory.GetDirectories(folderPath);
             if (files.Length <= 0)
                 return null;
-            return files[MelonUtils.RandomInt(0, files.Length)];
+            return files[RandomInt(0, files.Length)];
         }
 
         internal static void AnchorToScreen(UI_Anchor anchor, int x, int y, out int out_x, out int out_y)

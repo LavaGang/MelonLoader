@@ -66,9 +66,12 @@ namespace MelonLoader
                     ? type.GetInterfaces()
                     : att.Interfaces;
 
+                bool shouldLogSuccess = MelonDebug.IsEnabled()
+                    || att.LogSuccess;
+
                 InteropSupport.RegisterTypeInIl2CppDomainWithInterfaces(type,
-                    interfaceArr, 
-                    att.LogSuccess);
+                    interfaceArr,
+                    shouldLogSuccess);
             }
         }
 

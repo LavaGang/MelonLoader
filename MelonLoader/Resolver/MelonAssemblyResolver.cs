@@ -29,7 +29,8 @@ public class MelonAssemblyResolver
             "Mono.Cecil.dll",
             "MonoMod.exe",
             "MonoMod.Utils.dll",
-            "MonoMod.RuntimeDetour.dll");
+            "MonoMod.RuntimeDetour.dll",
+            "0Harmony.dll");
 
         MelonDebug.Msg("[MelonAssemblyResolver] Setup Successful!");
     }

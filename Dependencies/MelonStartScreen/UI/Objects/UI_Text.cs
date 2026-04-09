@@ -71,8 +71,8 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
             settings.lineSpacing = config.LineSpacing;
 
             string displayText = text;
-            displayText = displayText.Replace("<loaderName/>", (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON) ? "LemonLoader" : "MelonLoader");
-            displayText = displayText.Replace("<loaderVersion/>", BuildInfo.Version);
+            displayText = displayText.Replace("<loaderName/>", (LoaderConfig.Current.Loader.Theme == LoaderConfig.CoreConfig.LoaderTheme.Lemon) ? "LemonLoader" : "MelonLoader");
+            displayText = displayText.Replace("<loaderVersion/>", Properties.BuildInfo.Version);
             displayText = displayText.Replace("LemonLoader", "<color=#FFCC4D>LemonLoader</color>");
             displayText = displayText.Replace("MelonLoader", "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>");
             displayText = displayText.Replace("<loaderNameHalloween/>", "<color=#7C2CBF>Melon</color><color=#FF6F00>Loader</color>");

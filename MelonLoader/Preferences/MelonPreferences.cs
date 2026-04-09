@@ -104,10 +104,7 @@ namespace MelonLoader
                         category.LoadDefaults();
                         continue;
                     }
-
                     category.Load(table);
-
-                    OnPreferencesLoaded.Invoke(currentFile.FilePath);
                 }
             }
 
@@ -161,9 +158,7 @@ namespace MelonLoader
                     {
                         MelonLogger.Error($"Error while Saving Preferences to {file.FilePath}: {ex}");
                         file.WasError = true;
-                        continue;
                     }
-                    OnPreferencesSaved.Invoke(file.FilePath);
                 }
             }
 
@@ -354,8 +349,6 @@ namespace MelonLoader
 
             if (printmsg)
                 MelonLogger.MsgDirect($"MelonPreferences Loaded from {file.FilePath}");
-
-            OnPreferencesLoaded.Invoke(file.FilePath);
         }
 
         public static void RemoveCategoryFromFile(string filePath, string categoryName)

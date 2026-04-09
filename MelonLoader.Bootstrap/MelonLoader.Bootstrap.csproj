@@ -8,7 +8,6 @@
         <SelfContained>true</SelfContained>
         <PublishDir>$(MLOutDir)</PublishDir>
         <DefineConstants>$(DefineConstants);BOOTSTRAP</DefineConstants>
-
         <AcceptVSBuildToolsLicense>true</AcceptVSBuildToolsLicense>
         <XwinArches Condition="'$(XWinArches)' == ''">x86,x86_64</XwinArches>
     </PropertyGroup>
@@ -17,19 +16,45 @@
         <ExportsFile>linuxexports.def</ExportsFile>
         <LinkStandardCPlusPlusLibrary>true</LinkStandardCPlusPlusLibrary>
     </PropertyGroup>
-	
+
     <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'">
         <ExportsFile>osxexports.def</ExportsFile>
         <OSXEntryPath>Deps/$(RuntimeIdentifier)/osxentry.o</OSXEntryPath>
         <LinkStandardCPlusPlusLibrary>true</LinkStandardCPlusPlusLibrary>
     </PropertyGroup>
-    
+
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
+        <OSXEntryArch>x86_64</OSXEntryArch>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">
+        <OSXEntryArch>arm64</OSXEntryArch>
+    </PropertyGroup>
+
     <Target Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'" Name="BuildOSXEntry" BeforeTargets="Build">
-        <Exec Command="g++ -c -O2 -fPIC OSXEntry/osxentry.cpp -o $(OSXEntryPath)" />
+        <!-- -arch is required because g++ on Apple Silicon defaults to arm64, producing
+             an object file that ld64 silently ignores when linking an x86_64 dylib. -->
+        <Exec Command="g++ -arch $(OSXEntryArch) -c -O2 -fPIC OSXEntry/osxentry.cpp -o $(OSXEntryPath)" />
     </Target>
 
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'">
         <LinkerArg Include="/DEF:Exports.def" />
+    </ItemGroup>
+
+    <!-- Force ld64 to keep _SetRlimitHook and, by extension, the __DATA,__interpose struct
+         that references it. Without this, dead-stripping removes the interpose entry that
+         triggers MelonLoader on macOS, because nothing in the managed code references it. -->
+    <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'">
+        <LinkerArg Include="-Wl,-u,_SetRlimitHook" />
+    </ItemGroup>
+
+    <!-- Ship the launch wrapper alongside the dylib so end users have a ready-made
+         Steam launch option that survives macOS LaunchServices stripping DYLD_*.
+         Source file is committed with +x in the index; CopyToOutputDirectory and
+         Publish preserve Unix permissions on macOS so no chmod is needed. -->
+    <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'">
+        <None Include="OSXEntry/melonloader-launch.sh"
+              CopyToOutputDirectory="PreserveNewest"
+              Link="melonloader-launch.sh" />
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
@@ -65,13 +90,12 @@
 
     <ItemGroup>
         <Compile Include="$(SolutionDir)/MelonLoader/LoaderConfig.cs" />
-        <Compile Include="..\MelonLoader\NativeUtils\NativeHooks.cs" Link="NativeHooks.cs" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'">
         <NativeLibrary Include="$(OSXEntryPath)" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <NativeLibrary Include="$(AppHostPath)" />
         <NativeLibrary Include="Deps/$(RuntimeIdentifier)/$(LibPrefix)dobby$(LibExt)" />
@@ -86,9 +110,13 @@
         <WriteLinesToFile File="$(ExportsFile)" Lines="$([System.IO.File]::ReadAllText($(ExportsFile)).Replace('V1.0',''))" Overwrite="true" />
     </Target>
 
-    <Target Name="PublishAsBuildAfterTarget" AfterTargets="Build" DependsOnTargets="Publish" />
+    <Target Name="PublishAfterBuild" AfterTargets="Build" Condition="'$(SkipPublishAfterBuild)' != 'true'">
+        <MSBuild Projects="$(MSBuildProjectFile)"
+             Targets="Publish"
+             Properties="Configuration=$(Configuration);PublishDir=$(PublishDir);SkipPublishAfterBuild=true" />
+    </Target>
 
     <Target Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'" Name="RenameBinary" AfterTargets="Build">
-        <Move SourceFiles="$(MLOutDir)/$(TargetName).dll" DestinationFiles="$(MLOutDir)/version.dll" />
+        <Move SourceFiles="$(PublishDir)$(TargetName).dll" DestinationFiles="$(MLOutDir)/version.dll" Condition="Exists('$(PublishDir)$(TargetName).dll')" />
     </Target>
 </Project>

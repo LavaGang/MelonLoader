@@ -81,7 +81,7 @@ internal static partial class Dotnet
 
         if (status != 0)
         {
-            context = 0;
+            context = status;
             return false;
         }
 

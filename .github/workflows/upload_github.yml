@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v6
       
       - name: Download Windows x86 Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: MelonLoader.Windows.x86.CI.Release
           path: ./compiled_release/windows_x86
@@ -26,7 +26,7 @@ jobs:
           zip -r ../MelonLoader.x86.zip ./
       
       - name: Download Windows x64 Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: MelonLoader.Windows.x64.CI.Release
           path: ./compiled_release/windows_x64
@@ -36,7 +36,7 @@ jobs:
           zip -r ../MelonLoader.x64.zip ./
         
       - name: Download Linux x64 Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: MelonLoader.Linux.x64.CI.Release
           path: ./compiled_release/linux_x64
@@ -46,7 +46,7 @@ jobs:
           zip -r ../MelonLoader.Linux.x64.zip  ./
         
       - name: Download MacOS x64 Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: MelonLoader.macOS.x64.CI.Release
           path: ./compiled_release/macos_x64

@@ -37,27 +37,25 @@ public class LoaderConfig
         if (Directory.Exists(customBaseDir))
             baseDir = Path.GetFullPath(customBaseDir);
 
-        var path = Path.Combine(baseDir, "UserData", "Loader.cfg");
+        var userDataFolder = Path.Combine(baseDir, "UserData");
+        if (!Directory.Exists(userDataFolder))
+            Directory.CreateDirectory(userDataFolder);
 
+        var path = Path.Combine(userDataFolder, "Loader.cfg");
         if (File.Exists(path))
         {
             try
             {
                 var doc = TomlParser.ParseFile(path);
-
-                Current = TomletMain.To<LoaderConfig>(doc) ?? new();
+                Current = TomletMain.To<LoaderConfig>(doc) ?? new LoaderConfig();
+                SaveFile(path);
             }
-            catch { }
+            catch
+            {
+            }
         }
-
-        var doc2 = TomletMain.TomlStringFrom(Current);
-
-        try
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            File.WriteAllText(path, doc2);
-        }
-        catch { }
+        else
+            TrySaveFile(path);
 
         CoreConfig.Initialize(baseDir);
         ConsoleConfig.Initialize();
@@ -65,6 +63,24 @@ public class LoaderConfig
         MonoDebugServerConfig.Initialize();
         UnityEngineConfig.Initialize();
     }
+
+    private static void TrySaveFile(string path)
+    {
+        try
+        {
+            SaveFile(path);
+        }
+        catch
+        {
+        }
+    }
+    
+    private static void SaveFile(string path)
+    {
+        var doc2 = TomletMain.TomlStringFrom(Current);
+        File.WriteAllText(path, doc2);
+    }
+    
 #endif
 
     public static LoaderConfig Current { get; internal set; } = new();
@@ -93,7 +109,9 @@ public class LoaderConfig
         {
             Current.Loader.BaseDirectory = baseDir;
 
+#if !DEBUG
             if (ArgParser.IsDefined("melonloader.debug"))
+#endif
                 Current.Loader.DebugMode = true;
 
             if (ArgParser.IsDefined("melonloader.captureplayerlogs"))
@@ -129,7 +147,7 @@ public class LoaderConfig
         }
 #endif
 
-        [TomlNonSerialized]
+            [TomlNonSerialized]
         public string BaseDirectory { get; internal set; } = null!;
 
         // Technically, this will always return false, but it's still a config ¯\_(ツ)_/¯
@@ -140,9 +158,6 @@ public class LoaderConfig
         [TomlProperty("debug_mode")]
         [TomlPrecedingComment("Equivalent to the '--melonloader.debug' launch option")]
         public bool DebugMode { get; internal set; }
-#if DEBUG
-            = true;
-#endif
 
         [TomlProperty("capture_player_logs")]
         [TomlPrecedingComment("Capture all Unity player logs into MelonLoader's logs even if the game disabled them. NOTE: Depending on the game or Unity version, these logs can be overly verbose. Equivalent to the '--melonloader.captureplayerlogs' launch option")]

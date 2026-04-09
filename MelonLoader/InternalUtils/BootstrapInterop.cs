@@ -14,7 +14,13 @@ internal static unsafe class BootstrapInterop
 
     internal static void SetDefaultConsoleTitleWithGameName(string gameName, string gameVersion = null)
     {
+        if (LoaderConfig.Current.Console.DontSetTitle)
+            return;
+
         var versionStr = $"{Core.GetVersionString()} - {gameName} {gameVersion ?? ""}";
+
+        if (LoaderConfig.Current.Loader.DebugMode)
+            versionStr = "[D] " + versionStr;
 
         MelonUtils.SetConsoleTitle(versionStr);
     }
@@ -47,8 +53,10 @@ internal static unsafe class BootstrapInterop
     public static void NativeHookAttach(nint target, nint detour)
     {
 #if NET6_0_OR_GREATER
-        //SanityCheckDetour is able to wrap and fix the bad method in a delegate where possible, so we pass the detour by ref.
-        if (!MelonUtils.IsUnderWineOrSteamProton() && !CoreClrDelegateFixer.SanityCheckDetour(ref detour))
+        // SanityCheckDetour is able to wrap and fix the bad method in a delegate where possible, so we pass the detour by ref.
+        // Herp: Wine/Proton are missing the PssCaptureSnapshot export from kernel32.dll so we skip CoreClrDelegateFixer.SanityCheckDetour under that runtime
+        if (!MelonUtils.IsUnderWineOrSteamProton()
+            && !CoreClrDelegateFixer.SanityCheckDetour(ref detour))
             return;
 #endif
 
@@ -66,11 +74,16 @@ internal static unsafe class BootstrapInterop
 
     public static unsafe void NativeHookDetach(nint target, nint detour)
     {
-        Library.NativeHookDetach((nint*)target, detour);
+        NativeHookDetachDirect(target, detour);
 
 #if NET6_0_OR_GREATER
         NativeStackWalk.UnregisterHookAddr((ulong)target);
 #endif
+    }
+    
+    internal static unsafe void NativeHookDetachDirect(nint target, nint detour)
+    {
+        Library.NativeHookDetach((nint*)target, detour);
     }
 
     // Herp: This unfortunately needs to return a string with the error message

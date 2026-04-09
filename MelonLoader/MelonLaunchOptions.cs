@@ -50,14 +50,14 @@ namespace MelonLoader
                 else
                 {
                     // Unknown Command, Add it to Dictionary
-                    ExternalArguments.Add(noPrefixCmd, null);
+                    ExternalArguments[noPrefixCmd] = null;
                     continue;
                 }
 
                 // Parse Argumentless Commands
                 if (WithoutArg.TryGetValue(noPrefixCmd, out Action withoutArgFunc))
                 {
-                    InternalArguments.Add(noPrefixCmd, null);
+                    InternalArguments[noPrefixCmd] = null;
                     withoutArgFunc();
                     continue;
                 }
@@ -78,20 +78,20 @@ namespace MelonLoader
                     || cmdArg.StartsWith("-"))
                 {
                     // Unknown Command, Add it to Dictionary
-                    ExternalArguments.Add(noPrefixCmd, null);
+                    ExternalArguments[noPrefixCmd] = null;
                     continue;
                 }
 
                 // Parse Argument Commands
                 if (WithArg.TryGetValue(noPrefixCmd, out Action<string> withArgFunc))
                 {
-                    InternalArguments.Add(noPrefixCmd, cmdArg);
+                    InternalArguments[noPrefixCmd] = cmdArg;
                     withArgFunc(cmdArg);
                     continue;
                 }
 
                 // Unknown Command with Argument, Add it to Dictionary
-                ExternalArguments.Add(noPrefixCmd, cmdArg);
+                ExternalArguments[noPrefixCmd] = cmdArg;
             }
         }
 

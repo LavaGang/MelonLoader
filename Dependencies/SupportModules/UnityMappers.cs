@@ -14,6 +14,11 @@ namespace MelonLoader.Support.Preferences
             TomletMain.RegisterMapper(WriteVector3, ReadVector3);
             TomletMain.RegisterMapper(WriteVector4, ReadVector4);
             TomletMain.RegisterMapper(WriteQuaternion, ReadQuaternion);
+            TomletMain.RegisterMapper(WriteRect, ReadRect);
+            
+#if SM_Il2Cpp
+            TomletMain.RegisterMapper(WriteRectInt, ReadRectInt);
+#endif
         }
 
         private static Color ReadColor(TomlValue value)
@@ -99,5 +104,40 @@ namespace MelonLoader.Support.Preferences
             float[] floats = new[] { value.x, value.y, value.z, value.w };
             return MelonPreferences.Mapper.WriteArray(floats);
         }
+        
+        private static Rect ReadRect(TomlValue value)
+        {
+            float[] floats = MelonPreferences.Mapper.ReadArray<float>(value);
+            if (floats == null || floats.Length != 4)
+                return default;
+            return new Rect(floats[0], floats[1], floats[2], floats[3]);
+        }
+
+        private static TomlValue WriteRect(Rect value)
+        {
+            float[] floats = new[] { value.x, value.y, value.width, value.height };
+            return MelonPreferences.Mapper.WriteArray(floats);
+        }
+        
+#if SM_Il2Cpp
+        private static RectInt ReadRectInt(TomlValue value)
+        {
+            int[] ints = MelonPreferences.Mapper.ReadArray<int>(value);
+            if (ints == null || ints.Length != 4)
+                return default;
+            RectInt result = new RectInt();
+            result.x = ints[0];
+            result.y = ints[1];
+            result.width = ints[2];
+            result.height = ints[3];
+            return result;
+        }
+
+        private static TomlValue WriteRectInt(RectInt value)
+        {
+            int[] ints = new[] { value.x, value.y, value.width, value.height };
+            return MelonPreferences.Mapper.WriteArray(ints);
+        }
+#endif
     }
 }

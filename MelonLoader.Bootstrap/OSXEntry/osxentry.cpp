@@ -3,6 +3,7 @@
 extern "C"
 {
     void Init();
+    int SetRlimitHook(int resource, rlimit* rlp);
 }
 
 #define DYLD_INTERPOSE(_replacement,_replacee) \

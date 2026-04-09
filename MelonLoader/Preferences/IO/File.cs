@@ -73,25 +73,34 @@ namespace MelonLoader.Preferences.IO
                 else
                     InsertIntoDocument(category, parts[0], TomletMain.ValueFrom(parts[1].Replace("\r", "")));
             }
+            
+            MelonPreferences.OnPreferencesLoaded.Invoke(FilePath);
         }
 
         internal void Load()
         {
-            if (_waserror)
+            if (_waserror
+                || !System.IO.File.Exists(FilePath))
                 return;
-            if (!System.IO.File.Exists(FilePath))
-                return;
+            
             document = TomlParser.ParseFile(FilePath);
+            
+            MelonPreferences.OnPreferencesLoaded.Invoke(FilePath);
         }
 
         internal void Save()
         {
             if (_waserror || !ShouldSave)
                 return;
+            
             IsSaving = true;
+            
             System.IO.File.WriteAllText(FilePath, document.SerializedValue);
+            
             if ((LegacyFilePath != null) && System.IO.File.Exists(LegacyFilePath))
                 System.IO.File.Delete(LegacyFilePath);
+
+            MelonPreferences.OnPreferencesSaved.Invoke(FilePath);
         }
         
         private static string QuoteKey(string key) =>

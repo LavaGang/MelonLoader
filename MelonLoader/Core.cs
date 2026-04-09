@@ -118,7 +118,7 @@ namespace MelonLoader
 #endif
 
             Fixes.ForcedCultureInfo.Install();
-            Fixes.Harmony.InstancePatchFix.Install();
+            Fixes.MonoMod.InstancePatchFix.Install();
 
 #if WINDOWS
             Fixes.ProcessFix.Install();
@@ -132,14 +132,13 @@ namespace MelonLoader
             Fixes.Il2CppInterop.Il2CppInteropExceptionLog.Install();
 
 #if OSX
-            Fixes.Il2CppInterop.Il2CppInteropMacFix.Install();
             Fixes.Dotnet.NativeLibraryFix.Install();
 #endif
 
             Fixes.Il2CppInterop.Il2CppInteropFixes.Install();
+            //Fixes.Il2CppInterop.Il2CppInteropIl2CppObjectBaseFix.Install();
+            Fixes.Il2CppInterop.Il2CppInteropInjectorHelpersSetupFix.Install();
             Fixes.Il2CppInterop.Il2CppInteropGetFieldDefaultValueFix.Install();
-            Fixes.Il2CppInterop.Il2CppInteropGenericMethodGetMethodFix.Install();
-
             Fixes.Il2CppInterop.Il2CppICallInjector.Install();
 
 #endif
@@ -190,7 +189,7 @@ namespace MelonLoader
 
             if (!_success)
                 return false;
-
+                
             MelonEvents.OnPreModsLoaded.Invoke();
             MelonFolderHandler.LoadMelons(MelonFolderHandler.ScanType.Mods);
 
@@ -198,6 +197,7 @@ namespace MelonLoader
             if (!SupportModule.Setup())
                 return false;
 
+            MelonDebug.Msg("Invoking AddUnityDebugLog");
             AddUnityDebugLog();
 
 #if NET6_0_OR_GREATER
@@ -205,7 +205,10 @@ namespace MelonLoader
             RegisterTypeInIl2CppWithInterfaces.SetReady();
 #endif
 
+            MelonDebug.Msg("Invoking MelonHarmonyInit");
             MelonEvents.MelonHarmonyInit.Invoke();
+
+            MelonDebug.Msg("Invoking OnApplicationStart");
             MelonEvents.OnApplicationStart.Invoke();
 
             return true;

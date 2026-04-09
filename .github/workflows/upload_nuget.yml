@@ -14,10 +14,11 @@ jobs:
           dotnet-version: 9.0.x
           
       - name: Download NuGet Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: MelonLoader.NuGet
           path: ./compiled_release/
       
       - name: Publish NuGet Package
+        continue-on-error: true
         run: dotnet nuget push -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} ./compiled_release/*.nupkg

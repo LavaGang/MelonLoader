@@ -16,6 +16,7 @@
     <ItemGroup>
         <ProjectReference Include="$(SolutionDir)\MelonLoader\MelonLoader.csproj" Private="false" />
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" ExcludeAssets="Runtime" />
+		<PackageReference Include="AssetRipper.Primitives" Version="3.2.0" ExcludeAssets="Runtime" />
         <PackageReference Include="Samboy063.Tomlet" Version="$(TomletVersion)">
             <ExcludeAssets>Runtime</ExcludeAssets>
         </PackageReference>

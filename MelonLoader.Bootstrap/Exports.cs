@@ -193,12 +193,12 @@ internal static class Exports
 #endif
 #endif
 
+    // Herp: This is dirty Managed->Native->Managed pointer manipulation but trying to return a pointer causes crashes
     [UnmanagedCallersOnly(EntryPoint = "NativeHookAttach")]
     public static unsafe void NativeHookAttach(nint* target, nint detour)
     {
         *target = Dobby.HookAttach(*target, detour);
     }
-
     [UnmanagedCallersOnly(EntryPoint = "NativeHookDetach")]
     public static unsafe void NativeHookDetach(nint* target, nint detour)
     {

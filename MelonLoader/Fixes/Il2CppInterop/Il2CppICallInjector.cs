@@ -9,6 +9,10 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Il2CppInterop.HarmonySupport;
 using HarmonyLib;
+using Mono.Cecil;
+using MonoMod.Cil;
+using MethodAttributes = System.Reflection.MethodAttributes;
+using MethodImplAttributes = System.Reflection.MethodImplAttributes;
 
 #pragma warning disable 0649
 
@@ -201,13 +205,48 @@ namespace MelonLoader.Fixes.Il2CppInterop
                         || methodImpl.HasFlag(MethodImplAttributes.Unmanaged))
                         continue;
 
-                    // Check if Method has no Body or just throws NotImplementedException
-                    if (!method.HasMethodBody()
-                        || method.IsNotImplemented())
+                    // Check if Method has no Body
+                    if (!method.HasMethodBody())
                         continue;
+                    
+                    DynamicMethodDefinition dynmethod = method.ToNewDynamicMethodDefinition();
+                    ILContext ilcontext = new(dynmethod.Definition);
+                    ILCursor ilcursor = new(ilcontext);
+
+                    // Ignore methods that are just shims for Exception throws
+                    if ((ilcursor.Instrs.Count == 2)
+                        && (ilcursor.Instrs[1].OpCode.Code == Mono.Cecil.Cil.Code.Throw))
+                    {
+                        ilcontext.Dispose();
+                        dynmethod.Dispose();
+                        continue;
+                    }
+
+                    // Temporarily ignore methods that use GetPinnableReference
+                    // GetPinnableReference throws MissingMethodException
+                    bool IsValid = true;
+                    foreach (var inst in ilcursor.Instrs)
+                    {
+                        if (((inst.OpCode.Code == Mono.Cecil.Cil.Code.Call) ||
+                             (inst.OpCode.Code == Mono.Cecil.Cil.Code.Callvirt))
+                            && inst.Operand is MethodReference methodRef
+                            && methodRef.Name.Contains("GetPinnableReference"))
+                        {
+                            IsValid = false;
+                            break;
+                        }
+                    }
+                    if (!IsValid)
+                    {
+                        ilcontext.Dispose();
+                        dynmethod.Dispose();
+                        continue;
+                    }
 
                     // Found Shim
                     targetMethod = method;
+                    ilcontext.Dispose();
+                    dynmethod.Dispose();
                     break;
                 }
             }

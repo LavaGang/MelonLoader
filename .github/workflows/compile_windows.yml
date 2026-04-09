@@ -27,7 +27,7 @@ jobs:
 
       - name: Upload Debug for win-x64
         if: inputs.SKIP_DEBUG != true
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: MelonLoader.Windows.x64.CI.Debug
           path: Output/Debug/win-x64
@@ -36,7 +36,7 @@ jobs:
         run: dotnet build --no-restore -c Release -p:Platform="x64" -p:Version="${{ inputs.VERSION }}"
 
       - name: Upload Release for win-x64
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: MelonLoader.Windows.x64.CI.Release
           path: Output/Release/win-x64
@@ -47,7 +47,7 @@ jobs:
 
       - name: Upload Debug for win-x86
         if: inputs.SKIP_DEBUG != true
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: MelonLoader.Windows.x86.CI.Debug
           path: Output/Debug/win-x86
@@ -56,7 +56,7 @@ jobs:
         run: dotnet build --no-restore -c Release -p:Platform="x86" -p:Version="${{ inputs.VERSION }}"
 
       - name: Upload Release for win-x86
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: MelonLoader.Windows.x86.CI.Release
           path: Output/Release/win-x86

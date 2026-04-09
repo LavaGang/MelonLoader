@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <ProjectReference Include="$(SolutionDir)\MelonLoader\MelonLoader.csproj" Private="false" />
+        <PackageReference Include="AssetRipper.Primitives" Version="3.2.0" />
         <PackageReference Include="Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" Private="false">
           <ExcludeAssets>runtime</ExcludeAssets>
         </PackageReference>
