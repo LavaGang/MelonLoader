@@ -109,14 +109,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             if (!cpp2il.Execute())
             {
                 cpp2il.Cleanup();
-                return 1;
+                return TryContinueWithExistingAssemblies();
             }
 
             if (!il2cppinterop.Execute())
             {
                 cpp2il.Cleanup();
                 il2cppinterop.Cleanup();
-                return 1;
+                return TryContinueWithExistingAssemblies();
             }
 
             OldFiles_Cleanup();
@@ -130,6 +130,20 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Config.Values.GameAssemblyHash = CurrentGameAssemblyHash;
             Config.Save();
 
+            return 0;
+        }
+
+        private static int TryContinueWithExistingAssemblies()
+        {
+            if (LoaderConfig.Current.UnityEngine.ForceRegeneration)
+                return 1;
+
+            if (!Directory.Exists(MelonEnvironment.Il2CppAssembliesDirectory)
+                || Directory.GetFiles(MelonEnvironment.Il2CppAssembliesDirectory, "*.dll").Length <= 0)
+                return 1;
+
+            Logger.Warning("Assembly Generation failed, but existing Il2Cpp assemblies were found.");
+            Logger.Warning("Continuing with the existing assemblies. Mods may be incompatible until generation succeeds.");
             return 0;
         }
 
