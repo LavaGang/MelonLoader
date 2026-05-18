@@ -77,8 +77,13 @@
         </EmbeddedResource>
     </ItemGroup>
 
+    <PropertyGroup>
+        <AppHostPath>$(NuGetPackageRoot)runtime.$(RuntimeIdentifier).microsoft.netcore.dotnetapphost/$(AppHostVersion)/runtimes/$(RuntimeIdentifier)/native/libnethost$(LibExt)</AppHostPath>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="PublishAotCrossXWin" Version="1.2.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.NETCore.DotNetAppHost" Version="$(AppHostVersion)" PrivateAssets="All" />
         <PackageReference Include="Pastel" Version="$(PastelVersion)" />
         <PackageReference Include="Samboy063.Tomlet" Version="$(TomletVersion)" />
     </ItemGroup>
@@ -92,6 +97,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <NativeLibrary Include="$(AppHostPath)" />
         <NativeLibrary Include="Deps/$(RuntimeIdentifier)/$(LibPrefix)dobby$(LibExt)" />
         <NativeLibrary Include="Deps/$(RuntimeIdentifier)/$(LibPrefix)plthook$(LibExt)" />
     </ItemGroup>
