@@ -98,13 +98,9 @@
 
     <!-- Work around for https://github.com/dotnet/runtime/pull/109699 -->
     <Target Condition="$(IsWindows) == true" Name="RemoveWindowsDllMainStub" AfterTargets="SetupOSSpecificProps">
-        <PropertyGroup>
-            <_DllMainStub>$(IlcSdkPath)dllmain$(ObjectSuffix)</_DllMainStub>
-        </PropertyGroup>
-
         <ItemGroup>
-            <NativeLibrary Remove="$(_DllMainStub)" />
-            <LinkerArg Remove="&quot;$(_DllMainStub)&quot;" />
+            <NativeLibrary Remove="$(IlcSdkPath)dllmain$(ObjectSuffix)" />
+            <LinkerArg Remove="&quot;$(IlcSdkPath)dllmain$(ObjectSuffix)&quot;" />
         </ItemGroup>
     </Target>
 
