@@ -99,7 +99,6 @@
     <!-- Work around for https://github.com/dotnet/runtime/pull/109699 -->
     <Target Condition="$(IsWindows) == true" Name="RemoveWindowsDllMainStub" AfterTargets="SetupOSSpecificProps">
         <ItemGroup>
-            <NativeLibrary Remove="$(IlcSdkPath)dllmain$(ObjectSuffix)" />
             <LinkerArg Remove="&quot;$(IlcSdkPath)dllmain$(ObjectSuffix)&quot;" />
         </ItemGroup>
     </Target>
