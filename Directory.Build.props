@@ -6,7 +6,7 @@
         <Version>0.8.0</Version>
         <AppHostVersion>10.0.8</AppHostVersion>
 		
-        <BootstrapTarget>net10</BootstrapTarget>
+        <BootstrapTarget>net10.0</BootstrapTarget>
 		
         <DotNetTarget>net6</DotNetTarget>
 		
