@@ -97,7 +97,7 @@
     </ItemGroup>
 
     <!-- Work around for https://github.com/dotnet/runtime/pull/109699 -->
-    <Target Condition="$(IsWindows) == true" Name="RemoveWindowsDllMainStub" AfterTargets="SetupOSSpecificProps">
+    <Target Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'" Name="RemoveWindowsDllMainStub" AfterTargets="SetupOSSpecificProps">
         <ItemGroup>
             <LinkerArg Remove="&quot;$(IlcSdkPath)dllmain$(ObjectSuffix)&quot;" />
         </ItemGroup>
