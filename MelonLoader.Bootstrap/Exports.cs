@@ -103,15 +103,13 @@ internal static class Exports
         Environment.SetEnvironmentVariable(LdPreloadEnvName, newLdPreload);
     }
 #endif
-    
-#if WINDOWS
-    [UnmanagedCallersOnly(EntryPoint = "DllMain")]
-    [RequiresDynamicCode("Calls InitConfig")]
-    public static bool DllMain(nint hModule, uint ulReasonForCall, nint lpReserved)
-    {
-        if (ulReasonForCall != 1)
-            return true;
 
+#if WINDOWS
+    // https://github.com/Xpl0itR/NativeDllMain
+    [UnmanagedCallersOnly(EntryPoint = "DllProcessAttach")]
+    [RequiresDynamicCode("Calls InitConfig")]
+    public static bool WindowsEntryPoint(nint hModule)
+    {
         if (!Initialize(hModule))
             return true;
 

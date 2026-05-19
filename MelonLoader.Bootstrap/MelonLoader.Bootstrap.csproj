@@ -12,6 +12,10 @@
         <XwinArches Condition="'$(XWinArches)' == ''">x86,x86_64</XwinArches>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'">
+        <DllMainUseQueueUserApc>true</DllMainUseQueueUserApc>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
         <ExportsFile>linuxexports.def</ExportsFile>
         <LinkStandardCPlusPlusLibrary>true</LinkStandardCPlusPlusLibrary>
@@ -84,6 +88,7 @@
     <ItemGroup>
         <PackageReference Include="PublishAotCrossXWin" Version="1.2.0" PrivateAssets="all" />
         <PackageReference Include="Microsoft.NETCore.DotNetAppHost" Version="$(AppHostVersion)" PrivateAssets="All" />
+        <PackageReference Include="NativeDllMain" Version="1.0.0" PrivateAssets="all" />
         <PackageReference Include="Pastel" Version="$(PastelVersion)" />
         <PackageReference Include="Samboy063.Tomlet" Version="$(TomletVersion)" />
     </ItemGroup>
@@ -101,14 +106,6 @@
         <NativeLibrary Include="Deps/$(RuntimeIdentifier)/$(LibPrefix)dobby$(LibExt)" />
         <NativeLibrary Include="Deps/$(RuntimeIdentifier)/$(LibPrefix)plthook$(LibExt)" />
     </ItemGroup>
-
-    <!-- Work around for https://github.com/dotnet/runtime/pull/109699 -->
-    <Target Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'" Name="RemoveWindowsDllMainStub" AfterTargets="SetupOSSpecificProps">
-        <ItemGroup>
-            <NativeLibrary Remove="$(IlcSdkPath)dllmain$(ObjectSuffix)" />
-            <LinkerArg Remove="&quot;$(IlcSdkPath)dllmain$(ObjectSuffix)&quot;" />
-        </ItemGroup>
-    </Target>
 
     <!-- For some reasons, the linux export file .NET auto generate after compilation contains a hardcoded
          version being "V1.0". This is bad for us because it means every symbols we export will have "@@V1.0"
