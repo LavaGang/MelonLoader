@@ -59,7 +59,16 @@ namespace MelonLoader
             // Since MonoMod's PlatformHelper (used by DetourHelper.Native) runs Process.Start to determine ARM/x86
             // platform, this causes the unpatched TermInfoReader to kick in before it can be patched and fixed when
             // installing the XTermFix below. To work around this, we can force the platform directly
+#if OSX && ARM64
+            var macOSARM64Platform = Type.GetType(
+                "MonoMod.RuntimeDetour.Platforms.DetourNativeMacOSARM64Platform, MonoMod.RuntimeDetour",
+                false);
+            DetourHelper.Native = macOSARM64Platform == null
+                ? new DetourNativeMonoPosixPlatform(new DetourNativeARMPlatform())
+                : (IDetourNativePlatform)Activator.CreateInstance(macOSARM64Platform, new DetourNativeARMPlatform());
+#else
             DetourHelper.Native = new DetourNativeMonoPosixPlatform(new DetourNativeX86Platform());
+#endif
 #endif
 
             HarmonyInstance = new HarmonyLib.Harmony(Properties.BuildInfo.Name);
