@@ -12,6 +12,8 @@ jobs:
   upload_github:
     name: Upload GitHub Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
       
@@ -75,8 +77,9 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           body_path: RELEASE-NOTES.md
-          tag: ${{ inputs.TAG }}
-          release_name: ${{ inputs.RELEASE_NAME }}
+          tag_name: ${{ inputs.TAG }}
+          name: ${{ inputs.RELEASE_NAME }}
+          overwrite_files: true
           files: |
             compiled_release/MelonLoader.x86.zip
             compiled_release/MelonLoader.x64.zip
