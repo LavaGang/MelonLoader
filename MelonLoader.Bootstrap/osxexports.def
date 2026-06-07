@@ -10,3 +10,6 @@ _MonoGetDomainPtr
 _MonoGetRuntimeHandle
 _IsConsoleOpen
 _GetLoaderConfig
+_MLRegisterDlsymHook
+_MLRealDlsym
+_MLMacOSJitCopy

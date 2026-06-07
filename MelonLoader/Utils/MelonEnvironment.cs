@@ -83,6 +83,38 @@ namespace MelonLoader.Utils
         public static string MelonManagedDirectory { get; } = Path.Combine(DependenciesDirectory, "Mono");
         public static string Il2CppAssembliesDirectory { get; } = Path.Combine(MelonLoaderDirectory, "Il2CppAssemblies");
 
+#if OSX
+        private static string GetOSXGameExecutablePath()
+        {
+            string path = Process.GetCurrentProcess()!.MainModule!.FileName;
+            string current = Directory.Exists(path) ? path : Path.GetDirectoryName(path);
+
+            while (!string.IsNullOrEmpty(current))
+            {
+                if (current.EndsWith(".app"))
+                    return current;
+                current = Path.GetDirectoryName(current);
+            }
+
+            try
+            {
+                string baseDirectory = MelonBaseDirectory;
+                if (!string.IsNullOrEmpty(baseDirectory) && Directory.Exists(baseDirectory))
+                {
+                    string[] apps = Directory.GetDirectories(baseDirectory, "*.app", SearchOption.TopDirectoryOnly);
+                    if (apps.Length == 1)
+                        return apps[0];
+                }
+            }
+            catch
+            {
+                // Fall through to the legacy ancestor fallback below.
+            }
+
+            return MelonUtils.GetPathAncestor(path, 3);
+        }
+#endif
+
         internal static void PrintEnvironment()
         {
             //These must not be changed, lum needs them
