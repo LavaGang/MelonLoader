@@ -7,6 +7,9 @@ on:
     tags:
       - '*.*.*'
 
+permissions:
+  contents: write
+
 jobs:
   fix_tag_version:
     name: Fix Tag Version
@@ -36,6 +39,8 @@ jobs:
   upload:
     name: Upload
     needs: [ build, fix_tag_version ]
+    permissions:
+      contents: write
     uses: ./.github/workflows/upload_all.yml
     with:
       TAG: ${{ github.ref_name }}
