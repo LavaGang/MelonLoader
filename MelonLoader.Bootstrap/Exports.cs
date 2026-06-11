@@ -165,9 +165,8 @@ internal static class Exports
         if (_hookPlayerMainEntered)
             return LibcNative.LibCStartMain(main, argc, argv, init, fini, rtLdFini, stackEnd);
         
-        string libraryPath = $"{CurrentAssemblyName}.so";
-        nint handle = NativeLibrary.Load(libraryPath);
-        if (!Initialize(handle))
+        string libraryPath = Path.Join(Path.GetDirectoryName(Environment.ProcessPath), $"{CurrentAssemblyName}.so");
+        if (!File.Exists(libraryPath) || !NativeLibrary.TryLoad(libraryPath, out nint handle) || !Initialize(handle))
             return LibcNative.LibCStartMain(main, argc, argv, init, fini, rtLdFini, stackEnd);
 
         RemoveLibraryPreloadEnv();
