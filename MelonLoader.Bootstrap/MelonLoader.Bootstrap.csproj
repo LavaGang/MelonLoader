@@ -12,6 +12,10 @@
         <XwinArches Condition="'$(XWinArches)' == ''">x86,x86_64</XwinArches>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'">
+        <DllMainUseQueueUserApc>true</DllMainUseQueueUserApc>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
         <ExportsFile>linuxexports.def</ExportsFile>
         <LinkStandardCPlusPlusLibrary>true</LinkStandardCPlusPlusLibrary>
@@ -84,6 +88,7 @@
     <ItemGroup>
         <PackageReference Include="PublishAotCrossXWin" Version="1.2.0" PrivateAssets="all" />
         <PackageReference Include="Microsoft.NETCore.DotNetAppHost" Version="$(AppHostVersion)" PrivateAssets="All" />
+        <PackageReference Include="NativeDllMain" Version="1.0.0" PrivateAssets="all" />
         <PackageReference Include="Pastel" Version="$(PastelVersion)" />
         <PackageReference Include="Samboy063.Tomlet" Version="$(TomletVersion)" />
     </ItemGroup>
