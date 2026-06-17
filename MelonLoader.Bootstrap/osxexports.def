@@ -10,3 +10,4 @@ _MonoGetDomainPtr
 _MonoGetRuntimeHandle
 _IsConsoleOpen
 _GetLoaderConfig
+_Il2CppGenerate

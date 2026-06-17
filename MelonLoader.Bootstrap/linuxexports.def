@@ -12,5 +12,6 @@
         MonoGetRuntimeHandle;
         IsConsoleOpen;
         GetLoaderConfig;
+        Il2CppGenerate;
     local: *;
 };

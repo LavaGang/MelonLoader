@@ -283,4 +283,10 @@ internal static class Exports
     {
         Marshal.StructureToPtr(LoaderConfig.Current, *pConfig, false);
     }
+
+    [UnmanagedCallersOnly(EntryPoint = "Il2CppGenerate")]
+    public static unsafe void Il2CppGenerate(char* gameExePath, int gameExePathLength, char* outputFolder, int outputFolderLength, char* unstripDirectory, int unstripDirectoryLength)
+    {
+        RuntimeHandlers.Il2Cpp.Il2CppInteropGeneration.Run(new string(gameExePath, 0, gameExePathLength), new string(outputFolder, 0, outputFolderLength), new string(unstripDirectory, 0, unstripDirectoryLength));
+    }
 }
