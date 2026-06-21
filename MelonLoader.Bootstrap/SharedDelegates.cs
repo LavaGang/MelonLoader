@@ -32,5 +32,5 @@ internal delegate bool BoolRetFn();
 [UnmanagedFunctionPointer(CallingConvention.Winapi)]
 internal delegate void GetLoaderConfigFn(ref LoaderConfig config);
 
-[UnmanagedFunctionPointer(CallingConvention.Winapi)]
+[UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Unicode)]
 internal delegate void Il2CppGenerateFn(string gameExePath, int gameExePathLength, string outputFolder, int outputFolderLength, string unstripDirectory, int unstripDirectoryLength);
