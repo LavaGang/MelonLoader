@@ -35,7 +35,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 BootstrapInterop.Library.Il2CppGenerate(gameExePath, gameExePath.Length, OutputFolder, OutputFolder.Length, "", 0);
             }
 #if !DEBUG
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 Core.Logger.Error("Error Generating Interop Assemblies!", e);
                 return false;
