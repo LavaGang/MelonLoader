@@ -18,14 +18,21 @@ internal static class Il2CppInteropGeneration
 
     public static void Run(string gameExePath, string outputFolder, string unstripDirectory)
     {
-        KeyValuePair<string, string>[] extraData = string.IsNullOrEmpty(unstripDirectory)
-            ? []
-            : [new KeyValuePair<string, string>(UnstripBaseProcessingLayer.DirectoryKey, unstripDirectory)];
-        Il2CppGame.Process(
-            gameExePath,
-            outputFolder,
-            new AsmResolverDllOutputFormatBinding(),
-            Il2CppGame.GetDefaultProcessingLayers(),
-            extraData);
+        try
+        {
+            KeyValuePair<string, string>[] extraData = string.IsNullOrEmpty(unstripDirectory)
+                ? []
+                : [new KeyValuePair<string, string>(UnstripBaseProcessingLayer.DirectoryKey, unstripDirectory)];
+            Il2CppGame.Process(
+                gameExePath,
+                outputFolder,
+                new AsmResolverDllOutputFormatBinding(),
+                Il2CppGame.GetDefaultProcessingLayers(),
+                extraData);
+        }
+        catch (Exception ex)
+        {
+            MelonLogger.LogError(ex.ToString(), "Il2CppInterop");
+        }
     }
 }
