@@ -32,7 +32,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 #endif
             {
                 var gameExePath = MelonEnvironment.GameExecutablePath;
-                BootstrapInterop.Library.Il2CppGenerate(gameExePath, gameExePath.Length, OutputFolder, OutputFolder.Length, "", 0);
+                var unstripDirectory = ""; // Todo: supply unstripped assemblies
+                BootstrapInterop.Library.Il2CppGenerate(gameExePath, gameExePath.Length, OutputFolder, OutputFolder.Length, unstripDirectory, unstripDirectory.Length);
             }
 #if !DEBUG
             catch (System.Exception e)
