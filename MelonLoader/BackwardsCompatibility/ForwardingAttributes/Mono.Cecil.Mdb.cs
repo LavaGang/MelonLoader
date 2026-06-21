@@ -20,7 +20,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(Mono.CompilerServices.SymbolWriter.NamespaceEntry))]
 [assembly: TypeForwardedTo(typeof(Mono.CompilerServices.SymbolWriter.MonoSymbolWriter))]
 [assembly: TypeForwardedTo(typeof(Mono.CompilerServices.SymbolWriter.SourceMethodBuilder))]
-#if !NET6_0
+#if !NET6_0_OR_GREATER
 [assembly: TypeForwardedTo(typeof(Mono.CompilerServices.SymbolWriter.SymbolWriterImpl))]
 #endif
 [assembly: TypeForwardedTo(typeof(Mono.Cecil.Mdb.MdbReaderProvider))]

@@ -18,11 +18,14 @@ internal static class Il2CppInteropGeneration
 
     public static void Run(string gameExePath, string outputFolder, string unstripDirectory)
     {
+        KeyValuePair<string, string>[] extraData = string.IsNullOrEmpty(unstripDirectory)
+            ? []
+            : [new KeyValuePair<string, string>(UnstripBaseProcessingLayer.DirectoryKey, unstripDirectory)];
         Il2CppGame.Process(
             gameExePath,
             outputFolder,
             new AsmResolverDllOutputFormatBinding(),
             Il2CppGame.GetDefaultProcessingLayers(),
-            [new(UnstripBaseProcessingLayer.DirectoryKey, unstripDirectory)]);
+            extraData);
     }
 }

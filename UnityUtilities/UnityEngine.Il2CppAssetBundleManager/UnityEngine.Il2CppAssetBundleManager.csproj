@@ -7,12 +7,24 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Reference Include="Il2Cppmscorlib">
+            <HintPath>..\..\Dependencies\SupportModules\Il2Cpp\Libs\Il2Cppmscorlib.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="Il2CppSystem">
+            <HintPath>..\..\Dependencies\SupportModules\Il2Cpp\Libs\Il2CppSystem.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>..\..\Dependencies\SupportModules\Il2Cpp\Libs\UnityEngine.CoreModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="$(SolutionDir)\MelonLoader\MelonLoader.csproj" Private="false" />
         <PackageReference Include="AssetRipper.Primitives" Version="3.2.0" />
-        <PackageReference Include="Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" Private="false">
-          <ExcludeAssets>runtime</ExcludeAssets>
-        </PackageReference>
-        <PackageReference Include="Il2CppInterop.ReferenceLibs" Version="1.0.0" Private="false">
+        <PackageReference Include="ds5678.Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" Private="false">
           <ExcludeAssets>runtime</ExcludeAssets>
         </PackageReference>
     </ItemGroup>

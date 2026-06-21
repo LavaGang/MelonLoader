@@ -86,7 +86,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ds5678.Il2CppInterop.Generator" Version="2.0.0-beta.3" />
+        <PackageReference Include="ds5678.Il2CppInterop.Generator" Version="$(Il2CppInteropVersion)" />
         <PackageReference Include="PublishAotCrossXWin" Version="1.2.0" PrivateAssets="all" />
         <PackageReference Include="Microsoft.NETCore.DotNetAppHost" Version="$(AppHostVersion)" PrivateAssets="All" />
         <PackageReference Include="NativeDllMain" Version="1.0.0" PrivateAssets="all" />

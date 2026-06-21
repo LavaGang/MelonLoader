@@ -1,19 +1,21 @@
 ﻿using UnityEngine;
 
 #if SM_Il2Cpp
-using System;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.Injection;
+using Il2CppInterop.Common.Attributes;
 #endif
 
 namespace MelonLoader.Support
 {
-    internal class SM_Component : MonoBehaviour
-    {
-        private bool isQuitting;
-
 #if SM_Il2Cpp
-        public SM_Component(IntPtr value) : base(value) { }
+    [InjectedType]
+#endif
+    internal partial class SM_Component : MonoBehaviour
+    {
+#if SM_Il2Cpp
+        [Il2CppField]
+        private partial Il2CppSystem.Boolean isQuitting { get; set; }
+#else
+        private bool isQuitting;
 #endif
 
         internal static void Create()
@@ -28,8 +30,7 @@ namespace MelonLoader.Support
             Main.obj.hideFlags = HideFlags.DontSave;
 
 #if SM_Il2Cpp
-            ClassInjector.RegisterTypeInIl2Cpp<SM_Component>();
-            Main.component = Main.obj.AddComponent(Il2CppType.Of<SM_Component>()).TryCast<SM_Component>();
+            Main.component = Main.obj.AddComponent<SM_Component>();
 #else
             Main.component = (SM_Component)Main.obj.AddComponent(typeof(SM_Component));
 #endif
@@ -46,7 +47,7 @@ namespace MelonLoader.Support
 
             foreach (var queuedCoroutine in MelonCoroutines._queue)
 #if SM_Il2Cpp
-                StartCoroutine(new Il2CppSystem.Collections.IEnumerator(new MonoEnumeratorWrapper(queuedCoroutine).Pointer));
+                StartCoroutine(new MonoEnumeratorWrapper(queuedCoroutine));
 #else
                 StartCoroutine(queuedCoroutine);
 #endif

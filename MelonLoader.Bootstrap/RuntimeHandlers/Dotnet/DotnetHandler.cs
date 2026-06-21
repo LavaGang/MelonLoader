@@ -12,7 +12,7 @@ internal static class DotnetHandler
     
     public static void Initialize()
     {
-        var managedDir = Path.Combine(LoaderConfig.Current.Loader.BaseDirectory, "MelonLoader", "net6");
+        var managedDir = Path.Combine(LoaderConfig.Current.Loader.BaseDirectory, "MelonLoader", "net10.0");
         var runtimeConfigPath = Path.Combine(managedDir, "MelonLoader.runtimeconfig.json");
         var nativeHostPath = Path.Combine(managedDir, "MelonLoader.NativeHost.dll");
 
@@ -37,7 +37,7 @@ internal static class DotnetHandler
                 portableDir = Path.GetDirectoryName( // dotnet
                     Path.GetDirectoryName( // host
                         Path.GetDirectoryName( // fxr
-                            Path.GetDirectoryName( // 6.x.x
+                            Path.GetDirectoryName( // 10.x.x
                                 portableDir))))!;
 
             MelonDebug.Log($"Attempting to load hostfxr using .NET runtime from: {portableDir}");

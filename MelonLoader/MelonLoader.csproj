@@ -32,9 +32,8 @@
         <PackageReference Include="AssetsTools.NET" Version="$(AssetToolsVersion)" />
         <PackageReference Include="HarmonyX" Version="$(HarmonyXVersion)" />
         <PackageReference Include="Mono.Cecil" Version="$(MonoCecilVersion)" />
-        <PackageReference Include="MonoMod" Version="$(MonoModVersion)" />
-        <PackageReference Include="MonoMod.RuntimeDetour" Version="$(MonoModVersion)" />
-        <PackageReference Include="MonoMod.Utils" Version="$(MonoModVersion)" />
+        <PackageReference Include="MonoMod.RuntimeDetour" Version="$(MonoModRuntimeDetourVersion)" />
+        <PackageReference Include="MonoMod.Utils" Version="$(MonoModUtilsVersion)" />
         <PackageReference Include="Samboy063.Tomlet" Version="$(TomletVersion)" />
         <PackageReference Include="AsmResolver.DotNet" Version="$(AsmResolverVersion)" />
 		
@@ -42,25 +41,22 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTarget)'">
-        <PackageReference Include="IndexRange" Version="1.1.1" />
-        <PackageReference Include="Microsoft.Bcl" Version="1.1.10" />
         <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="3.1.512801" />
         <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.661903" />
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Primitives" Version="10.0.3" />
-        <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Primitives" Version="10.0.9" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.9" />
         <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
-        <PackageReference Include="System.Security.Permissions" Version="10.0.3" />
+        <PackageReference Include="System.Security.Permissions" Version="10.0.9" />
 		
         <PackageReference Include="Iced" Version="$(IcedVersion)" />
-        <PackageReference Include="Il2CppInterop.Common" Version="$(Il2CppInteropVersion)" />
-        <PackageReference Include="Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" />
-        <PackageReference Include="Il2CppInterop.Generator" Version="$(Il2CppInteropVersion)" />
-        <PackageReference Include="Il2CppInterop.HarmonySupport" Version="$(Il2CppInteropVersion)" />
+        <PackageReference Include="ds5678.Il2CppInterop.Common" Version="$(Il2CppInteropVersion)" />
+        <PackageReference Include="ds5678.Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" />
+        <PackageReference Include="ds5678.Il2CppInterop.HarmonySupport" Version="$(Il2CppInteropVersion)" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Resources\classdata.tpk" />

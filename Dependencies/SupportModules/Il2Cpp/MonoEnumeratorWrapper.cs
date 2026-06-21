@@ -1,38 +1,33 @@
-using Il2CppInterop.Runtime.Injection;
+using Il2CppInterop.Common;
+using Il2CppInterop.Common.Attributes;
 using System;
 using System.Collections;
 
 namespace MelonLoader.Support
 {
-    public class MonoEnumeratorWrapper : Il2CppSystem.Object /*, IEnumerator */
+    [InjectedType]
+    public partial class MonoEnumeratorWrapper : Il2CppSystem.Object, Il2CppSystem.Collections.IEnumerator
     {
-        internal unsafe static void Register()
-            => ClassInjector.RegisterTypeInIl2Cpp<MonoEnumeratorWrapper>(new()
-            {
-                LogSuccess = true,
-                Interfaces = new Type[] { typeof(Il2CppSystem.Collections.IEnumerator) }
-            });
+        [ManagedField]
+        private partial IEnumerator enumerator { get; set; }
 
-        private readonly IEnumerator enumerator;
-        public MonoEnumeratorWrapper(IntPtr ptr) : base(ptr) { }
-        public MonoEnumeratorWrapper(IEnumerator _enumerator) : base(ClassInjector.DerivedConstructorPointer<MonoEnumeratorWrapper>())
+        public MonoEnumeratorWrapper(IEnumerator _enumerator) : this(ObjectPointer.New<MonoEnumeratorWrapper>())
         {
-            ClassInjector.DerivedConstructorBody(this);
             enumerator = _enumerator ?? throw new NullReferenceException("routine is null");
         }
 
-        public Il2CppSystem.Object /*IEnumerator.*/Current
+        public Il2CppSystem.IObject Current
         {
             get => enumerator.Current switch
                 {
                     IEnumerator next => new MonoEnumeratorWrapper(next),
-                    Il2CppSystem.Object il2cppObject => il2cppObject,
+                    Il2CppSystem.IObject il2cppObject => il2cppObject,
                     null => null,
                     _ => throw new NotSupportedException($"{enumerator.GetType()}: Unsupported type {enumerator.Current.GetType()}"),
                 };
         }
 
-        public bool MoveNext()
+        public Il2CppSystem.Boolean MoveNext()
         {
             try
             {
