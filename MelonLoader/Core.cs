@@ -115,7 +115,6 @@ namespace MelonLoader
             // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             //  NativeStackWalk.LogNativeStackTrace();
 
-            Fixes.Dotnet.DotnetAssemblyLoadContextFix.Install();
             Fixes.Dotnet.DotnetModHandlerRedirectionFix.Install();
 #endif
 
