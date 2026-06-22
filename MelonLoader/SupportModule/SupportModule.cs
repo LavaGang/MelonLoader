@@ -30,7 +30,6 @@ namespace MelonLoader
             while (enumerator.MoveNext())
             {
                 string ModulePath = Path.Combine(BaseDirectory, enumerator.Current.FileName);
-                MelonLogger.Msg($"Checking Support Module: {ModulePath}");
                 if (!File.Exists(ModulePath))
                     continue;
 
@@ -45,8 +44,6 @@ namespace MelonLoader
                             //    Path.GetFileNameWithoutExtension(ModulePath) + ".deps.json");
                             //if (File.Exists(depsJson))
                             //    File.Delete(depsJson);
-
-                            MelonLogger.Msg($"Skipped Support Module: {ModulePath}");
 
                             continue;
                         }

@@ -62,7 +62,15 @@ namespace MelonLoader.Support
             Interface.SetInteropSupportInterface(Interop);
             runtime.Start();
 
-            Il2CppInitialize();
+            try
+            {
+                Il2CppInitialize();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Il2CppInterop Initialization Failed: {ex}");
+                return null;
+            }
 
             if (!LoaderConfig.Current.UnityEngine.DisableConsoleLogCleaner)
                 ConsoleCleaner();
