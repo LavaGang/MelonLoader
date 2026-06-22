@@ -16,7 +16,7 @@ internal static class Il2CppInteropGeneration
 #endif
     }
 
-    public static void Run(string gameExePath, string outputFolder, string unstripDirectory)
+    public static bool Run(string gameExePath, string outputFolder, string unstripDirectory)
     {
         try
         {
@@ -29,10 +29,12 @@ internal static class Il2CppInteropGeneration
                 new AsmResolverDllOutputFormatBinding(),
                 Il2CppGame.GetDefaultProcessingLayers(),
                 extraData);
+            return true;
         }
         catch (Exception ex)
         {
             MelonLogger.LogError(ex.ToString(), "Il2CppInterop");
+            return false;
         }
     }
 }

@@ -33,7 +33,16 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             {
                 var gameExePath = MelonEnvironment.GameExecutablePath;
                 var unstripDirectory = ""; // Todo: supply unstripped assemblies
-                BootstrapInterop.Library.Il2CppGenerate(gameExePath, gameExePath.Length, OutputFolder, OutputFolder.Length, unstripDirectory, unstripDirectory.Length);
+                var success = BootstrapInterop.Library.Il2CppGenerate(gameExePath, gameExePath.Length, OutputFolder, OutputFolder.Length, unstripDirectory, unstripDirectory.Length);
+                if (success)
+                {
+                    Core.Logger.Msg("Interop Generation Complete!");
+                }
+                else
+                {
+                    Core.Logger.Error("Interop Generation Failed!");
+                }
+                return success;
             }
 #if !DEBUG
             catch (System.Exception e)
@@ -42,9 +51,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 return false;
             }
 #endif
-
-            Core.Logger.Msg("Interop Generation Complete!");
-            return true;
         }
     }
 }
