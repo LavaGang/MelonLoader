@@ -55,7 +55,7 @@
         <AssetToolsVersion>3.0.4</AssetToolsVersion>
         <AssetRipperVersion>3.2.0</AssetRipperVersion>
         <AsmResolverVersion>6.0.0-beta.5</AsmResolverVersion>
-        <Il2CppInteropVersion>2.0.0-beta.4</Il2CppInteropVersion>
+        <Il2CppInteropVersion>2.0.0-beta.5</Il2CppInteropVersion>
 	</PropertyGroup>
 	
 	<!--
