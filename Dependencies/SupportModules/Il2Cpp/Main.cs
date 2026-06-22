@@ -239,6 +239,12 @@ namespace MelonLoader.Support
             Func<TState, Exception, string> formatter)
         {
             string formattedTxt = formatter(state, exception);
+
+            // https://github.com/dotnet/runtime/blob/fc23f447cfbddb07670e92dab98c794f0499d406/src/libraries/Microsoft.Extensions.Logging.Abstractions/src/LoggerExtensions.cs#L515-L518
+            // The default Microsoft formatter doesn't use the exception argument.
+            if (exception != null)
+                formattedTxt = $"{formattedTxt}\n{exception}";
+
             switch (logLevel)
             {
                 case LogLevel.Debug:
