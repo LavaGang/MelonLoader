@@ -20,7 +20,6 @@ internal static class Il2CppInteropGeneration
     {
         try
         {
-            MelonLogger.LogInfo($"Game Executable Path (native): {gameExePath}", "Il2CppInterop");
             KeyValuePair<string, string>[] extraData = string.IsNullOrEmpty(unstripDirectory)
                 ? []
                 : [new KeyValuePair<string, string>(UnstripBaseProcessingLayer.DirectoryKey, unstripDirectory)];
