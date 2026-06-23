@@ -209,11 +209,7 @@ namespace MelonLoader.Support
         private static readonly ConcurrentBag<object> s_keepAlive = new();
         public IDisposable Create<TDelegate>(nint original, TDelegate target, out TDelegate trampoline) where TDelegate : Delegate
         {
-            var detourRequest = new CreateNativeDetourRequest()
-            {
-                Source = original,
-                Target = Marshal.GetFunctionPointerForDelegate(target)
-            };
+            var detourRequest = new CreateNativeDetourRequest(original, Marshal.GetFunctionPointerForDelegate(target));
             var detour = DetourContext.CurrentFactory!.CreateNativeDetour(detourRequest);
 
             if (!detour.HasOrigEntrypoint)
