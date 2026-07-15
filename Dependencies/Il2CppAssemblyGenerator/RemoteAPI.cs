@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -17,96 +15,120 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             internal string MappingURL = null;
             internal string MappingFileSHA512 = null;
         }
+
         internal static InfoStruct Info = new InfoStruct();
+        internal static RemoteAPIContactResult? LastContactResult { get; private set; }
 
-        private class HostInfo
-        {
-            internal string URL = null;
-            internal LemonFunc<string, InfoStruct> Func = null;
-            internal HostInfo(string url, LemonFunc<string, InfoStruct> func)
-            {
-                URL = url;
-                Func = func;
-            }
-        }
-        private static List<HostInfo> HostList = null;
-
-        static RemoteAPI()
-        {
-            string gamename = Regex.Replace(InternalUtils.UnityInformationHandler.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant();
-
-            HostList = new List<HostInfo> {
-                new HostInfo($"{DefaultHostInfo.Melon.API_URL}{gamename}", DefaultHostInfo.Melon.Contact),
-                new HostInfo($"{DefaultHostInfo.Melon.API_URL_1}{gamename}", DefaultHostInfo.Melon.Contact),
-                new HostInfo($"{DefaultHostInfo.Melon.API_URL_2}{gamename}", DefaultHostInfo.Melon.Contact),
-                new HostInfo($"{DefaultHostInfo.Melon.API_URL_SAMBOY}{gamename}", DefaultHostInfo.Melon.Contact),
-                new HostInfo($"{DefaultHostInfo.Melon.API_URL_DUBYADUDE}{gamename}", DefaultHostInfo.Melon.Contact),
-            };
-        }
-
-        internal static void Contact()
+        internal static RemoteAPIContactResult Contact()
         {
             Core.Logger.Msg("Contacting RemoteAPI...");
 
-            ContactHosts();
+            Info = new InfoStruct();
+            RemoteAPIContactOutcome outcome = RemoteAPIClient.ContactHosts(
+                Core.webClient,
+                CreateHostList(),
+                MelonDebug.Msg);
+            LastContactResult = outcome.Result;
 
+            switch (outcome.Result)
+            {
+                case RemoteAPIContactResult.Success:
+                    Info = outcome.Info;
+                    NormalizeInfo();
+                    LogInfo();
+                    break;
+
+                case RemoteAPIContactResult.NotFound:
+                    Core.Logger.Msg($"Game Not Found on RemoteAPI Host ({outcome.HostURL})");
+                    LogInfo();
+                    break;
+
+                case RemoteAPIContactResult.Unavailable:
+                    Core.Logger.Warning(
+                        $"RemoteAPI is unavailable after trying {outcome.Failures.Count} hosts "
+                        + $"({BuildFailureSummary(outcome.Failures)}). "
+                        + "Continuing with locally cached generation settings when available.");
+                    break;
+            }
+
+            return outcome.Result;
+        }
+
+        internal static string GetRemoteOrCachedValue(string remoteValue, string cachedValue)
+            => LastContactResult == RemoteAPIContactResult.Unavailable
+                && !string.IsNullOrEmpty(cachedValue)
+                    ? cachedValue
+                    : remoteValue;
+
+        private static List<RemoteAPIHost> CreateHostList()
+        {
+            string gameName = Regex.Replace(
+                InternalUtils.UnityInformationHandler.GameName,
+                "[^a-zA-Z0-9_.]+",
+                "-",
+                RegexOptions.Compiled).ToLowerInvariant();
+
+            return new List<RemoteAPIHost> {
+                new RemoteAPIHost($"{DefaultHostInfo.Melon.API_URL}{gameName}", DefaultHostInfo.Melon.Contact),
+                new RemoteAPIHost($"{DefaultHostInfo.Melon.API_URL_1}{gameName}", DefaultHostInfo.Melon.Contact),
+                new RemoteAPIHost($"{DefaultHostInfo.Melon.API_URL_2}{gameName}", DefaultHostInfo.Melon.Contact),
+                new RemoteAPIHost($"{DefaultHostInfo.Melon.API_URL_SAMBOY}{gameName}", DefaultHostInfo.Melon.Contact),
+                new RemoteAPIHost($"{DefaultHostInfo.Melon.API_URL_DUBYADUDE}{gameName}", DefaultHostInfo.Melon.Contact),
+            };
+        }
+
+        private static void NormalizeInfo()
+        {
+            if (string.IsNullOrEmpty(Info.ForceDumperVersion))
+                return;
+
+            if (!SemVersion.TryParse(Info.ForceDumperVersion, out SemVersion version))
+            {
+                MelonDebug.Msg($"RemoteAPI returned an invalid Cpp2IL version '{Info.ForceDumperVersion}'. Ignoring it.");
+                Info.ForceDumperVersion = null;
+                return;
+            }
+
+            if (version <= SemVersion.Parse("2022.0.2"))
+                Info.ForceDumperVersion = null;
+        }
+
+        private static void LogInfo()
+        {
             Core.Logger.Msg($"RemoteAPI.DumperVersion = {(string.IsNullOrEmpty(Info.ForceDumperVersion) ? "null" : Info.ForceDumperVersion)}");
             Core.Logger.Msg($"RemoteAPI.ObfuscationRegex = {(string.IsNullOrEmpty(Info.ObfuscationRegex) ? "null" : Info.ObfuscationRegex)}");
             Core.Logger.Msg($"RemoteAPI.MappingURL = {(string.IsNullOrEmpty(Info.MappingURL) ? "null" : Info.MappingURL)}");
             Core.Logger.Msg($"RemoteAPI.MappingFileSHA512 = {(string.IsNullOrEmpty(Info.MappingFileSHA512) ? "null" : Info.MappingFileSHA512)}");
         }
 
-        private static void ContactHosts()
+        private static string BuildFailureSummary(IReadOnlyList<RemoteAPIHostFailure> failures)
         {
-            if ((HostList == null) || (HostList.Count <= 0))
-                return;
-            foreach (HostInfo info in HostList)
+            if (failures.Count <= 0)
+                return "no hosts configured";
+
+            Dictionary<string, int> reasonCounts = new Dictionary<string, int>();
+            List<string> reasons = new List<string>();
+            foreach (RemoteAPIHostFailure failure in failures)
             {
-                if (string.IsNullOrEmpty(info.URL) || (info.Func == null))
-                    continue;
-
-                MelonDebug.Msg($"ContactURL = {info.URL}");
-
-                string Response = null;
-                try
+                if (reasonCounts.TryGetValue(failure.Reason, out int count))
                 {
-                    var result = Core.webClient.GetAsync(info.URL).Result;
-                    result.EnsureSuccessStatusCode();
-                    Response = result.Content.ReadAsStringAsync().Result;
-                }
-                catch (Exception ex)
-                {
-                    if (ex is not HttpRequestException {StatusCode: {}} hre)
-                    {
-                        Core.Logger.Error($"Exception while Contacting RemoteAPI Host ({info.URL}): {ex}");
-                        continue;
-                    }
-
-                    if (hre.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    {
-                        Core.Logger.Msg($"Game Not Found on RemoteAPI Host ({info.URL})");
-                        break;
-                    }
-
-                    Core.Logger.Error($"WebException ({hre.StatusCode}) while Contacting RemoteAPI Host ({info.URL}): {ex}");
+                    reasonCounts[failure.Reason] = count + 1;
                     continue;
                 }
 
-                var isResponseNull = string.IsNullOrEmpty(Response);
-                MelonDebug.Msg($"Response = {(isResponseNull ? "null" : Response) }");
-                if (isResponseNull)
-                    break;
-
-                InfoStruct returnInfo = info.Func(Response);
-                if (returnInfo == null)
-                    continue;
-
-                if (returnInfo.ForceDumperVersion != null && SemVersion.Parse(returnInfo.ForceDumperVersion) <= SemVersion.Parse("2022.0.2"))
-                    returnInfo.ForceDumperVersion = null;
-
-                Info = returnInfo;
-                break;
+                reasonCounts.Add(failure.Reason, 1);
+                reasons.Add(failure.Reason);
             }
+
+            for (int i = 0; i < reasons.Count; i++)
+            {
+                string reason = reasons[i];
+                int count = reasonCounts[reason];
+                if (count > 1)
+                    reasons[i] = $"{reason} x{count}";
+            }
+
+            return string.Join(", ", reasons);
         }
 
         private class DefaultHostInfo
