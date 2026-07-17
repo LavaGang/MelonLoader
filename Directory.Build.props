@@ -48,8 +48,8 @@
         <IcedVersion>1.21.0</IcedVersion>
         <TomletVersion>6.2.0</TomletVersion>
         <PastelVersion>7.0.1</PastelVersion>
-        <MonoModUtilsVersion>25.0.12</MonoModUtilsVersion>
-        <MonoModRuntimeDetourVersion>25.3.4</MonoModRuntimeDetourVersion>
+        <MonoModUtilsVersion>25.0.14</MonoModUtilsVersion>
+        <MonoModRuntimeDetourVersion>25.3.6</MonoModRuntimeDetourVersion>
         <MonoCecilVersion>0.11.6</MonoCecilVersion>
         <HarmonyXVersion>2.16.1</HarmonyXVersion>
         <AssetToolsVersion>3.0.4</AssetToolsVersion>
