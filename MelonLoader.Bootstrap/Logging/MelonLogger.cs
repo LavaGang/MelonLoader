@@ -49,12 +49,7 @@ internal static class MelonLogger
                 foreach (var file in logs)
                     queue.Add((file, File.GetLastWriteTime(file)));
 
-                queue.Sort((x, y) =>
-                {
-                    if (x.Item2 >= y.Item2)
-                        return 0;
-                    return 1;
-                });
+                queue.Sort((x, y) => x.Item2.CompareTo(y.Item2));
 
                 var toDelete = logs.Length - LoaderConfig.Current.Logs.MaxLogs + 1;
                 for (var i = 0; i < toDelete; i++)
