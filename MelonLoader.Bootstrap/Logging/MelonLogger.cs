@@ -69,7 +69,7 @@ internal static class MelonLogger
         }
 
         var latestPath = Path.Combine(LoaderConfig.Current.Loader.BaseDirectory, "MelonLoader", "Latest.log");
-        var cachedPath = Path.Combine(logsDir, $"{DateTime.Now:%y-%M-%d_%H-%m-%s}.log");
+        var cachedPath = Path.Combine(logsDir, $"{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.log");
 
         MelonDebug.Log("Opening stream to latest log");
         try
