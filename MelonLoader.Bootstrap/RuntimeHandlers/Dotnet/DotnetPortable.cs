@@ -1,5 +1,6 @@
 ﻿#if X64 && (WINDOWS || OSX || LINUX)
 using System.Diagnostics;
+using System.Formats.Tar;
 using System.IO.Compression;
 
 namespace MelonLoader.Bootstrap.RuntimeHandlers.Dotnet;
@@ -8,11 +9,27 @@ internal static class DotnetPortable
 {
     private const string dotnetRuntimeDownload =
 #if LINUX
-        "https://github.com/LavaGang/PortableDotnet/raw/refs/heads/6.0.25/dotnet6.linux.x86_64.zip";
+#if X64
+        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-linux-x64.tar.gz";
+#elif ARM64
+        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-linux-arm64.tar.gz";
+#elif ARM32
+        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-linux-arm.tar.gz";
+#endif
 #elif OSX
-        "https://github.com/LavaGang/PortableDotnet/raw/refs/heads/6.0.25/dotnet6.macos.x86_64.zip";
+#if X64
+        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-osx-x64.tar.gz"; 
+#elif ARM64
+        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-osx-arm64.tar.gz"; 
+#endif
 #elif WINDOWS
-        "https://github.com/LavaGang/PortableDotnet/raw/refs/heads/6.0.25/dotnet6.windows.x86_64.zip";
+#if X64
+        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-win-x64.zip";
+#elif X86
+        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-win-x86.zip";
+#elif ARM64
+        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-win-arm64.zip";
+#endif
 #endif
     
     private static readonly FileDownload downloadRequest = new(dotnetRuntimeDownload);
@@ -20,7 +37,7 @@ internal static class DotnetPortable
     public static bool AttemptInstall()
     {
         Core.Logger.Msg($"Downloading the Portable .NET Runtime from: {dotnetRuntimeDownload}");
-        var tempPath = Path.GetTempFileName() + ".zip";
+        var tempPath = Path.GetTempFileName() + ".tmp";
         (bool, HttpResponseMessage?)? resp = null;
         try
         {
@@ -61,7 +78,11 @@ internal static class DotnetPortable
         {
             if (Directory.Exists(dotnetDir))
                 Directory.Delete(dotnetDir, true);
+#if WINDOWS
             ZipFile.ExtractToDirectory(tempPath, dependenciesDir);
+#else
+            TarFile.ExtractToDirectory(tempPath, dependenciesDir, false);
+#endif
         }
         catch (Exception ex)
         {
