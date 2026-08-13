@@ -1,8 +1,7 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.Linq;
 using System.Reflection;
-using HarmonyLib;
-using MonoMod.RuntimeDetour;
 
 namespace MelonLoader
 {
@@ -20,7 +19,7 @@ namespace MelonLoader
 			&& (method.GetCustomAttributes(typeof(PatchShield), false).Length <= 0);
 
 		internal static void Install()
-        {
+		{
 			Type patchProcessorType = typeof(PatchProcessor);
 			Type patchShieldType = typeof(PatchShield);
 			PatchProcessor_OriginalRef = AccessTools.FieldRefAccess<MethodBase>(patchProcessorType, "original");
@@ -29,14 +28,14 @@ namespace MelonLoader
 			{
 				Core.HarmonyInstance.Patch(
 					AccessTools.Method("HarmonyLib.PatchFunctions:ReversePatch"),
-					AccessTools.Method(patchShieldType, "PatchMethod_PatchFunctions_ReversePatch").ToNewHarmonyMethod()
+					AccessTools.Method(patchShieldType, nameof(PatchMethod_PatchFunctions_ReversePatch)).ToNewHarmonyMethod()
 					);
 			}
 			catch (Exception ex) { LogException(ex); }
 
 			try
 			{
-				HarmonyMethod unpatchMethod = AccessTools.Method(patchShieldType, "PatchMethod_PatchProcessor_Unpatch").ToNewHarmonyMethod();
+				HarmonyMethod unpatchMethod = AccessTools.Method(patchShieldType, nameof(PatchMethod_PatchProcessor_Unpatch)).ToNewHarmonyMethod();
 				foreach (MethodInfo method in patchProcessorType.GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(x => x.Name.Equals("Unpatch")))
 					Core.HarmonyInstance.Patch(method, unpatchMethod);
 			}
@@ -45,14 +44,10 @@ namespace MelonLoader
 			try
 			{
 				Core.HarmonyInstance.Patch(AccessTools.Method(patchProcessorType, "Patch"),
-					AccessTools.Method(patchShieldType, "PatchMethod_PatchProcessor_Patch").ToNewHarmonyMethod()
+					AccessTools.Method(patchShieldType, nameof(PatchMethod_PatchProcessor_Patch)).ToNewHarmonyMethod()
 					);
 			}
 			catch (Exception ex) { LogException(ex); }
-
-			Hook.OnDetour += (detour, originalMethod, patchMethod, delegateTarget) => MethodCheck(originalMethod);
-			ILHook.OnDetour += (detour, originalMethod, ilmanipulator) => MethodCheck(originalMethod);
-			Detour.OnDetour += (detour, originalMethod, patchMethod) => MethodCheck(originalMethod);
 		}
 
 		private static bool PatchMethod_PatchFunctions_ReversePatch(MethodBase __1) => MethodCheck(__1);

@@ -3,6 +3,7 @@ using UnityEngine;
 
 #if SM_Il2Cpp
 using Il2CppInterop.Runtime;
+using MelonLoader.InternalUtils;
 #else
 using System.Linq;
 using System.Reflection;
@@ -15,11 +16,12 @@ namespace MelonLoader.Support
         private static bool _failure;
 
 #if SM_Il2Cpp
-        private delegate void SetAsLastSiblingDelegate(IntPtr transformptr);
+        private delegate void SetAsLastSiblingDelegate_Unity6(Il2CppSystem.IntPtr obj);
+        private static SetAsLastSiblingDelegate_Unity6 _method_unity6;
 #else
         private static MethodInfo _methodInfo;
-        private delegate void SetAsLastSiblingDelegate(Transform obj);
 #endif
+        private delegate void SetAsLastSiblingDelegate(Transform obj);
 
         private static SetAsLastSiblingDelegate _method;
 
@@ -27,7 +29,7 @@ namespace MelonLoader.Support
         {
             if (_failure = !FindMethod())
                 return;
-            _failure = !InvokeMethod(obj);
+            _failure = !TrySetAsLastSibling(obj);
         }
 
         private static void LogError(string cat, Exception ex)
@@ -44,8 +46,15 @@ namespace MelonLoader.Support
             try
             {
 #if SM_Il2Cpp
-                _method = IL2CPP.ResolveICall<SetAsLastSiblingDelegate>("UnityEngine.Transform::SetAsLastSibling");
-                if (_method == null)
+                if (UnityInformationHandler.EngineVersion.Major >= 6000)
+                {
+                    _method_unity6 = RuntimeInvoke.ResolveICall<SetAsLastSiblingDelegate_Unity6>("UnityEngine.Transform::SetAsLastSibling_Injected");
+                }
+                else
+                {
+                    _method = RuntimeInvoke.ResolveICall<SetAsLastSiblingDelegate>("UnityEngine.Transform::SetAsLastSibling");
+                }
+                if (_method == null && _method_unity6 == null)
                     throw new Exception("Unable to find Internal Call for UnityEngine.Transform::SetAsLastSibling");
 #else
                 _methodInfo = typeof(Transform).GetMethods(BindingFlags.Public | BindingFlags.Instance).FirstOrDefault(x => (
@@ -66,20 +75,31 @@ namespace MelonLoader.Support
             return true;
         }
 
-        private static bool InvokeMethod(Component obj)
+        private static void InvokeMethod(Transform transform)
+        {
+#if SM_Il2Cpp
+            if (UnityInformationHandler.EngineVersion.Major >= 6000)
+            {
+                _method_unity6(transform.m_CachedPtr);
+            }
+            else
+            {
+                _method(transform);
+            }
+#else
+            _method(transform);
+#endif
+        }
+
+        private static bool TrySetAsLastSibling(Component obj)
         {
             if (_failure || (_method == null))
                 return false;
 
             try
             {
-#if SM_Il2Cpp
-                _method(IL2CPP.Il2CppObjectBaseToPtrNotNull(obj.transform));
-                _method(IL2CPP.Il2CppObjectBaseToPtrNotNull(obj.gameObject.transform));
-#else
-                _method(obj.transform);
-                _method(obj.gameObject.transform);
-#endif
+                InvokeMethod(obj.transform);
+                InvokeMethod(obj.gameObject.transform);
             }
             catch (Exception ex)
             {

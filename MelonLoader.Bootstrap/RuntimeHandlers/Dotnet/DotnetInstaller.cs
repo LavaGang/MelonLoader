@@ -7,9 +7,9 @@ internal static class DotnetInstaller
 {
     private const string dotnetRuntimeDownload =
 #if X64
-        "https://aka.ms/dotnet/6.0/dotnet-runtime-win-x64.exe";
+        "https://aka.ms/dotnet/10.0/dotnet-runtime-win-x64.exe";
 #else
-        "https://aka.ms/dotnet/6.0/dotnet-runtime-win-x86.exe";
+        "https://aka.ms/dotnet/10.0/dotnet-runtime-win-x86.exe";
 #endif
     private static readonly FileDownload downloadRequest = new(dotnetRuntimeDownload);
 

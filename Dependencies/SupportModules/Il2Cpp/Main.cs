@@ -1,17 +1,20 @@
-﻿using Il2CppInterop.HarmonySupport;
+﻿using Il2CppInterop.Common;
+using Il2CppInterop.HarmonySupport;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.Startup;
-using MelonLoader.Support.Preferences;
-using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using MelonLoader.CoreClrUtils;
-using UnityEngine;
-using Il2CppInterop.Common;
-using Microsoft.Extensions.Logging;
-using MelonLoader.Utils;
-using System.IO;
 using MelonLoader.InternalUtils;
+using MelonLoader.Support.Preferences;
+using MelonLoader.Utils;
+using Microsoft.Extensions.Logging;
+using MonoMod.Core;
+using MonoMod.RuntimeDetour;
+using System;
+using System.Collections.Concurrent;
+using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using UnityEngine;
 
 [assembly: MelonLoader.PatchShield]
 
@@ -29,7 +32,7 @@ namespace MelonLoader.Support
 
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
-            Interface = interface_from; 
+            Interface = interface_from;
 
             foreach (var file in Directory.GetFiles(MelonEnvironment.Il2CppAssembliesDirectory, "*.dll"))
             {
@@ -47,24 +50,30 @@ namespace MelonLoader.Support
                     MacOsIl2CppInteropLibraryResolver);
             }
 
+            DetourContext.SetGlobalContext(new DetourFactoryContext(new Il2CppInteropDetourFactory()));
+
             Il2CppInteropRuntime runtime = Il2CppInteropRuntime.Create(new()
             {
                 DetourProvider = new MelonDetourProvider(),
-                UnityVersion = new Version(
-                    InternalUtils.UnityInformationHandler.EngineVersion.Major,
-                    InternalUtils.UnityInformationHandler.EngineVersion.Minor,
-                    InternalUtils.UnityInformationHandler.EngineVersion.Build)
-            }).AddLogger(new InteropLogger())
-              .AddHarmonySupport();
+                UnityVersion = UnityInformationHandler.EngineVersion
+            }).AddLogger(new InteropLogger());
 
             Interop = new InteropInterface();
             Interface.SetInteropSupportInterface(Interop);
             runtime.Start();
 
+            try
+            {
+                //Il2CppInitialize();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Il2CppInterop Initialization Failed: {ex}");
+                return null;
+            }
+
             if (!LoaderConfig.Current.UnityEngine.DisableConsoleLogCleaner)
                 ConsoleCleaner();
-
-            MonoEnumeratorWrapper.Register();
 
             GetSceneManagerMethods(out MethodInfo sceneLoaded,
                 out MethodInfo sceneUnloaded);
@@ -190,86 +199,30 @@ namespace MelonLoader.Support
             }
             catch (Exception ex) { MelonLogger.Warning($"Console Cleaner Failed: {ex}"); }
         }
+
+        [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "Initialize")]
+        private static extern void Il2CppInitialize([UnsafeAccessorType("Il2CppInterop.Initialization.Il2CppInitialization, Il2CppInterop.Initialization")] object obj = null);
     }
 
     internal sealed class MelonDetourProvider : IDetourProvider
     {
-        public IDetour Create<TDelegate>(nint original, TDelegate target) where TDelegate : Delegate
+        private static readonly ConcurrentBag<object> s_keepAlive = new();
+        public IDisposable Create<TDelegate>(nint original, TDelegate target, out TDelegate trampoline) where TDelegate : Delegate
         {
-            return new MelonDetour(original, target);
-        }
+            var detourRequest = new CreateNativeDetourRequest(original, Marshal.GetFunctionPointerForDelegate(target));
+            var detour = DetourContext.CurrentFactory!.CreateNativeDetour(detourRequest);
 
-        private sealed class MelonDetour : IDetour
-        {
-            private nint _detourFrom;
-            private nint _originalPtr;
-            
-            private Delegate _target;
-            private IntPtr _targetPtr;
-            
-            private GCHandle _pin;
-
-            /// <summary>
-            /// Original method
-            /// </summary>
-            public nint Target => _detourFrom;
-
-            public nint Detour => _targetPtr;
-            public nint OriginalTrampoline => _originalPtr;
-            
-            public MelonDetour(nint detourFrom, Delegate target)
+            if (!detour.HasOrigEntrypoint)
             {
-                _detourFrom = detourFrom;
-                _target = target;
-                _pin = GCHandle.Alloc(_target);
-
-                // We have to apply immediately because we're gonna be asked for a trampoline right away
-                Apply();
+                throw new Exception("HasOrigEntrypoint has to be true");
             }
 
-            public unsafe void Apply()
-            {
-                if (_targetPtr != IntPtr.Zero)
-                    return;
+            trampoline = Marshal.GetDelegateForFunctionPointer<TDelegate>(detour.OrigEntrypoint);
 
-                //_targetPtr = Marshal.GetFunctionPointerForDelegate(_target);
-                _targetPtr = CoreClrDelegateFixer.GetFixedPointerForDelegate(_target);
-                
-                var addr = _detourFrom;
-                nint addrPtr = (nint)(&addr);
-                
-                BootstrapInterop.NativeHookAttachDirect(addrPtr, _targetPtr);
-                NativeStackWalk.RegisterHookAddr((ulong)addrPtr, $"Il2CppInterop detour of 0x{addrPtr:X} -> 0x{_targetPtr:X}");
+            // monomod reorg undoes the hook on finalizer which we want to prevent
+            s_keepAlive.Add(detour);
 
-                _originalPtr = addr;
-            }
-
-            public unsafe void Dispose()
-            {
-                if (_targetPtr == IntPtr.Zero)
-                    return;
-
-                var addr = _detourFrom;
-                nint addrPtr = (nint)(&addr);
-
-                BootstrapInterop.NativeHookDetachDirect(addrPtr, _targetPtr);
-                NativeStackWalk.UnregisterHookAddr((ulong)addrPtr);
-                CoreClrDelegateFixer.Unpin(_target.Method);
-
-                _targetPtr = IntPtr.Zero;
-                _originalPtr = IntPtr.Zero;
-                
-                if (_pin.IsAllocated)
-                    _pin.Free();
-            }
-
-            public T GenerateTrampoline<T>()
-                where T : Delegate
-            {
-                if (_originalPtr == IntPtr.Zero)
-                    return null;
-                return Marshal.GetDelegateForFunctionPointer<T>(_originalPtr);
-            }
+            return detour;
         }
     }
 
@@ -282,6 +235,12 @@ namespace MelonLoader.Support
             Func<TState, Exception, string> formatter)
         {
             string formattedTxt = formatter(state, exception);
+
+            // https://github.com/dotnet/runtime/blob/fc23f447cfbddb07670e92dab98c794f0499d406/src/libraries/Microsoft.Extensions.Logging.Abstractions/src/LoggerExtensions.cs#L515-L518
+            // The default Microsoft formatter doesn't use the exception argument.
+            if (exception != null)
+                formattedTxt = $"{formattedTxt}\n{exception}";
+
             switch (logLevel)
             {
                 case LogLevel.Debug:

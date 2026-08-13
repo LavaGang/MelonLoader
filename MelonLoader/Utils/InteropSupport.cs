@@ -11,9 +11,6 @@ namespace MelonLoader
             public bool IsInjectedType(Type type);
             public IntPtr GetClassPointerForType(Type type);
             FieldInfo MethodBaseToIl2CppFieldInfo(MethodBase method);
-            int? GetIl2CppMethodCallerCount(MethodBase method);
-            void RegisterTypeInIl2CppDomain(Type type, bool logSuccess);
-            void RegisterTypeInIl2CppDomainWithInterfaces(Type type, Type[] interfaces, bool logSuccess);
             IntPtr CopyMethodInfoStruct(IntPtr ptr);
         }
         internal static Interface SMInterface;
@@ -70,50 +67,6 @@ namespace MelonLoader
             if (method == null)
                 throw new NullReferenceException("The method cannot be null.");
             return SMInterface.MethodBaseToIl2CppFieldInfo(method);
-        }
-
-        public static T Il2CppObjectPtrToIl2CppObject<T>(IntPtr ptr)
-        {
-            ValidateInterface();
-            if (ptr == IntPtr.Zero)
-                throw new NullReferenceException("The ptr cannot be IntPtr.Zero.");
-            if (!IsGeneratedAssemblyType(typeof(T)))
-                throw new NullReferenceException("The type must be a Generated Assembly Type.");
-            return (T)typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(IntPtr) }, new ParameterModifier[0]).Invoke(new object[] { ptr });
-        }
-
-        public static int? GetIl2CppMethodCallerCount(MethodBase method)
-        {
-            ValidateInterface();
-            if (method == null)
-                throw new NullReferenceException("The method cannot be null.");
-            return SMInterface.GetIl2CppMethodCallerCount(method);
-        }
-
-        public static void RegisterTypeInIl2CppDomain(Type type)
-            => RegisterTypeInIl2CppDomain(type, true);
-
-        public static void RegisterTypeInIl2CppDomain(Type type, bool logSuccess)
-        {
-            ValidateInterface();
-            if (type == null)
-                throw new NullReferenceException("The type cannot be null.");
-            SMInterface.RegisterTypeInIl2CppDomain(type, logSuccess);
-        }
-
-        public static void RegisterTypeInIl2CppDomainWithInterfaces(Type type, Type[] interfaces)
-            => RegisterTypeInIl2CppDomainWithInterfaces(type, interfaces, true);
-
-        public static void RegisterTypeInIl2CppDomainWithInterfaces(Type type, Type[] interfaces, bool logSuccess)
-        {
-            ValidateInterface();
-            if (type == null)
-                throw new NullReferenceException("The type cannot be null.");
-            if (interfaces == null)
-                throw new NullReferenceException("The interfaces cannot be null.");
-            if (interfaces.Length <= 0)
-                throw new NullReferenceException("The interfaces cannot be empty.");
-            SMInterface.RegisterTypeInIl2CppDomainWithInterfaces(type, interfaces, logSuccess);
         }
 
         public static IntPtr CopyMethodInfoStruct(IntPtr ptr)

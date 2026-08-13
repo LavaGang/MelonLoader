@@ -208,6 +208,12 @@ internal static class MelonLogger
             Console.WriteLine($"[{time.Pastel(timeColor)}] {msg.Pastel(msgColor)}");
     }
 
+    public static void LogInfo(ReadOnlySpan<char> msg)
+        => LogInternal(null, msg, null, ColorARGB.White, ConsoleColor.White);
+
+    public static void LogInfo(ReadOnlySpan<char> msg, ReadOnlySpan<char> sectionName)
+        => LogInternal(null, msg, sectionName, ColorARGB.White, ConsoleColor.White);
+
     public static void LogWarning(ReadOnlySpan<char> msg)
         => LogInternal("WARNING", msg, null, ColorARGB.Yellow, ConsoleColor.Yellow);
     public static void LogWarning(ReadOnlySpan<char> msg, ReadOnlySpan<char> sectionName)

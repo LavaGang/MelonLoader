@@ -1,47 +1,18 @@
-﻿using Il2CppInterop.Runtime;
+﻿using Il2CppInterop.Common;
+using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using System;
 
 namespace UnityEngine;
 
-public class Il2CppAssetBundleCreateRequest : AsyncOperation
+public class Il2CppAssetBundleRequest
 {
-    public Il2CppAssetBundleCreateRequest(IntPtr ptr) : base(ptr) { }
-
-    static Il2CppAssetBundleCreateRequest()
+    public Il2CppAssetBundleRequest(IntPtr ptr)
     {
-        Il2CppInterop.Runtime.Injection.ClassInjector.RegisterTypeInIl2Cpp<Il2CppAssetBundleCreateRequest>();
-
-        get_assetBundleDelegateField = IL2CPP.ResolveICall<get_assetBundleDelegate>("UnityEngine.AssetBundleCreateRequest::get_assetBundle");
+        Pointer = ptr;
     }
 
-    public Il2CppAssetBundle assetBundle
-    {
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        get
-        {
-            var ptr = get_assetBundleDelegateField(this.Pointer);
-            if (ptr == IntPtr.Zero)
-                return null;
-            return new Il2CppAssetBundle(ptr);
-        }
-    }
-
-    private delegate IntPtr get_assetBundleDelegate(IntPtr _this);
-    private static readonly get_assetBundleDelegate get_assetBundleDelegateField;
-}
-
-public class Il2CppAssetBundleRequest : AsyncOperation
-{
-    public Il2CppAssetBundleRequest(IntPtr ptr) : base(ptr) { }
-
-    static Il2CppAssetBundleRequest()
-    {
-        Il2CppInterop.Runtime.Injection.ClassInjector.RegisterTypeInIl2Cpp<Il2CppAssetBundleRequest>();
-
-        get_assetDelegateField = IL2CPP.ResolveICall<get_assetDelegate>("UnityEngine.AssetBundleRequest::get_asset");
-        get_allAssetsDelegateField = IL2CPP.ResolveICall<get_allAssetsDelegate>("UnityEngine.AssetBundleRequest::get_allAssets");
-    }
+    public IntPtr Pointer { get; }
 
     public Object asset
     {
@@ -50,24 +21,30 @@ public class Il2CppAssetBundleRequest : AsyncOperation
             var ptr = get_assetDelegateField(this.Pointer);
             if (ptr == IntPtr.Zero)
                 return null;
-            return new Object(ptr);
+            return (Object)Il2CppObjectPool.Get(ptr);
         }
     }
 
-    public Il2CppReferenceArray<Object> allAssets
+    public Il2CppArrayRank1<Object> allAssets
     {
         get
         {
             var ptr = get_allAssetsDelegateField(this.Pointer);
             if (ptr == IntPtr.Zero)
                 return null;
-            return new Il2CppReferenceArray<Object>(ptr);
+            return (Il2CppArrayRank1<Object>)Il2CppObjectPool.Get(ptr);
         }
     }
 
-    private delegate IntPtr get_assetDelegate(IntPtr _this);
-    private static readonly get_assetDelegate get_assetDelegateField;
+    private delegate Il2CppSystem.IntPtr get_assetDelegate(Il2CppSystem.IntPtr _this);
+    private static readonly get_assetDelegate get_assetDelegateField = RuntimeInvoke.ResolveICall<get_assetDelegate>("UnityEngine.AssetBundleRequest::get_asset");
 
-    private delegate IntPtr get_allAssetsDelegate(IntPtr _this);
-    private static readonly get_allAssetsDelegate get_allAssetsDelegateField;
+    private delegate Il2CppSystem.IntPtr get_allAssetsDelegate(Il2CppSystem.IntPtr _this);
+    private static readonly get_allAssetsDelegate get_allAssetsDelegateField = RuntimeInvoke.ResolveICall<get_allAssetsDelegate>("UnityEngine.AssetBundleRequest::get_allAssets");
+
+    static Il2CppAssetBundleRequest()
+    {
+        get_assetDelegateField = RuntimeInvoke.ResolveICall<get_assetDelegate>("UnityEngine.AssetBundleRequest::get_asset");
+        get_allAssetsDelegateField = RuntimeInvoke.ResolveICall<get_allAssetsDelegate>("UnityEngine.AssetBundleRequest::get_allAssets");
+    }
 }

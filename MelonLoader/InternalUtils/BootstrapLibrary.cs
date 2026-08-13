@@ -14,4 +14,5 @@ internal class BootstrapLibrary
     internal PtrRetFn MonoGetRuntimeHandle { get; private set; }
     internal BoolRetFn IsConsoleOpen { get; private set; }
     internal GetLoaderConfigFn GetLoaderConfig { get; private set; }
+    internal Il2CppGenerateFn Il2CppGenerate { get; private set; }
 }

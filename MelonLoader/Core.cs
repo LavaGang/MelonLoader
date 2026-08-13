@@ -10,7 +10,6 @@ using MelonLoader.Utils;
 using MelonLoader.InternalUtils;
 using MelonLoader.Melons;
 using MonoMod.RuntimeDetour;
-using MonoMod.RuntimeDetour.Platforms;
 
 [assembly: MelonLoader.PatchShield]
 
@@ -53,14 +52,6 @@ namespace MelonLoader
 
             Assertions.LemonAssertMapping.Setup();
             HarmonyLogger.Setup();
-
-#if !WINDOWS && !NET6_0_OR_GREATER
-            // Using Process.Start can run Console..cctor
-            // Since MonoMod's PlatformHelper (used by DetourHelper.Native) runs Process.Start to determine ARM/x86
-            // platform, this causes the unpatched TermInfoReader to kick in before it can be patched and fixed when
-            // installing the XTermFix below. To work around this, we can force the platform directly
-            DetourHelper.Native = new DetourNativeMonoPosixPlatform(new DetourNativeX86Platform());
-#endif
 
             HarmonyInstance = new HarmonyLib.Harmony(Properties.BuildInfo.Name);
 
@@ -120,18 +111,14 @@ namespace MelonLoader
 
 #endif
 
-            Fixes.MonoMod.DetourContextDisposeFix.Install();
-
 #if NET6_0_OR_GREATER
             // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             //  NativeStackWalk.LogNativeStackTrace();
 
-            Fixes.Dotnet.DotnetAssemblyLoadContextFix.Install();
             Fixes.Dotnet.DotnetModHandlerRedirectionFix.Install();
 #endif
 
             Fixes.ForcedCultureInfo.Install();
-            Fixes.MonoMod.InstancePatchFix.Install();
 
 #if WINDOWS
             Fixes.ProcessFix.Install();
@@ -140,19 +127,10 @@ namespace MelonLoader
 #if NET6_0_OR_GREATER
 
             Fixes.AsmResolver.AsmResolverUtf8StringConcatFix.Install();
-            Fixes.Il2CppInterop.Il2CppInteropUnmangleMethodNameFix.Install();
-
-            Fixes.Il2CppInterop.Il2CppInteropExceptionLog.Install();
 
 #if OSX
             Fixes.Dotnet.NativeLibraryFix.Install();
 #endif
-
-            Fixes.Il2CppInterop.Il2CppInteropFixes.Install();
-            //Fixes.Il2CppInterop.Il2CppInteropIl2CppObjectBaseFix.Install();
-            Fixes.Il2CppInterop.Il2CppInteropInjectorHelpersSetupFix.Install();
-            Fixes.Il2CppInterop.Il2CppInteropGetFieldDefaultValueFix.Install();
-            Fixes.Il2CppInterop.Il2CppICallInjector.Install();
 
 #endif
 
@@ -213,11 +191,6 @@ namespace MelonLoader
             MelonDebug.Msg("Invoking AddUnityDebugLog");
             AddUnityDebugLog();
 
-#if NET6_0_OR_GREATER
-            RegisterTypeInIl2Cpp.SetReady();
-            RegisterTypeInIl2CppWithInterfaces.SetReady();
-#endif
-
             MelonDebug.Msg("Invoking MelonHarmonyInit");
             MelonEvents.MelonHarmonyInit.Invoke();
 
@@ -272,11 +245,6 @@ namespace MelonLoader
 
             HarmonyInstance.UnpatchSelf();
             bHapticsManager.Disconnect();
-
-#if NET6_0_OR_GREATER
-            Fixes.Il2CppInterop.Il2CppInteropFixes.Shutdown();
-            Fixes.Il2CppInterop.Il2CppICallInjector.Shutdown();
-#endif
 
             Thread.Sleep(200);
 
