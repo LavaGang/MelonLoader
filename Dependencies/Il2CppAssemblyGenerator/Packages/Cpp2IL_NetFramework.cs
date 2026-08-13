@@ -13,7 +13,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             Version = LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion;
 #if !DEBUG
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = RemoteAPI.Info.ForceDumperVersion;
+                Version = RemoteAPI.GetRemoteOrCachedValue(
+                    RemoteAPI.Info.ForceDumperVersion,
+                    Config.Values.DumperVersion);
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = $"2022.1.0-pre-release.15";

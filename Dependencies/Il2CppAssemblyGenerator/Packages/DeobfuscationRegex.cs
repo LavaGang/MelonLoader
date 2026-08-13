@@ -8,7 +8,9 @@
         {
             Regex = LoaderConfig.Current.UnityEngine.ForceGeneratorRegex;
             if (string.IsNullOrEmpty(Regex))
-                Regex = RemoteAPI.Info.ObfuscationRegex;
+                Regex = RemoteAPI.GetRemoteOrCachedValue(
+                    RemoteAPI.Info.ObfuscationRegex,
+                    Config.Values.DeobfuscationRegex);
         }
 
         internal void Setup()

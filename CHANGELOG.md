@@ -45,7 +45,7 @@
 
 ### v0.8.0
 
-1. 
+1. Improved RemoteAPI outage handling to report one warning instead of an error per host and retain cached Il2Cpp generation settings
 
 ---
 
