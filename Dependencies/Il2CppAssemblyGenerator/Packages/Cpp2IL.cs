@@ -59,8 +59,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 || !Config.Values.DumperVersion.Equals(Version);
         }
 
-        internal override void Cleanup() { }
-
         internal override void Save()
             => Save(ref Config.Values.DumperVersion);
 
