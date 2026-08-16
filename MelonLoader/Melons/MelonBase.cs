@@ -404,7 +404,18 @@ namespace MelonLoader
             HarmonyInstance ??= new HarmonyLib.Harmony($"{MelonAssembly.Assembly.FullName}:{Info.Name}");
 
             Registered = true; // this has to be true before the melon can subscribe to any events
-            RegisterCallbacks();
+
+            try
+            {
+                RegisterCallbacks();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Failed to register {MelonTypeName} '{MelonAssembly.Location}': Melon failed to register its callbacks!");
+                MelonLogger.Error(ex.ToString());
+                Registered = false;
+                return false;
+            }
 
             try
             {
