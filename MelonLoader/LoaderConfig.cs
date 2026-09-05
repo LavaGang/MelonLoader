@@ -394,7 +394,7 @@ public class LoaderConfig
         public bool EnableCpp2ILNativeMethodDetector { get; internal set; }
         
         [TomlProperty("keep_cpp2il_output")]
-        [TomlPrecedingComment("Enables the NativeMethodDetector processor for Cpp2IL. Equivalent to the '--cpp2il.keepoutput' launch option")]
+        [TomlPrecedingComment("Keeps the output assemblies from Cpp2IL. Equivalent to the '--cpp2il.keepoutput' launch option")]
         public bool KeepCpp2ILOutput { get; internal set; }
     }
 }
