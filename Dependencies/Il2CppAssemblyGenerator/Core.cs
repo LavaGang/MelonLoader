@@ -108,13 +108,15 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             if (!cpp2il.Execute())
             {
-                cpp2il.Cleanup();
+                if (!LoaderConfig.Current.UnityEngine.KeepCpp2ILOutput)
+                    cpp2il.Cleanup();
                 return 1;
             }
 
             if (!il2cppinterop.Execute())
             {
-                cpp2il.Cleanup();
+                if (!LoaderConfig.Current.UnityEngine.KeepCpp2ILOutput)
+                    cpp2il.Cleanup();
                 il2cppinterop.Cleanup();
                 return 1;
             }
@@ -122,7 +124,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             OldFiles_Cleanup();
             OldFiles_LAM();
 
-            cpp2il.Cleanup();
+            if (!LoaderConfig.Current.UnityEngine.KeepCpp2ILOutput)
+                cpp2il.Cleanup();
             il2cppinterop.Cleanup();
 
             Logger.Msg("Assembly Generation Successful!");

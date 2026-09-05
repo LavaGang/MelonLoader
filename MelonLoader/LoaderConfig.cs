@@ -147,7 +147,7 @@ public class LoaderConfig
         }
 #endif
 
-            [TomlNonSerialized]
+        [TomlNonSerialized]
         public string BaseDirectory { get; internal set; } = null!;
 
         // Technically, this will always return false, but it's still a config ¯\_(ツ)_/¯
@@ -392,5 +392,9 @@ public class LoaderConfig
         [TomlProperty("enable_cpp2il_native_method_detector")]
         [TomlPrecedingComment("Enables the NativeMethodDetector processor for Cpp2IL. Equivalent to the '--cpp2il.nativemethoddetector' launch option")]
         public bool EnableCpp2ILNativeMethodDetector { get; internal set; }
+        
+        [TomlProperty("keep_cpp2il_output")]
+        [TomlPrecedingComment("Enables the NativeMethodDetector processor for Cpp2IL. Equivalent to the '--cpp2il.keepoutput' launch option")]
+        public bool KeepCpp2ILOutput { get; internal set; }
     }
 }
