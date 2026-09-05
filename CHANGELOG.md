@@ -1,6 +1,6 @@
 | Versions: |
 | - |
-| [v0.8.0](#v080) |
+| [v0.7.4](#v074) |
 | [v0.7.3](#v073) |
 | [v0.7.2](#v072) |
 | [v0.7.1](#v071) |
@@ -43,9 +43,15 @@
 
 ---
 
-### v0.8.0
+### v0.7.4
 
-1. Improved RemoteAPI outage handling to report one warning instead of an error per host and retain cached Il2Cpp generation settings
+1. Bumped Bootstrap .NET version to 10   (Credits to [ds5678](https://github.com/ds5678))
+2. Improved RemoteAPI outage handling to report one warning instead of an error per host and retain cached Il2Cpp generation settings   (Credits to [batmanwarrior](https://github.com/batmanwarrior))
+3. Fixed an issue with stale Cpp2IL output being reused for assembly generation   (Credits to [ifBars](https://github.com/ifBars))
+4. Fixed an issue with Logging sometimes deleting the newest log instead of the oldest in rotation   (Credits to [JesseWV](https://github.com/JesseWV))
+5. Changed Portable Dotnet Handling to download from official Microsoft Sources instead
+6. Fixed an issue with Melon Callback Registry not failing gracefully   (Credits to [ObjectInSpace](https://github.com/ObjectInSpace))
+7. Implemented --cpp2il.keepoutput launch option for keeping Cpp2IL output after generation is attempted
 
 ---
 

@@ -3,7 +3,7 @@
 		Project
 	-->
     <PropertyGroup>
-        <Version>0.8.0</Version>
+        <Version>0.7.4</Version>
         <AppHostVersion>10.0.8</AppHostVersion>
 		
         <BootstrapTarget>net10.0</BootstrapTarget>
