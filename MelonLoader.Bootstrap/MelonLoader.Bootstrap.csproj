@@ -49,6 +49,11 @@
          triggers MelonLoader on macOS, because nothing in the managed code references it. -->
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'">
         <LinkerArg Include="-Wl,-u,_SetRlimitHook" />
+        <!-- Keep the dlsym interpose + its registration/real-dlsym exports. -->
+        <LinkerArg Include="-Wl,-u,_DlsymHook" />
+        <LinkerArg Include="-Wl,-u,_MLRegisterDlsymHook" />
+        <LinkerArg Include="-Wl,-u,_MLRealDlsym" />
+        <LinkerArg Include="-Wl,-u,_MLMacOSJitCopy" />
     </ItemGroup>
 
     <!-- Ship the launch wrapper alongside the dylib so end users have a ready-made
@@ -113,6 +118,15 @@
          To workaround this, we can remove the string in the file before linking, but after compile -->
     <Target Name="Replace" BeforeTargets="LinkNative" DependsOnTargets="IlcCompile">
         <WriteLinesToFile File="$(ExportsFile)" Lines="$([System.IO.File]::ReadAllText($(ExportsFile)).Replace('V1.0',''))" Overwrite="true" />
+    </Target>
+
+    <!-- The exports file is regenerated from the managed UnmanagedCallersOnly
+         exports during IlcCompile, so native (C++) exports must be appended here,
+         after regeneration but before the native link. _MLRegisterDlsymHook is the
+         osxentry.cpp setter the managed dlsym interpose uses. -->
+    <Target Name="AddNativeOSXExports" AfterTargets="Replace" BeforeTargets="LinkNative"
+            Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'">
+        <WriteLinesToFile File="$(ExportsFile)" Lines="_MLRegisterDlsymHook;_MLRealDlsym;_MLMacOSJitCopy" Overwrite="false" />
     </Target>
 
     <Target Name="PublishAfterBuild" AfterTargets="Build" Condition="'$(SkipPublishAfterBuild)' != 'true'">

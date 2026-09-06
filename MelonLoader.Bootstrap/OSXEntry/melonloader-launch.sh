@@ -35,6 +35,70 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BOOTSTRAP_PATH="$SCRIPT_DIR/MelonLoader.Bootstrap.dylib"
 
+shell_quote() {
+    printf "'%s'" "$(printf "%s" "$1" | sed "s/'/'\\\\''/g")"
+}
+
+open_melonloader_terminal() {
+    if [ "${MELONLOADER_NO_TERMINAL:-0}" = "1" ]; then
+        return
+    fi
+
+    if ! command -v open >/dev/null 2>&1; then
+        return
+    fi
+
+    local log_path="$SCRIPT_DIR/MelonLoader/Latest.log"
+    local title="MelonLoader - $(basename "$APP" .app)"
+    local watcher_base watcher_script
+    watcher_base="$(mktemp "${TMPDIR:-/tmp}/melonloader-log-tail.XXXXXX")" || return
+    watcher_script="$watcher_base.command"
+    mv "$watcher_base" "$watcher_script" || {
+        rm -f "$watcher_base"
+        return
+    }
+
+    local quoted_log_path quoted_title
+    quoted_log_path="$(shell_quote "$log_path")"
+    quoted_title="$(shell_quote "$title")"
+
+    cat > "$watcher_script" <<EOF
+#!/bin/bash
+LOG_PATH=$quoted_log_path
+TITLE=$quoted_title
+GAME_PID=$$
+
+printf '\\033]0;%s\\007' "\$TITLE"
+clear
+echo "\$TITLE"
+echo "Waiting for MelonLoader log..."
+echo
+
+while [ ! -f "\$LOG_PATH" ] && kill -0 "\$GAME_PID" 2>/dev/null; do
+    sleep 0.2
+done
+
+if [ -f "\$LOG_PATH" ]; then
+    tail -n +1 -F "\$LOG_PATH" &
+    TAIL_PID=\$!
+    while kill -0 "\$GAME_PID" 2>/dev/null; do
+        sleep 1
+    done
+    kill "\$TAIL_PID" 2>/dev/null || true
+    wait "\$TAIL_PID" 2>/dev/null || true
+else
+    echo "MelonLoader log was not created."
+fi
+
+rm -f "\$0"
+echo
+echo "Game exited. You can close this window."
+EOF
+
+    chmod +x "$watcher_script"
+    open -a Terminal "$watcher_script" >/dev/null 2>&1 || true
+}
+
 # Find the one .app bundle next to this script.
 shopt -s nullglob
 APPS=("$SCRIPT_DIR"/*.app)
@@ -77,5 +141,7 @@ if [ -n "$STEAM_DYLD_INSERT_LIBRARIES" ]; then
 else
     export DYLD_INSERT_LIBRARIES="$BOOTSTRAP_PATH"
 fi
+
+open_melonloader_terminal
 
 exec "$@"
