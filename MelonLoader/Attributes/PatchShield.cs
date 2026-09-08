@@ -50,13 +50,20 @@ namespace MelonLoader
 			}
 			catch (Exception ex) { LogException(ex); }
 
-			Hook.OnDetour += (detour, originalMethod, patchMethod, delegateTarget) => MethodCheck(originalMethod);
-			ILHook.OnDetour += (detour, originalMethod, ilmanipulator) => MethodCheck(originalMethod);
-			Detour.OnDetour += (detour, originalMethod, patchMethod) => MethodCheck(originalMethod);
+			try
+			{
+				Core.HarmonyInstance.Patch(AccessTools.Method(typeof(Hook), "Apply"),
+					AccessTools.Method(patchShieldType, "PatchMethod_Hook_Apply").ToNewHarmonyMethod());
+				Core.HarmonyInstance.Patch(AccessTools.Method(typeof(ILHook), "Apply"),
+					AccessTools.Method(patchShieldType, "PatchMethod_ILHook_Apply").ToNewHarmonyMethod());
+			}
+			catch (Exception ex) { LogException(ex); }
 		}
 
 		private static bool PatchMethod_PatchFunctions_ReversePatch(MethodBase __1) => MethodCheck(__1);
 		private static bool PatchMethod_PatchProcessor_Patch(PatchProcessor __instance) => MethodCheck(PatchProcessor_OriginalRef(__instance));
 		private static bool PatchMethod_PatchProcessor_Unpatch(PatchProcessor __instance) => MethodCheck(PatchProcessor_OriginalRef(__instance));
+		private static bool PatchMethod_Hook_Apply(Hook __instance) => MethodCheck(__instance.Source);
+		private static bool PatchMethod_ILHook_Apply(ILHook __instance) => MethodCheck(__instance.Method);
 	}
 }
