@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PublishAot>true</PublishAot>
+		<NativeLib>Shared</NativeLib>
+		<AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+		<SolutionDir>$(MSBuildThisFileDirectory)../../</SolutionDir>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="../../MelonLoader.Bootstrap/Utils/ArgParser.cs" Link="ArgParser.cs" />
+		<Compile Include="../../MelonLoader/Utils/MelonEnvironment.cs" Link="MelonEnvironment.cs" />
+	</ItemGroup>
+</Project>
