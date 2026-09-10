@@ -2,13 +2,38 @@
 
 internal static class ArgParser
 {
+#if OSX
+	[System.Runtime.InteropServices.DllImport("/usr/lib/libSystem.B.dylib")]
+	private static extern IntPtr _NSGetArgc();
+
+	[System.Runtime.InteropServices.DllImport("/usr/lib/libSystem.B.dylib")]
+	private static extern IntPtr _NSGetArgv();
+
+	private static string[] GetHostArguments() {
+		// A NativeAOT shared library does not receive the host's argv through
+		// Environment.GetCommandLineArgs(). Ask the C runtime for the game args.
+		var count = System.Runtime.InteropServices.Marshal.ReadInt32(_NSGetArgc());
+		var argv = System.Runtime.InteropServices.Marshal.ReadIntPtr(_NSGetArgv());
+		var args = new string[count];
+		for (var i = 0; i < count; i++) {
+			var argument = System.Runtime.InteropServices.Marshal.ReadIntPtr(argv, i * IntPtr.Size);
+			args[i] = System.Runtime.InteropServices.Marshal.PtrToStringUTF8(argument)!;
+		}
+		return args;
+	}
+#endif
+
     private static readonly List<Argument> arguments;
 
     static ArgParser()
     {
         arguments = [];
 
+#if OSX
+		var args = GetHostArguments();
+#else
         var args = Environment.GetCommandLineArgs();
+#endif
 
         for (var i = 1; i < args.Length; i++)
         {
