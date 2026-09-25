@@ -1,4 +1,6 @@
 ﻿#if NET6_0_OR_GREATER
+extern alias Iced;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +14,13 @@ using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.Runtime;
 using Il2CppInterop.Runtime.Runtime.VersionSpecific.Class;
 using Il2CppInterop.Runtime.Runtime.VersionSpecific.MethodInfo;
-using Il2CppInterop.Runtime.Runtime.VersionSpecific.Type;
 using HarmonyLib;
 using Il2CppInterop.Generator.Contexts;
 using AsmResolver.DotNet;
 using Il2CppInterop.HarmonySupport;
-using Iced.Intel;
 using Il2CppInterop.Common.XrefScans;
-using FlowControl = Iced.Intel.FlowControl;
+using Iced::Iced.Intel;
+using FlowControl = Iced::Iced.Intel.FlowControl;
 
 #pragma warning disable CS8632
 
