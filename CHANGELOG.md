@@ -53,6 +53,8 @@
 6. Fixed an issue with Melon Callback Registry not failing gracefully   (Credits to [ObjectInSpace](https://github.com/ObjectInSpace))
 7. Implemented --cpp2il.keepoutput launch option for keeping Cpp2IL output after generation is attempted
 8. Fixed an issue with MacOS using the wrong NativeLibrary Load method resulting in unhandled exceptions
+9. Fixed an issue with .NET 6 Portable Tar Extraction throwing an End of File exception
+10. Fixed an issue with RegisterTypeInIl2Cpp and RegisterTypeInIl2CppWithInterfaces attributes not gracefully failing when exceptions are thrown
 
 ---
 

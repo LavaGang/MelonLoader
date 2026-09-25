@@ -25,31 +25,15 @@ namespace MelonLoader
                 registrationQueue.Add(asm);
                 return;
             }
-
-            IEnumerable<Type> typeTbl = asm.GetValidTypes();
-            if ((typeTbl == null) || (typeTbl.Count() <= 0))
-                return;
-            foreach (Type type in typeTbl)
-            {
-                object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), false);
-                if ((attTbl == null) || (attTbl.Length <= 0))
-                    continue;
-                RegisterTypeInIl2Cpp att = (RegisterTypeInIl2Cpp)attTbl[0];
-                if (att == null)
-                    continue;
-
-                bool shouldLogSuccess = MelonDebug.IsEnabled() 
-                    || att.LogSuccess;
-
-                InteropSupport.RegisterTypeInIl2CppDomain(type, 
-                    shouldLogSuccess);
-            }
+            
+            try { ProcessAssembly(asm); }
+            catch { }
         }
 
         internal static void SetReady()
         {
             ready = true;
-
+            
             if (registrationQueue == null)
                 return;
 
@@ -57,6 +41,40 @@ namespace MelonLoader
                 RegisterAssembly(asm);
 
             registrationQueue = null;
+        }
+        
+        private static void ProcessAssembly(Assembly asm)
+        {
+            IEnumerable<Type> typeTbl = asm.GetValidTypes();
+            if ((typeTbl == null) || (typeTbl.Count() <= 0))
+                return;
+            
+            foreach (Type type in typeTbl)
+            {
+                object[] attTbl = [];
+                try { attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), true); }
+                catch { continue; }
+                if (attTbl.Length <= 0)
+                    continue;
+                
+                RegisterTypeInIl2Cpp att = (RegisterTypeInIl2Cpp)attTbl[0];
+                if (att == null)
+                    continue;
+
+                bool shouldLogSuccess = MelonDebug.IsEnabled() 
+                    || att.LogSuccess;
+
+                try
+                {
+                    InteropSupport.RegisterTypeInIl2CppDomain(type, 
+                        shouldLogSuccess);
+                }
+                catch (Exception e)
+                {
+                    MelonLogger.Error($"Failed to register custom type {type.FullName}");
+                    MelonLogger.Error(e.ToString());
+                }
+            }
         }
     }
 }

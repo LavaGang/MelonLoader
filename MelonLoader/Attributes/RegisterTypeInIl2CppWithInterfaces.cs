@@ -47,32 +47,9 @@ namespace MelonLoader
                 registrationQueue.Add(asm);
                 return;
             }
-
-            IEnumerable<Type> typeTbl = asm.GetValidTypes();
-            if ((typeTbl == null) || (typeTbl.Count() <= 0))
-                return;
-
-            foreach (Type type in typeTbl)
-            {
-                object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2CppWithInterfaces), false);
-                if ((attTbl == null) || (attTbl.Length <= 0))
-                    continue;
-
-                RegisterTypeInIl2CppWithInterfaces att = (RegisterTypeInIl2CppWithInterfaces)attTbl[0];
-                if (att == null)
-                    continue;
-
-                Type[] interfaceArr = att.GetInterfacesFromType
-                    ? type.GetInterfaces()
-                    : att.Interfaces;
-
-                bool shouldLogSuccess = MelonDebug.IsEnabled()
-                    || att.LogSuccess;
-
-                InteropSupport.RegisterTypeInIl2CppDomainWithInterfaces(type,
-                    interfaceArr,
-                    shouldLogSuccess);
-            }
+            
+            try { ProcessAssembly(asm); }
+            catch { }
         }
 
         internal static void SetReady()
@@ -86,6 +63,45 @@ namespace MelonLoader
                 RegisterAssembly(asm);
 
             registrationQueue = null;
+        }
+        
+        private static void ProcessAssembly(Assembly asm)
+        {
+            IEnumerable<Type> typeTbl = asm.GetValidTypes();
+            if ((typeTbl == null) || (typeTbl.Count() <= 0))
+                return;
+
+            foreach (Type type in typeTbl)
+            {
+                object[] attTbl = [];
+                try { attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), true); }
+                catch { continue; }
+                if (attTbl.Length <= 0)
+                    continue;
+
+                RegisterTypeInIl2CppWithInterfaces att = (RegisterTypeInIl2CppWithInterfaces)attTbl[0];
+                if (att == null)
+                    continue;
+
+                Type[] interfaceArr = att.GetInterfacesFromType
+                    ? type.GetInterfaces()
+                    : att.Interfaces;
+
+                bool shouldLogSuccess = MelonDebug.IsEnabled()
+                                        || att.LogSuccess;
+                
+                try
+                {
+                    InteropSupport.RegisterTypeInIl2CppDomainWithInterfaces(type,
+                        interfaceArr,
+                        shouldLogSuccess);
+                }
+                catch (Exception e)
+                {
+                    MelonLogger.Error($"Failed to register custom type {type.FullName}");
+                    MelonLogger.Error(e.ToString());
+                }
+            }
         }
     }
 }

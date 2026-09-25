@@ -7,6 +7,8 @@
 * Fixed an issue with Melon Callback Registry not failing gracefully
 * Implemented --cpp2il.keepoutput launch option for keeping Cpp2IL output after generation is attempted
 * Fixed an issue with MacOS using the wrong NativeLibrary Load method resulting in unhandled exceptions
+* Fixed an issue with .NET 6 Portable Tar Extraction throwing an End of File exception
+* Fixed an issue with RegisterTypeInIl2Cpp and RegisterTypeInIl2CppWithInterfaces attributes not gracefully failing when exceptions are thrown
 
 ## Contributors:
 * [ds5678](<https://github.com/ds5678>) made a contribution in [#1167](<https://github.com/LavaGang/MelonLoader/pull/1167>)
