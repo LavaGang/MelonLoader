@@ -36,6 +36,20 @@ namespace MelonLoader
             LogSuccess = logSuccess;
             Interfaces = interfaces;
         }
+        
+        public static bool TryRegisterAssembly(Assembly asm)
+        {
+            try
+            {
+                RegisterAssembly(asm);
+                return true;
+            }
+            catch (Exception e)
+            {
+                MelonLogger.Error(e.ToString());
+            }
+            return false;
+        }
 
         public static void RegisterAssembly(Assembly asm)
         {
@@ -48,8 +62,7 @@ namespace MelonLoader
                 return;
             }
             
-            try { ProcessAssembly(asm); }
-            catch { }
+            ProcessAssembly(asm);
         }
 
         internal static void SetReady()
@@ -60,7 +73,7 @@ namespace MelonLoader
                 return;
 
             foreach (var asm in registrationQueue)
-                RegisterAssembly(asm);
+                TryRegisterAssembly(asm);
 
             registrationQueue = null;
         }
@@ -73,10 +86,8 @@ namespace MelonLoader
 
             foreach (Type type in typeTbl)
             {
-                object[] attTbl = [];
-                try { attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), true); }
-                catch { continue; }
-                if (attTbl.Length <= 0)
+                object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), true);
+                if ((attTbl == null) || (attTbl.Length <= 0))
                     continue;
 
                 RegisterTypeInIl2CppWithInterfaces att = (RegisterTypeInIl2CppWithInterfaces)attTbl[0];
@@ -90,17 +101,9 @@ namespace MelonLoader
                 bool shouldLogSuccess = MelonDebug.IsEnabled()
                                         || att.LogSuccess;
                 
-                try
-                {
-                    InteropSupport.RegisterTypeInIl2CppDomainWithInterfaces(type,
-                        interfaceArr,
-                        shouldLogSuccess);
-                }
-                catch (Exception e)
-                {
-                    MelonLogger.Error($"Failed to register custom type {type.FullName}");
-                    MelonLogger.Error(e.ToString());
-                }
+                InteropSupport.RegisterTypeInIl2CppDomainWithInterfaces(type,
+                    interfaceArr,
+                    shouldLogSuccess);
             }
         }
     }

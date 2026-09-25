@@ -15,6 +15,20 @@ namespace MelonLoader
         public RegisterTypeInIl2Cpp() { }
         public RegisterTypeInIl2Cpp(bool logSuccess) { LogSuccess = logSuccess; }
 
+        public static bool TryRegisterAssembly(Assembly asm)
+        {
+            try
+            {
+                RegisterAssembly(asm);
+                return true;
+            }
+            catch (Exception e)
+            {
+                MelonLogger.Error(e.ToString());
+            }
+            return false;
+        }
+
         public static void RegisterAssembly(Assembly asm)
         {
             if (!MelonUtils.IsGameIl2Cpp())
@@ -26,19 +40,18 @@ namespace MelonLoader
                 return;
             }
             
-            try { ProcessAssembly(asm); }
-            catch { }
+            ProcessAssembly(asm);
         }
 
         internal static void SetReady()
         {
             ready = true;
-            
+
             if (registrationQueue == null)
                 return;
 
             foreach (var asm in registrationQueue)
-                RegisterAssembly(asm);
+                TryRegisterAssembly(asm);
 
             registrationQueue = null;
         }
@@ -51,10 +64,8 @@ namespace MelonLoader
             
             foreach (Type type in typeTbl)
             {
-                object[] attTbl = [];
-                try { attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), true); }
-                catch { continue; }
-                if (attTbl.Length <= 0)
+                object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), true);
+                if ((attTbl == null) || (attTbl.Length <= 0))
                     continue;
                 
                 RegisterTypeInIl2Cpp att = (RegisterTypeInIl2Cpp)attTbl[0];
@@ -64,16 +75,8 @@ namespace MelonLoader
                 bool shouldLogSuccess = MelonDebug.IsEnabled() 
                     || att.LogSuccess;
 
-                try
-                {
-                    InteropSupport.RegisterTypeInIl2CppDomain(type, 
-                        shouldLogSuccess);
-                }
-                catch (Exception e)
-                {
-                    MelonLogger.Error($"Failed to register custom type {type.FullName}");
-                    MelonLogger.Error(e.ToString());
-                }
+                InteropSupport.RegisterTypeInIl2CppDomain(type, 
+                    shouldLogSuccess);
             }
         }
     }

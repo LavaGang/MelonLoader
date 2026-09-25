@@ -67,7 +67,7 @@ namespace MelonLoader
         /// Loads or finds a MelonAssembly from path.
         /// </summary>
         /// <param name="path">Path of the MelonAssembly</param>
-        /// <param name="loadMelons">Sets whether Melons should be auto-loaded or not</param>
+        /// <param name="loadMelons">Sets whether Melons should be autoloaded or not</param>
         public static MelonAssembly LoadMelonAssembly(string path, bool loadMelons = true)
         {
             if (path == null)
@@ -346,8 +346,8 @@ namespace MelonLoader
             }
 
 #if NET6_0_OR_GREATER
-            RegisterTypeInIl2Cpp.RegisterAssembly(Assembly);
-            RegisterTypeInIl2CppWithInterfaces.RegisterAssembly(Assembly);
+            RegisterTypeInIl2Cpp.TryRegisterAssembly(Assembly);
+            RegisterTypeInIl2CppWithInterfaces.TryRegisterAssembly(Assembly);
 #endif
 
             if (rottenMelons.Count != 0)
