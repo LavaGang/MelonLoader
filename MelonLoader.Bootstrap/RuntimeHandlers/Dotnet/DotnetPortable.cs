@@ -78,10 +78,19 @@ internal static class DotnetPortable
         {
             if (Directory.Exists(dotnetDir))
                 Directory.Delete(dotnetDir, true);
+            Directory.CreateDirectory(dotnetDir);
+            
 #if WINDOWS
-            ZipFile.ExtractToDirectory(tempPath, dependenciesDir);
+            ZipFile.ExtractToDirectory(tempPath, dotnetDir);
 #else
-            TarFile.ExtractToDirectory(tempPath, dependenciesDir, false);
+            var fileStream = File.OpenRead(tempPath);
+            var gzipStream = new GZipStream(fileStream, CompressionMode.Decompress);
+            TarFile.ExtractToDirectory(
+                gzipStream,
+                dotnetDir,
+                true);
+            gzipStream.Close();
+            fileStream.Close();
 #endif
         }
         catch (Exception ex)
