@@ -10,8 +10,16 @@ on:
 
 jobs:
   compile_macos:
-    name: Build MacOS Binaries
+    name: Build MacOS ${{ matrix.arch }} Binaries
     runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            rid: osx-x64
+          - arch: arm64
+            rid: osx-arm64
     steps:
       - uses: actions/checkout@v7
       - name: Setup dotnet
@@ -20,24 +28,24 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Restore Dependencies
-        run: dotnet restore
+        run: dotnet restore -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}"
 
-      - name: Build Debug for osx-x64
+      - name: Build Debug for ${{ matrix.rid }}
         if: inputs.SKIP_DEBUG != true
-        run: dotnet build --no-restore -c Debug -p:Platform="x64" -p:Version="${{ inputs.VERSION }}"
+        run: dotnet build --no-restore -c Debug -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}" -p:Version="${{ inputs.VERSION }}"
 
-      - name: Upload Debug for osx-x64
+      - name: Upload Debug for ${{ matrix.rid }}
         if: inputs.SKIP_DEBUG != true
         uses: actions/upload-artifact@v7
         with:
-          name: MelonLoader.macOS.x64.CI.Debug
-          path: Output/Debug/osx-x64
+          name: MelonLoader.macOS.${{ matrix.arch }}.CI.Debug
+          path: Output/Debug/${{ matrix.rid }}
 
-      - name: Build Release for osx-x64
-        run: dotnet build --no-restore -c Release -p:Platform="x64" -p:Version="${{ inputs.VERSION }}"
+      - name: Build Release for ${{ matrix.rid }}
+        run: dotnet build --no-restore -c Release -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}" -p:Version="${{ inputs.VERSION }}"
 
-      - name: Upload Release for osx-x64
+      - name: Upload Release for ${{ matrix.rid }}
         uses: actions/upload-artifact@v7
         with:
-          name: MelonLoader.macOS.x64.CI.Release
-          path: Output/Release/osx-x64
+          name: MelonLoader.macOS.${{ matrix.arch }}.CI.Release
+          path: Output/Release/${{ matrix.rid }}

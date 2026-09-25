@@ -85,6 +85,17 @@ namespace MelonLoader
         {
 #if OSX
             string frameworksPath = Path.Combine(MelonEnvironment.GameExecutablePath, "Contents/Frameworks");
+            if (!Directory.Exists(frameworksPath))
+            {
+                string[] apps = Directory.Exists(MelonEnvironment.MelonBaseDirectory)
+                    ? Directory.GetDirectories(MelonEnvironment.MelonBaseDirectory, "*.app", SearchOption.TopDirectoryOnly)
+                    : new string[0];
+                if (apps.Length == 1)
+                    frameworksPath = Path.Combine(apps[0], "Contents/Frameworks");
+            }
+            if (!Directory.Exists(frameworksPath))
+                return false;
+
             var libs = Directory.GetFiles(frameworksPath, "*.dylib", SearchOption.AllDirectories);
             return libs.Select(Path.GetFileName).Contains("libmono.0.dylib");
 #else

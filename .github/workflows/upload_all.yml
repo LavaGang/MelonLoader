@@ -20,6 +20,8 @@ on:
 jobs:
   upload_github:
     name: GitHub
+    permissions:
+      contents: write
     uses: ./.github/workflows/upload_github.yml
     with:
       TAG: ${{ inputs.TAG }}

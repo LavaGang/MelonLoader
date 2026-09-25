@@ -1,6 +1,7 @@
 ﻿using MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
 using MelonLoader.Bootstrap.RuntimeHandlers.Mono;
 using MelonLoader.Bootstrap.Utils;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace MelonLoader.Bootstrap
@@ -24,7 +25,14 @@ namespace MelonLoader.Bootstrap
 
             IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate(DetourDelegate);
 
-#if LINUX || OSX
+#if OSX
+            // plthook cannot patch UnityPlayer.dylib's GOT on modern macOS
+            // (LC_DYLD_CHAINED_FIXUPS) -- it reports "no such function" and the
+            // mono hook never installs. Interpose dlsym in native code instead
+            // (osxentry.cpp), the same DYLD interpose mechanism used to trigger
+            // Init via setrlimit.
+            RegisterDlsymHook(Marshal.GetFunctionPointerForDelegate(DlsymDetourDelegate));
+#elif LINUX
             PltHook.InstallHooks
             ([
                 ("dlsym", detourPtr)
@@ -50,8 +58,12 @@ namespace MelonLoader.Bootstrap
 
 #if WINDOWS
             return GetProcAddress(handle, symbolName);
-#elif LINUX || OSX
+#elif LINUX
             return dlsym(handle, symbolName);
+#elif OSX
+            // Use the real (un-interposed) dlsym so MelonLoader resolves the
+            // genuine runtime exports, not its own dlsym detours.
+            return RealDlsym(handle, symbolName);
 #else
             return nint.Zero;
 #endif
@@ -84,6 +96,38 @@ namespace MelonLoader.Bootstrap
             return redirect.detourPtr;
         }
 
+#if OSX
+        // macOS interpose detour. osxentry.cpp resolves the real address and
+        // passes it in (calling dlsym from managed code re-enters the interpose
+        // and recurses), so this only decides whether to redirect.
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate nint DlsymDetourFn(nint handle, nint symbol, nint real);
+        private static readonly DlsymDetourFn DlsymDetourDelegate = DlsymDetour;
+
+        private static nint DlsymDetour(nint handle, nint symbol, nint real)
+        {
+            string? symbolName = Marshal.PtrToStringAnsi(symbol);
+            if (string.IsNullOrEmpty(symbolName))
+                return real;
+
+            if (!MonoHandler.SymbolRedirects.TryGetValue(symbolName, out var redirect)
+                && !Il2CppHandler.SymbolRedirects.TryGetValue(symbolName, out redirect))
+                return real;
+
+            if (!_runtimeInitialised)
+            {
+                _runtimeInitialised = true;
+                MelonDebug.Log("Initializing Runtime");
+                redirect.InitMethod(handle);
+                if (!LoaderConfig.Current.Loader.CapturePlayerLogs)
+                    ConsoleHandler.ResetHandles();
+            }
+
+            MelonDebug.Log($"Redirecting {symbolName}");
+            return redirect.detourPtr;
+        }
+#endif
+
 #if WINDOWS
         [DllImport("kernel32")]
         private static extern nint GetProcAddress(nint handle, nint symbol);
@@ -91,8 +135,15 @@ namespace MelonLoader.Bootstrap
         [DllImport("libdl.so.2")]
         private static extern IntPtr dlsym(nint handle, nint symbol);
 #elif OSX
-        [DllImport("libSystem.B.dylib")]
-        private static extern IntPtr dlsym(nint handle, nint symbol);
+        // Native (osxentry.cpp): RealDlsym is the un-interposed dlsym used by
+        // GetSymbol; RegisterDlsymHook installs the managed interpose target.
+        [LibraryImport("*", EntryPoint = "MLRealDlsym")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        private static partial nint RealDlsym(nint handle, nint symbol);
+
+        [LibraryImport("*", EntryPoint = "MLRegisterDlsymHook")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        private static partial void RegisterDlsymHook(nint detour);
 #endif
     }
 }
