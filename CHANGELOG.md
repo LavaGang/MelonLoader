@@ -52,6 +52,7 @@
 5. Changed Portable Dotnet Handling to download from official Microsoft Sources instead
 6. Fixed an issue with Melon Callback Registry not failing gracefully   (Credits to [ObjectInSpace](https://github.com/ObjectInSpace))
 7. Implemented --cpp2il.keepoutput launch option for keeping Cpp2IL output after generation is attempted
+8. Fixed an issue with MacOS using the wrong NativeLibrary Load method resulting in unhandled exceptions
 
 ---
 

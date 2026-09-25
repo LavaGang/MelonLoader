@@ -128,8 +128,8 @@ internal static class Exports
             return;
 
         string libraryPath = $"{CurrentAssemblyName}.dylib";
-        nint handle = NativeLibrary.Load(libraryPath);
-        if (!Initialize(handle))
+        if (!NativeLibrary.TryLoad(libraryPath, out nint handle)
+            || !Initialize(handle))
             return;
 
         _hookPlayerMainEntered = true;
@@ -166,7 +166,9 @@ internal static class Exports
             return LibcNative.LibCStartMain(main, argc, argv, init, fini, rtLdFini, stackEnd);
         
         string libraryPath = Path.Join(Path.GetDirectoryName(Environment.ProcessPath), $"{CurrentAssemblyName}.so");
-        if (!File.Exists(libraryPath) || !NativeLibrary.TryLoad(libraryPath, out nint handle) || !Initialize(handle))
+        if (!File.Exists(libraryPath)
+            || !NativeLibrary.TryLoad(libraryPath, out nint handle)
+            || !Initialize(handle))
             return LibcNative.LibCStartMain(main, argc, argv, init, fini, rtLdFini, stackEnd);
 
         RemoveLibraryPreloadEnv();
@@ -185,8 +187,10 @@ internal static class Exports
     {
         if (_originalMain is null)
             return 0;
+
         if (_hookPlayerMainEntered)
             return _originalMain(argc, argv, envp);
+
         _hookPlayerMainEntered = true;
 
         Core.Init();
