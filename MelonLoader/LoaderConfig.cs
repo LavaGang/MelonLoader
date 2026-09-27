@@ -27,6 +27,15 @@ public class LoaderConfig
     [RequiresDynamicCode("Dynamically accesses LoaderConfig properties")]
     internal static void Initialize()
     {
+        var env = Environment.GetEnvironmentVariable("MELONLOADER_LOADED");
+        if (!string.IsNullOrEmpty(env)
+            || ArgParser.IsDefined("no-mods"))
+        {
+            Current.Loader.Disable = true;
+            return;
+        }
+        Environment.SetEnvironmentVariable("MELONLOADER_LOADED", "1");
+
         var customBaseDir = ArgParser.GetValue("melonloader.basedir");
         var baseDir = Path.GetDirectoryName(Environment.ProcessPath)!;
 
@@ -56,6 +65,8 @@ public class LoaderConfig
         }
         else
             TrySaveFile(path);
+        if (Current.Loader.Disable)
+            return;
 
         CoreConfig.Initialize(baseDir);
         ConsoleConfig.Initialize();
@@ -119,9 +130,6 @@ public class LoaderConfig
 
             if (int.TryParse(ArgParser.GetValue("melonloader.harmonyloglevel"), out var harmonyLogLevel))
                 Current.Loader.HarmonyLogLevel = (HarmonyLogVerbosity)Math.Clamp(harmonyLogLevel, (int)HarmonyLogVerbosity.None, (int)HarmonyLogVerbosity.IL);
-
-            if (ArgParser.IsDefined("no-mods"))
-                Current.Loader.Disable = true;
 
             if (ArgParser.IsDefined("quitfix"))
                 Current.Loader.ForceQuit = true;
