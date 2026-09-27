@@ -344,10 +344,11 @@ namespace MelonLoader
                         MelonLogger.Warning($"==Normal users can ignore this warning==\nMelon '{info.Name}' by '{info.Author}' has version '{info.Version}' which does not use the Semantic Versioning format. Versions using formats other than the Semantic Versioning format will not be supported in the future versions of MelonLoader.\nFor more details, see: https://semver.org");
                 }
             }
-
+            
 #if NET6_0_OR_GREATER
-            RegisterTypeInIl2Cpp.TryRegisterAssembly(Assembly);
-            RegisterTypeInIl2CppWithInterfaces.TryRegisterAssembly(Assembly);
+            if (!RegisterTypeInIl2Cpp.TryRegisterAssembly(Assembly, out var errMsg)
+                || !RegisterTypeInIl2CppWithInterfaces.TryRegisterAssembly(Assembly, out errMsg))
+                MelonLogger.Error(errMsg);
 #endif
 
             if (rottenMelons.Count != 0)

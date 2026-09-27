@@ -14,7 +14,7 @@ namespace MelonLoader
 
         internal Type[] Interfaces;
         internal bool GetInterfacesFromType;
-
+        
         public RegisterTypeInIl2CppWithInterfaces()
         {
             GetInterfacesFromType = true;
@@ -37,8 +37,10 @@ namespace MelonLoader
             Interfaces = interfaces;
         }
         
-        public static bool TryRegisterAssembly(Assembly asm)
+        public static bool TryRegisterAssembly(Assembly asm, 
+            out string errorMsg)
         {
+            errorMsg = string.Empty;
             try
             {
                 RegisterAssembly(asm);
@@ -46,7 +48,7 @@ namespace MelonLoader
             }
             catch (Exception e)
             {
-                MelonLogger.Error(e.ToString());
+                errorMsg = e.ToString();
             }
             return false;
         }
@@ -73,7 +75,8 @@ namespace MelonLoader
                 return;
 
             foreach (var asm in registrationQueue)
-                TryRegisterAssembly(asm);
+                if (!TryRegisterAssembly(asm, out string errorMsg))
+                    MelonLogger.Error($"{errorMsg}");
 
             registrationQueue = null;
         }
@@ -86,7 +89,7 @@ namespace MelonLoader
 
             foreach (Type type in typeTbl)
             {
-                object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), true);
+                object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2CppWithInterfaces), false);
                 if ((attTbl == null) || (attTbl.Length <= 0))
                     continue;
 
