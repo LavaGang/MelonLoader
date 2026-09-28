@@ -37,7 +37,7 @@
     <Target Condition="'$(RuntimeIdentifier.StartsWith(`osx-`))' == 'true'" Name="BuildOSXEntry" BeforeTargets="Build">
         <!-- -arch is required because g++ on Apple Silicon defaults to arm64, producing
              an object file that ld64 silently ignores when linking an x86_64 dylib. -->
-        <Exec Command="g++ -arch $(OSXEntryArch) -c -O2 -fPIC OSXEntry/osxentry.cpp -o $(OSXEntryPath)" />
+        <Exec Command="g++ -mmacosx-version-min=12.0 -arch $(OSXEntryArch) -c -O2 -fPIC OSXEntry/osxentry.cpp -o $(OSXEntryPath)" />
     </Target>
 
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'">
