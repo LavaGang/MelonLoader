@@ -44,7 +44,6 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(HarmonyLib.HarmonyGlobalSettings))]
 [assembly: TypeForwardedTo(typeof(HarmonyLib.HarmonyMethod))]
 [assembly: TypeForwardedTo(typeof(HarmonyLib.HarmonyMethodExtensions))]
-[assembly: TypeForwardedTo(typeof(HarmonyLib.InlineSignature))]
 [assembly: TypeForwardedTo(typeof(HarmonyLib.PatchInfo))]
 [assembly: TypeForwardedTo(typeof(HarmonyLib.Patch))]
 [assembly: TypeForwardedTo(typeof(HarmonyLib.PatchClassProcessor))]

@@ -19,8 +19,12 @@ namespace MelonLoader.Fixes.Harmony
             }
             catch (Exception ex) { MelonLogger.Warning(ex); }
 
-            Hook.OnDetour += (detour, originalMethod, patchMethod, delegateTarget) => PatchMethod(patchMethod);
-            Detour.OnDetour += (detour, originalMethod, patchMethod) => PatchMethod(patchMethod);
+            try
+            {
+                Core.HarmonyInstance.Patch(AccessTools.Method(typeof(Hook), "Apply"),
+                    AccessTools.Method(instancePatchFixType, "PatchHookApply").ToNewHarmonyMethod());
+            }
+            catch (Exception ex) { MelonLogger.Warning(ex); }
         }
 
         private static bool PatchMethod(MethodBase __0)
@@ -31,5 +35,7 @@ namespace MelonLoader.Fixes.Harmony
                 throw new Exception("Patch Method must be a Static Method!");
             return true;
         }
+
+        private static bool PatchHookApply(Hook __instance) => PatchMethod(__instance.Target);
     }
 }

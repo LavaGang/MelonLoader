@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Reflection;
-using System.IO;
 using bHapticsLib;
 using System.Threading;
-using HarmonyLib;
 using MelonLoader.Resolver;
 using MelonLoader.Utils;
 using MelonLoader.InternalUtils;
 using MelonLoader.Melons;
-using MonoMod.RuntimeDetour;
-using MonoMod.RuntimeDetour.Platforms;
 
 [assembly: MelonLoader.PatchShield]
 
@@ -53,14 +48,6 @@ namespace MelonLoader
 
             Assertions.LemonAssertMapping.Setup();
             HarmonyLogger.Setup();
-
-#if !WINDOWS && !NET6_0_OR_GREATER
-            // Using Process.Start can run Console..cctor
-            // Since MonoMod's PlatformHelper (used by DetourHelper.Native) runs Process.Start to determine ARM/x86
-            // platform, this causes the unpatched TermInfoReader to kick in before it can be patched and fixed when
-            // installing the XTermFix below. To work around this, we can force the platform directly
-            DetourHelper.Native = new DetourNativeMonoPosixPlatform(new DetourNativeX86Platform());
-#endif
 
             HarmonyInstance = new HarmonyLib.Harmony(Properties.BuildInfo.Name);
 
