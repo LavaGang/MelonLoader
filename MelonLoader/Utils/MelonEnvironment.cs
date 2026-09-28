@@ -12,6 +12,37 @@ namespace MelonLoader.Utils
             "net6";
 #endif
 
+#if OSX
+		[System.Runtime.InteropServices.DllImport("/usr/lib/libSystem.B.dylib")]
+		private static extern int _NSGetExecutablePath([System.Runtime.InteropServices.Out] byte[] buffer, ref uint size);
+
+		private static string GetOSXGameExecutablePath() {
+			// MainModule can refer to the embedding Mono runtime instead of the
+			// game's executable. dyld knows the actual process executable path.
+			uint size = 1024;
+			var buffer = new byte[size];
+			if (_NSGetExecutablePath(buffer, ref size) != 0) {
+				buffer = new byte[size];
+				if (_NSGetExecutablePath(buffer, ref size) != 0) {
+					throw new IOException("Could not determine the game executable path.");
+				}
+			}
+			var length = System.Array.IndexOf(buffer, (byte)0);
+			if (length < 0) {
+				throw new IOException("The game executable path was not null-terminated.");
+			}
+			var path = Path.GetDirectoryName(Path.GetFullPath(System.Text.Encoding.UTF8.GetString(buffer, 0, length)));
+			while (!string.IsNullOrEmpty(path)) {
+				if (path.EndsWith(".app", System.StringComparison.OrdinalIgnoreCase) &&
+					Directory.Exists(Path.Combine(path, "Contents/Resources/Data"))) {
+					return path;
+				}
+				path = Path.GetDirectoryName(path);
+			}
+			throw new DirectoryNotFoundException("Could not locate the Unity app bundle containing the game executable.");
+		}
+#endif
+
         public static bool IsDotnetRuntime { get; } = OurRuntimeName == "net6";
         public static bool IsMonoRuntime { get; } = !IsDotnetRuntime;
 
@@ -19,7 +50,7 @@ namespace MelonLoader.Utils
 
         public static string GameExecutablePath { get; } =
 #if OSX
-            MelonUtils.GetPathAncestor(Process.GetCurrentProcess()!.MainModule!.FileName, 3);
+            GetOSXGameExecutablePath();
 #else
             Process.GetCurrentProcess().MainModule.FileName;
 #endif
