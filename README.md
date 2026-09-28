@@ -262,7 +262,7 @@ MelonLoader uses a proxy DLL to trick the game into loading itself on startup. T
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/LICENSE.md) for the full License.
 
 Third-party Libraries used as Source Code and/or bundled in Binary Form:
-- [Dobby](https://github.com/jmpews/Dobby) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/jmpews/Dobby/blob/master/LICENSE) for the full License.
+- [Dobby](https://github.com/LavaGang/Dobby) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/Dobby/blob/master/LICENSE) for the full License.
 - [plthook](https://github.com/LavaGang/plthook) is licensed under the 2-Clause BSD License. See [LICENSE](https://github.com/LavaGang/plthook/blob/master/LICENSE.md) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
 - [HarmonyX](https://github.com/BepInEx/HarmonyX) is licensed under the MIT License. See [LICENSE](https://github.com/BepInEx/HarmonyX/blob/master/LICENSE) for the full License.
