@@ -27,8 +27,8 @@
         <IsPackable>false</IsPackable>
         <Configurations>Debug;Release</Configurations>
 		
-        <Platforms>x86;x64</Platforms>
-        <RuntimeIdentifiers>win-x86;win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+        <Platforms>x86;x64;arm64</Platforms>
+        <RuntimeIdentifiers>win-x86;win-x64;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
 		
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -108,6 +108,9 @@
 
     <PropertyGroup Condition="'$(RuntimeIdentifier.EndsWith(`-x64`))' == 'true'">
         <DefineConstants>$(DefineConstants);X64</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(RuntimeIdentifier.EndsWith(`-arm64`))' == 'true'">
+        <DefineConstants>$(DefineConstants);ARM64</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup>
