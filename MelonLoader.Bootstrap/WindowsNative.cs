@@ -13,6 +13,10 @@ internal static partial class WindowsNative
     [LibraryImport("kernel32.dll", EntryPoint = "GetProcAddress", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
     internal static partial nint GetProcAddress(nint hModule, string lpProcName);
+    
+    [LibraryImport("kernel32.dll", EntryPoint = "LoadLibraryA", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
+    internal static partial nint LoadLibrary(string lpLibFileName);
 
     [LibraryImport("kernel32.dll")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]

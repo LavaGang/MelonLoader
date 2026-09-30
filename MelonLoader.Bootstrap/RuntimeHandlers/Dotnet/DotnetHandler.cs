@@ -159,7 +159,7 @@ internal static class DotnetHandler
         catch (Exception ex)
         {
             if (LoaderConfig.Current.Loader.DebugMode)
-                MelonLogger.LogError(ex.ToString());
+                Core.Logger.Error(ex.ToString());
             return false;
         }
 
@@ -174,7 +174,7 @@ internal static class DotnetHandler
         catch (Exception ex)
         {
             if (LoaderConfig.Current.Loader.DebugMode)
-                MelonLogger.LogError(ex.ToString());
+                Core.Logger.Error(ex.ToString());
             return false;
         }
 
@@ -199,7 +199,7 @@ internal static class DotnetHandler
         catch (Exception ex)
         {
             if (LoaderConfig.Current.Loader.DebugMode)
-                MelonLogger.LogError(ex.ToString());
+                Core.Logger.Error(ex.ToString());
         }
         
         // Restore Original Root and Path
@@ -211,7 +211,7 @@ internal static class DotnetHandler
         catch (Exception ex)
         {
             if (LoaderConfig.Current.Loader.DebugMode)
-                MelonLogger.LogError(ex.ToString());
+                Core.Logger.Error(ex.ToString());
         }
 
         return false;

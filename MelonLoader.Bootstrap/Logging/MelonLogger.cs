@@ -105,6 +105,8 @@ internal static class MelonLogger
         {
             Core.Logger.Error("Failed to create any log files. Logging to console only");
         }
+        
+        ConsoleHandler.InstallHooks();
 
         if (LoaderConfig.Current.Loader.CapturePlayerLogs)
         {
@@ -131,7 +133,7 @@ internal static class MelonLogger
             file.WriteLine(log);
         }
     }
-
+    
     public static void Log(ColorARGB msgColor, ReadOnlySpan<char> msg, ReadOnlySpan<char> strippedMessage)
     {
         var time = DateTime.Now.ToString(timeFormat);

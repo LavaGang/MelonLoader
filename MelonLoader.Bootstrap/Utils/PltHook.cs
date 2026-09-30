@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using MelonLoader.Bootstrap.Logging;
 
 namespace MelonLoader.Bootstrap;
 
@@ -36,19 +35,21 @@ internal static partial class PltHook
     private static partial nint PlthookError();
 
     private static bool WasError;
-    private static string? PlayerFileName;
+    private static string? PlayerFilePath;
+    private static nint PlayerModuleHandle;
     private const string UnityPlayerLibName = "UnityPlayer";
 
     internal static void InstallHooks(List<(string functionName, nint hookFunctionPtr)> hooks)
     {
-        if (!EnsureUnityPlayerLibrary())
+        if (!FindUnityPlayerLibrary()
+            || !LoadUnityPlayerLibrary())
             return;
         
         nint pltHook = IntPtr.Zero;
-        if (PlthookOpen(ref pltHook, PlayerFileName) != 0)
+        if (PlthookOpenByHandle(ref pltHook, PlayerModuleHandle) != 0)
         {
-            MelonLogger.LogError($"plthook_open error: {Marshal.PtrToStringAuto(PlthookError())}");
-            PlayerFileName = null;
+            Core.Logger.Error($"plthook_open error: {Marshal.PtrToStringAuto(PlthookError())}");
+            PlayerFilePath = null;
             WasError = true;
             return;
         }
@@ -68,21 +69,45 @@ internal static partial class PltHook
         PlthookClose(pltHook);
     }
 
-    private static bool EnsureUnityPlayerLibrary()
+    private static bool LoadUnityPlayerLibrary()
+    {
+        if (WasError)
+            return false;
+        if (PlayerModuleHandle != IntPtr.Zero)
+            return true;
+        
+        MelonDebug.Log($"Attempting to use UnityPlayer: '{PlayerFilePath}'");
+        
+#if WINDOWS
+        PlayerModuleHandle = WindowsNative.LoadLibrary(PlayerFilePath!);
+#else
+        PlayerModuleHandle = LibcNative.Dlopen(PlayerFilePath!, LibcNative.RtldLazy | LibcNative.RtldNoLoad);
+#endif
+        if (PlayerModuleHandle == IntPtr.Zero)
+        {
+            Core.Logger.Error($"Failed to load {PlayerFilePath}, cannot apply plt hooks");
+            PlayerModuleHandle = IntPtr.Zero;
+            PlayerFilePath = null;
+            WasError = true;
+            return false;
+        }
+        
+        Core.Logger.Msg($"Using UnityPlayer: '{PlayerFilePath}'");
+        return true;
+    }
+
+    private static bool FindUnityPlayerLibrary()
     {
         if (WasError)
             return false;
         
-        if (!string.IsNullOrEmpty(PlayerFileName))
+        if (!string.IsNullOrEmpty(PlayerFilePath))
             return true;
         
-        PlayerFileName = Process.GetCurrentProcess().Modules.OfType<ProcessModule>()
+        PlayerFilePath = Process.GetCurrentProcess().Modules.OfType<ProcessModule>()
             .FirstOrDefault(x => x.FileName.Contains(UnityPlayerLibName))?.FileName;
-        if (!string.IsNullOrEmpty(PlayerFileName))
-        {
-            MelonDebug.Log($"Attempting to use UnityPlayer: '{PlayerFileName}'");
+        if (!string.IsNullOrEmpty(PlayerFilePath))
             return true;
-        }
 
         string processModulePath = Process.GetCurrentProcess().MainModule!.FileName;
         string parentPlayerPath = Path.GetDirectoryName(processModulePath)!;
@@ -90,37 +115,36 @@ internal static partial class PltHook
 #if OSX
         string libName = $"{UnityPlayerLibName}.dylib";
         parentPlayerPath = Path.Combine(Path.GetDirectoryName(parentPlayerPath)!, "Frameworks");
-        PlayerFileName = Path.Combine(parentPlayerPath, libName);
+        PlayerFilePath = Path.Combine(parentPlayerPath, libName);
 #elif LINUX
         string libName = $"{UnityPlayerLibName}.so";
-        PlayerFileName = Path.Combine(parentPlayerPath, libName);
+        PlayerFilePath = Path.Combine(parentPlayerPath, libName);
 #elif WINDOWS
         string libName = $"{UnityPlayerLibName}.dll";
-        PlayerFileName = Path.Combine(parentPlayerPath, libName);
+        PlayerFilePath = Path.Combine(parentPlayerPath, libName);
 #endif
 
 #if !WINDOWS
-        if (!File.Exists(PlayerFileName))
+        if (!File.Exists(PlayerFilePath))
         {
             libName = $"lib{UnityPlayerLibName}.so";
-            PlayerFileName = Path.Combine(parentPlayerPath, libName);
+            PlayerFilePath = Path.Combine(parentPlayerPath, libName);
         }
-        if (!File.Exists(PlayerFileName))
+        if (!File.Exists(PlayerFilePath))
         {
             libName = $"Lib{UnityPlayerLibName}.so";
-            PlayerFileName = Path.Combine(parentPlayerPath, libName);
+            PlayerFilePath = Path.Combine(parentPlayerPath, libName);
         }
 #endif
         
-        if (!File.Exists(PlayerFileName))
+        if (!File.Exists(PlayerFilePath))
         {
-            MelonLogger.LogError($"Unable to find {UnityPlayerLibName} library to apply plthook");
-            PlayerFileName = null;
+            Core.Logger.Error($"Unable to find {UnityPlayerLibName} library to apply plthook");
+            PlayerFilePath = null;
             WasError = true;
             return false;
         }
         
-        MelonDebug.Log($"Attempting to use UnityPlayer: '{PlayerFileName}'");
         return true;
     }
 }

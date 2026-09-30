@@ -51,19 +51,7 @@ internal static class ConsoleHandler
             if (!string.IsNullOrEmpty(title))
                 Console.Title = title;
 
-#if LINUX
-        PltHook.InstallHooks(
-        [
-            ("fclose", Marshal.GetFunctionPointerForDelegate(HookFCloseDelegate))
-        ]);
-#endif
-
 #if WINDOWS
-        PltHook.InstallHooks(
-        [
-            ("CloseHandle", Marshal.GetFunctionPointerForDelegate(HookCloseHandleDelegate)),
-        ]);
-
         Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
         Console.SetError(new StreamWriter(Console.OpenStandardError()) { AutoFlush = true });
         Console.SetIn(new StreamReader(Console.OpenStandardInput()));
@@ -75,6 +63,21 @@ internal static class ConsoleHandler
 #endif
 
         IsOpen = true;
+    }
+
+    public static void InstallHooks()
+    {
+#if LINUX
+        PltHook.InstallHooks(
+        [
+            ("fclose", Marshal.GetFunctionPointerForDelegate(HookFCloseDelegate))
+        ]);
+#elif WINDOWS
+        PltHook.InstallHooks(
+        [
+            ("CloseHandle", Marshal.GetFunctionPointerForDelegate(HookCloseHandleDelegate)),
+        ]);
+#endif
     }
 
     public static void NullHandles()
