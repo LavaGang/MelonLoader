@@ -25,8 +25,7 @@ namespace MelonLoader.Utils
 #endif
         public static string MelonLoaderDirectory { get; } = Path.Combine(MelonBaseDirectory, "MelonLoader");
         public static string GameRootDirectory { get; } = Path.GetDirectoryName(GameExecutablePath);
-
-
+        
         public static string DependenciesDirectory { get; } = Path.Combine(MelonLoaderDirectory, "Dependencies");
         public static string SupportModuleDirectory { get; } = Path.Combine(DependenciesDirectory, "SupportModules");
         public static string CompatibilityLayerDirectory { get; } = Path.Combine(DependenciesDirectory, "CompatibilityLayers");
@@ -47,7 +46,9 @@ namespace MelonLoader.Utils
 #endif
         public static string UnityGameManagedDirectory { get; } = Path.Combine(UnityGameDataDirectory, "Managed");
         public static string Il2CppDataDirectory { get; } = Path.Combine(UnityGameDataDirectory, "il2cpp_data");
-        public static string UnityPlayerPath { get; } = Path.Combine(GameRootDirectory, "UnityPlayer.dll");
+        
+        public static string UnityPlayerPath { get; } = FindLibrary("UnityPlayer");
+        public static string Il2CppGameAssemblyPath { get; } = FindLibrary("GameAssembly");
 
         public static string MelonManagedDirectory { get; } = Path.Combine(DependenciesDirectory, "Mono");
         public static string Il2CppAssembliesDirectory { get; } = Path.Combine(MelonLoaderDirectory, "Il2CppAssemblies");
@@ -61,6 +62,57 @@ namespace MelonLoader.Utils
             MelonLogger.MsgDirect($"Game::ApplicationPath = {GameExecutablePath}");
 
             MelonLogger.MsgDirect($"Runtime Type: {OurRuntimeName}");
+        }
+        
+        private static string FindLibrary(string libraryName)
+        {
+	        string modFilePath = string.Empty;
+	        string modFileName = string.Empty;
+	        
+	        var loadedModules = Process.GetCurrentProcess().Modules;
+	        foreach (var mod in loadedModules)
+	        {
+		        if (mod.GetType() != typeof(ProcessModule))
+			        continue;
+		        
+		        modFilePath = ((ProcessModule)mod).FileName;
+		        modFileName = Path.GetFileName(modFilePath);
+		        if (modFileName.Contains(libraryName))
+			        return modFilePath;
+	        }
+
+	        string processModulePath = Process.GetCurrentProcess().MainModule!.FileName;
+	        string parentPlayerPath = Path.GetDirectoryName(processModulePath)!;
+        
+#if OSX
+	        modFileName = $"{libraryName}.dylib";
+	        parentPlayerPath = Path.Combine(Path.GetDirectoryName(parentPlayerPath)!, "Frameworks");
+	        modFilePath = Path.Combine(parentPlayerPath, modFileName);
+#elif LINUX
+	        modFileName = $"{libraryName}.so";
+	        modFilePath = Path.Combine(parentPlayerPath, modFileName);
+#elif WINDOWS
+	        modFileName = $"{libraryName}.dll";
+	        modFilePath = Path.Combine(parentPlayerPath, modFileName);
+#endif
+
+#if !WINDOWS
+	        if (!File.Exists(modFilePath))
+	        {
+		        modFileName = $"lib{libraryName}.so";
+		        modFilePath = Path.Combine(parentPlayerPath, modFileName);
+	        }
+	        if (!File.Exists(modFilePath))
+	        {
+		        modFileName = $"Lib{libraryName}.so";
+		        modFilePath = Path.Combine(parentPlayerPath, modFileName);
+	        }
+#endif
+        
+	        if (!File.Exists(modFilePath))
+		        return null;
+        
+	        return modFilePath;
         }
         
 #if OSX

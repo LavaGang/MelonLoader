@@ -111,7 +111,7 @@ namespace MelonLoader.Support
         {
             if (libraryName == "GameAssembly")
             {
-                string gameAssemblyPath = Path.Combine(MelonEnvironment.GameExecutablePath, "Contents", "Frameworks", $"{libraryName}.dylib");
+                string gameAssemblyPath = MelonEnvironment.Il2CppGameAssemblyPath;
                 return System.Runtime.InteropServices.NativeLibrary.Load(gameAssemblyPath);
             }
             return IntPtr.Zero;

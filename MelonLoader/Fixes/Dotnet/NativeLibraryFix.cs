@@ -27,7 +27,7 @@ public class NativeLibraryFix
     {
         if (__0 != "GameAssembly")
             return true;
-        __0 = Path.Combine(MelonEnvironment.GameExecutablePath, "Contents", "Frameworks", $"{__0}.dylib");
+        __0 = MelonEnvironment.Il2CppGameAssemblyPath;
         MelonDebug.Msg($"Loading library {__0}");
         return true;
     }

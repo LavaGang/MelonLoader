@@ -60,7 +60,8 @@
 13. Fixed an issue with MacOS not discovering the Unity app bundle correctly   (Credits to [johanntan](https://github.com/johanntan))
 14. Fixed an issue with plthook on MacOS not applying chained-fixup correctly   (Credits to [johanntan](https://github.com/johanntan))
 15. Fixed an issue with plthook application being used earlier than logging initialization resulting in lost error logs
-16. Fixed a race condition issue with the load order of Bootstrap/Proxy and UnityPlayer
+16. Fixed an issue with MelonEnvironment using an incorrect path for UnityPlayer and GameAssembly
+17. Fixed a race condition issue with the load order of Bootstrap/Proxy and UnityPlayer
 
 ---
 

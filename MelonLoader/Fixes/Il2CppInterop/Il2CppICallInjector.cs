@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using Il2CppInterop.HarmonySupport;
 using HarmonyLib;
+using MelonLoader.Utils;
 using Mono.Cecil;
 using MonoMod.Cil;
 using MethodAttributes = System.Reflection.MethodAttributes;
@@ -46,10 +46,9 @@ namespace MelonLoader.Fixes.Il2CppInterop
                 if (_generateNativeToManagedTrampoline == null)
                     throw new Exception("Failed to get Il2CppDetourMethodPatcher.GenerateNativeToManagedTrampoline");
 
-                string gameAssemblyName = "GameAssembly";
-                NativeLibrary gameAssemblyLib = NativeLibrary.Load(gameAssemblyName);
+                NativeLibrary gameAssemblyLib = NativeLibrary.Load(MelonEnvironment.Il2CppGameAssemblyPath);
                 if (gameAssemblyLib == null)
-                    throw new Exception($"Failed to load {gameAssemblyName} Native Library");
+                    throw new Exception($"Failed to load {MelonEnvironment.Il2CppGameAssemblyPath}");
 
                 IntPtr il2cpp_resolve_icall = gameAssemblyLib.GetExport(nameof(il2cpp_resolve_icall));
                 if (il2cpp_resolve_icall == IntPtr.Zero)

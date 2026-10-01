@@ -169,12 +169,14 @@ namespace MelonLoader.InternalUtils
 
         private static UnityVersion ReadVersionFallback(string gameDataPath)
         {
-            string unityPlayerPath = MelonEnvironment.UnityPlayerPath;
-            if (!File.Exists(unityPlayerPath))
-                unityPlayerPath = MelonEnvironment.GameExecutablePath;
-
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
+                string unityPlayerPath = MelonEnvironment.UnityPlayerPath;
+            
+                if (string.IsNullOrEmpty(unityPlayerPath) 
+                    || !File.Exists(unityPlayerPath))
+                    unityPlayerPath = MelonEnvironment.GameExecutablePath;
+                
                 var unityVer = FileVersionInfo.GetVersionInfo(unityPlayerPath);
                 return TryParse(unityVer.FileVersion);
             }
