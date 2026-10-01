@@ -46,15 +46,21 @@
 ### v0.7.4
 
 1. Bumped Bootstrap .NET version to 10   (Credits to [ds5678](https://github.com/ds5678))
-2. Improved RemoteAPI outage handling to report one warning instead of an error per host and retain cached Il2Cpp generation settings   (Credits to [batmanwarrior](https://github.com/batmanwarrior))
-3. Fixed an issue with stale Cpp2IL output being reused for assembly generation   (Credits to [ifBars](https://github.com/ifBars))
-4. Fixed an issue with Logging sometimes deleting the newest log instead of the oldest in rotation   (Credits to [JesseWV](https://github.com/JesseWV))
-5. Changed Portable Dotnet Handling to download from official Microsoft Sources instead
-6. Fixed an issue with Melon Callback Registry not failing gracefully   (Credits to [ObjectInSpace](https://github.com/ObjectInSpace))
-7. Implemented --cpp2il.keepoutput launch option for keeping Cpp2IL output after generation is attempted
-8. Fixed an issue with MacOS using the wrong NativeLibrary Load method resulting in unhandled exceptions
-9. Fixed an issue with .NET 6 Portable Tar Extraction throwing an End of File exception
-10. Fixed an issue with RegisterTypeInIl2Cpp and RegisterTypeInIl2CppWithInterfaces attributes not gracefully failing when exceptions are thrown
+2. Changed Portable Dotnet Handling to download from official Microsoft Sources
+3. Implemented --cpp2il.keepoutput launch option for keeping Cpp2IL output after generation is attempted
+4. Implemented support for MacOS Arm64   (Credits to [kkorenn](https://github.com/kkorenn))
+5. Improved RemoteAPI outage handling to report one warning instead of an error per host and retain cached Il2Cpp generation settings   (Credits to [batmanwarrior](https://github.com/batmanwarrior))
+6. Fixed an issue with stale Cpp2IL output being reused for assembly generation   (Credits to [ifBars](https://github.com/ifBars))
+7. Fixed an issue with Logging sometimes deleting the newest log instead of the oldest in rotation   (Credits to [JesseWV](https://github.com/JesseWV))
+8. Fixed an issue with Melon Callback Registry not failing gracefully   (Credits to [ObjectInSpace](https://github.com/ObjectInSpace))
+9. Fixed an issue with MacOS using the wrong NativeLibrary Load method resulting in unhandled exceptions
+10. Fixed an issue with .NET 6 Portable Tar Extraction throwing an End of File exception
+11. Fixed an issue with RegisterTypeInIl2Cpp and RegisterTypeInIl2CppWithInterfaces attributes not gracefully failing when exceptions are thrown
+12. Fixed an issue with MacOS host arguments not being read correctly   (Credits to [johanntan](https://github.com/johanntan))
+13. Fixed an issue with MacOS not discovering the Unity app bundle correctly   (Credits to [johanntan](https://github.com/johanntan))
+14. Fixed an issue with plthook on MacOS not applying chained-fixup correctly   (Credits to [johanntan](https://github.com/johanntan))
+15. Fixed an issue with plthook application being used earlier than logging initialization resulting in lost error logs
+16. Fixed a race condition issue with the load order of Bootstrap/Proxy and UnityPlayer
 
 ---
 
