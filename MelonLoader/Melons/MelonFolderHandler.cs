@@ -192,7 +192,7 @@ public static class MelonFolderHandler
                 // Check for Exclusion
                 if (!dir.Equals(exc)
                     && !dir.StartsWith(exc))
-                    return;
+                    continue;
 
                 // Remove Path from Directory List
                 paths.Remove(dir);
@@ -200,6 +200,7 @@ public static class MelonFolderHandler
                 // Remove Path from Resolver
                 Resolver.MelonAssemblyResolver.RemoveSearchDirectory(dir);
                 // TO-DO: Remove Native Library Resolver
+                break;
             }
     }
 
