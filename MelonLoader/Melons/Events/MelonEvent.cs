@@ -44,6 +44,7 @@ namespace MelonLoader
                         a.melonAssembly.OnUnregister.Subscribe(() => Unsubscribe(a.del), unsubscribeOnFirstInvocation: true);
                     }
 
+                    bool inserted = false;
                     for (var b = 0; b < actions.Count; b++)
                     {
                         var act = actions[b];
@@ -51,12 +52,16 @@ namespace MelonLoader
                         {
                             actions.Insert(b, a);
                             UpdateEnumerator();
-                            return;
+                            inserted = true;
+                            break;
                         }
                     }
 
-                    actions.Add(a);
-                    UpdateEnumerator();
+                    if (!inserted)
+                    {
+                        actions.Add(a);
+                        UpdateEnumerator();
+                    }
                 }
             }
         }
