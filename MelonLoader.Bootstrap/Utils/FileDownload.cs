@@ -48,7 +48,7 @@ internal class FileDownload
                 await fileStream.WriteAsync(buffer, 0, bytesRead);
 
                 totalBytesRead += bytesRead;
-                if (totalBytes.HasValue)
+                if (totalBytes is > 0)
                 {
                     int progress = (int)((totalBytesRead * 100L) / totalBytes.Value);
                     if (progress != lastProgress)
@@ -61,7 +61,7 @@ internal class FileDownload
             contentStream.Close();
             fileStream.Close();
 
-            if ((lastProgress != 100)
+            if ((totalBytes.HasValue && totalBytesRead != totalBytes.Value)
                 || !resp.IsSuccessStatusCode)
             {
                 if (File.Exists(filePath))
