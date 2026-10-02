@@ -70,6 +70,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
                         processStartInfo.EnvironmentVariables[kvp.Key] = kvp.Value;
                 }
 
+#if OSX
+                // Generator helpers must not inherit the game's injected libraries, which may
+                // target a different architecture. Apply after overrides, only to the child.
+                processStartInfo.EnvironmentVariables.Remove("DYLD_INSERT_LIBRARIES");
+#endif
+
                 Core.Logger.Msg("\"" + ExeFilePath + "\" " + processStartInfo.Arguments);
 
                 Process process = new Process();
