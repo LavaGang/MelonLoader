@@ -135,13 +135,13 @@ internal sealed class MacOSArm64NativeDetourPlatform : IDetourNativePlatform
         switch (type)
         {
             case 0:
-                return 5;
+                return 8;
             case 1:
-                return 6;
+                return 12;
             case 2:
-                return 14;
+                return 8;
             case 3:
-                return 6;
+                return 12;
             case 4:
                 return 16;
             default:
@@ -154,15 +154,12 @@ internal sealed class MacOSArm64NativeDetourPlatform : IDetourNativePlatform
         if (!NativeJitCopySupported)
             return false;
 
-        try
-        {
-            return CallNativeJitCopy(dst, src, (UIntPtr)size) != 0;
-        }
-        catch
-        {
-            _nativeJitCopySupported = false;
-            return false;
-        }
+        // Once native copy support is available, a failed protected write must
+        // not fall through to the raw writer: MakeWritable was deliberately a
+        // no-op, so that fallback could fault on the same RX destination.
+        if (CallNativeJitCopy(dst, src, (UIntPtr)size) == 0)
+            throw new InvalidOperationException($"Failed to copy {size} detour bytes to 0x{dst:X} with restored macOS memory protections");
+        return true;
     }
 
     private static bool NativeJitCopySupported
