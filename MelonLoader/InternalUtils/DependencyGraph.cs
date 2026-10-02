@@ -209,7 +209,7 @@ namespace MelonLoader.InternalUtils
         private void TopologicalSortInto(IList<T> loadedMelons)
         {
             int[] unloadedDependencies = new int[vertices.Length];
-            SortedList<string, Vertex> loadableMelons = new SortedList<string, Vertex>();
+            SortedList<Vertex, Vertex> loadableMelons = new SortedList<Vertex, Vertex>(new VertexComparer());
             int skippedMelons = 0;
 
             // Find all sinks in the dependency graph, i.e. Melons without any dependencies on other Melons
@@ -219,9 +219,8 @@ namespace MelonLoader.InternalUtils
                 int dependencyCount = vertex.dependencies.Count;
 
                 unloadedDependencies[i] = dependencyCount;
-                if ((dependencyCount == 0) 
-                    && !loadableMelons.ContainsKey(vertex.name))
-                    loadableMelons.Add(vertex.name, vertex);
+                if (dependencyCount == 0)
+                    loadableMelons.Add(vertex, vertex);
             }
 
             // Perform the (reverse) topological sorting
@@ -230,8 +229,7 @@ namespace MelonLoader.InternalUtils
                 Vertex melon = loadableMelons.Values[0];
                 loadableMelons.RemoveAt(0);
 
-                if (!melon.skipLoading
-                    && !loadableMelons.ContainsKey(melon.name))
+                if (!melon.skipLoading)
                     loadedMelons.Add(melon.melon);
                 else
                     ++skippedMelons;
@@ -241,9 +239,8 @@ namespace MelonLoader.InternalUtils
                     unloadedDependencies[dependent.index] -= 1;
                     dependent.skipLoading |= melon.skipLoading;
 
-                    if ((unloadedDependencies[dependent.index] == 0)
-                        && !loadableMelons.ContainsKey(dependent.name))
-                        loadableMelons.Add(dependent.name, dependent);
+                    if (unloadedDependencies[dependent.index] == 0)
+                        loadableMelons.Add(dependent, dependent);
                 }
             }
 
@@ -278,6 +275,15 @@ namespace MelonLoader.InternalUtils
                 dependencies = new List<Vertex>();
                 dependents = new List<Vertex>();
                 skipLoading = false;
+            }
+        }
+
+        private sealed class VertexComparer : IComparer<Vertex>
+        {
+            public int Compare(Vertex x, Vertex y)
+            {
+                int nameComparison = string.CompareOrdinal(x.name, y.name);
+                return nameComparison != 0 ? nameComparison : x.index.CompareTo(y.index);
             }
         }
     }
