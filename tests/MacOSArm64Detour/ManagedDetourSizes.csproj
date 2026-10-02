@@ -6,8 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MonoMod.RuntimeDetour">
-      <HintPath>$([System.Environment]::GetFolderPath(SpecialFolder.UserProfile))/.nuget/packages/monomod.runtimedetour/22.7.31.1/lib/net5.0/MonoMod.RuntimeDetour.dll</HintPath>
+    <PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" />
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>$(MSBuildSDKsPath)/../Roslyn/bincore/Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>$(MSBuildSDKsPath)/../Roslyn/bincore/Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
     <Compile Include="../../MelonLoader/Fixes/MonoMod/MacOSArm64NativeDetourPlatform.cs" Link="MacOSArm64NativeDetourPlatform.cs" />
   </ItemGroup>

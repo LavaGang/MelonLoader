@@ -1,6 +1,10 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using MelonLoader.Fixes.MonoMod;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+if (args.Length != 1) throw new ArgumentException("Expected the production Core.cs path.");
 
 uint[] expectedSizes = [8, 12, 8, 12, 16];
 MethodInfo wrapperSize = typeof(MacOSArm64NativeDetourPlatform).GetMethod(
@@ -44,6 +48,21 @@ finally
 }
 
 Console.WriteLine("ALL MANAGED DETOUR SIZE CHECKS PASSED");
+
+string coreSource = File.ReadAllText(args[0]);
+var parseOptions = new CSharpParseOptions(
+    LanguageVersion.Latest, preprocessorSymbols: ["OSX", "ARM64", "NET6_0_OR_GREATER"]);
+var coreRoot = CSharpSyntaxTree.ParseText(coreSource, parseOptions).GetRoot();
+var assignments = coreRoot.DescendantNodes().OfType<AssignmentExpressionSyntax>().ToArray();
+var nativeAssignments = assignments.Where(assignment =>
+    assignment.Left.ToString() == "DetourHelper.Native").ToArray();
+Check(nativeAssignments.Length == 1, "net6 macOS ARM64 selects one explicit native platform");
+Check(nativeAssignments[0].Right.ToString().Contains("MacOSArm64NativeDetourPlatform"),
+    "net6 macOS ARM64 selects protected detour wrapper");
+var harmonyAssignment = assignments.Single(assignment => assignment.Left.ToString() == "HarmonyInstance");
+Check(nativeAssignments[0].SpanStart < harmonyAssignment.SpanStart,
+    "net6 macOS ARM64 selects wrapper before Harmony initialization");
+Console.WriteLine("ALL CORE PLATFORM SELECTION CHECKS PASSED");
 
 static void Check(bool condition, string label)
 {
