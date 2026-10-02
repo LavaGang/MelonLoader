@@ -12,7 +12,12 @@ internal partial class LibcNative
     internal const int SeekEnd = 2;
 
     internal const int RtldLazy = 0x1;
+    internal const int RtldNow = 0x2;
+    internal const int RtldLocal = 0x4;
+    internal const int RtldGlobal = 0x8;
     internal const int RtldNoLoad = 0x10;
+    internal const int RtldNoDelete = 0x80;
+    internal const int RtldFirst = 0x100;
     
     [LibraryImport("libc", EntryPoint = "__libc_start_main")]
     public static unsafe partial int LibCStartMain(

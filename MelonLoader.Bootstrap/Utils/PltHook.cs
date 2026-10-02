@@ -39,7 +39,9 @@ internal static partial class PltHook
     private static nint PlayerModuleHandle;
     private const string UnityPlayerLibName = "UnityPlayer";
 
-    internal static void InstallHooks(List<(string functionName, nint hookFunctionPtr)> hooks)
+    internal static void InstallHooks(List<(
+        string functionName,
+        nint hookFunctionPtr)> hooks)
     {
         if (!FindUnityPlayerLibrary()
             || !LoadUnityPlayerLibrary())
@@ -48,7 +50,7 @@ internal static partial class PltHook
         nint pltHook = IntPtr.Zero;
         if (PlthookOpenByHandle(ref pltHook, PlayerModuleHandle) != 0)
         {
-            Core.Logger.Error($"plthook_open error: {Marshal.PtrToStringAuto(PlthookError())}");
+            Core.Logger.Error($"plthook_open_by_handle error: {Marshal.PtrToStringAuto(PlthookError())}");
             PlayerFilePath = null;
             WasError = true;
             return;
@@ -81,7 +83,7 @@ internal static partial class PltHook
 #if WINDOWS
         PlayerModuleHandle = WindowsNative.LoadLibrary(PlayerFilePath!);
 #else
-        PlayerModuleHandle = LibcNative.Dlopen(PlayerFilePath!, LibcNative.RtldLazy | LibcNative.RtldNoLoad);
+        PlayerModuleHandle = LibcNative.Dlopen(PlayerFilePath!, LibcNative.RtldNow | LibcNative.RtldGlobal);
 #endif
         if (PlayerModuleHandle == IntPtr.Zero)
         {
