@@ -197,7 +197,7 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(entry_identifier))
                 throw new Exception("entry_identifier is null or empty when calling CreateEntry");
 
-            MelonPreferences_Category category = GetCategory(entry_identifier);
+            MelonPreferences_Category category = GetCategory(category_identifier);
             if (category == null)
                 category = CreateCategory(category_identifier);
 
