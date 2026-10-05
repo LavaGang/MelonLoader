@@ -151,13 +151,12 @@ public class ProcessModulesFix
             nint imageNamePtr = DyLdGetImageName(i);
             string imageName = Marshal.PtrToStringAnsi(imageNamePtr) ?? "";
             nint slide = DyLdGetImageVmAddrSlide(i);
+            // The header and load commands are mapped inside the first segment, so the sum of the segment sizes alone
+            // covers the image. Adding them again would make the module extend past its last mapped page.
             int memorySize = 0;
             nint headerPtr = DyLdGetImageHeader(i);
             var header = (MachHeader64)Marshal.PtrToStructure(headerPtr, typeof(MachHeader64))!;
-            var headerSize = Marshal.SizeOf(typeof(MachHeader64));
-            memorySize += headerSize;
-            memorySize += (int)header.sizeOfCommands;
-            nint commandPtr = headerPtr + headerSize;
+            nint commandPtr = headerPtr + Marshal.SizeOf(typeof(MachHeader64));
             nint entryOffset = 0;
             for (int j = 0; j < header.nbrCommands; j++)
             {
