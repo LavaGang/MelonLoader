@@ -81,7 +81,8 @@ internal static class Exports
     private static void RemoveLibraryPreloadEnv()
     {
         string[] ldPreloads = Environment.GetEnvironmentVariable(LdPreloadEnvName)!.Split(":");
-        string newLdPreload = string.Join(':', ldPreloads.Where(x => x != $"{CurrentAssemblyName}.{LibExtension}"));
+        // Entries may be absolute paths: melonloader-launch.sh injects the bootstrap by its full path
+        string newLdPreload = string.Join(':', ldPreloads.Where(x => Path.GetFileName(x) != $"{CurrentAssemblyName}.{LibExtension}"));
         string[]? ldLibraryPaths = Environment.GetEnvironmentVariable(LdPathEnvName)?.Split(":");
 
         // It's possible to hook without a library path set so we only remove ourselves if the variable had a value
