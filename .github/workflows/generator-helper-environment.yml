@@ -1,0 +1,27 @@
+name: Generator helper environment
+
+on:
+  push:
+    paths:
+      - Dependencies/Il2CppAssemblyGenerator/Packages/Models/ExecutablePackage.cs
+      - tests/ExecutablePackage/**
+      - .github/workflows/generator-helper-environment.yml
+  pull_request:
+    paths:
+      - Dependencies/Il2CppAssemblyGenerator/Packages/Models/ExecutablePackage.cs
+      - tests/ExecutablePackage/**
+      - .github/workflows/generator-helper-environment.yml
+
+permissions:
+  contents: read
+
+jobs:
+  helper-environment:
+    runs-on: macos-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - run: bash tests/ExecutablePackage/run.sh
