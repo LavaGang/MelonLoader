@@ -14,7 +14,9 @@ internal static partial class WindowsNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
     internal static partial nint GetProcAddress(nint hModule, string lpProcName);
     
-    [LibraryImport("kernel32.dll", EntryPoint = "LoadLibraryA", StringMarshalling = StringMarshalling.Utf8)]
+    // Wide variant: LoadLibraryA reads its argument in the ANSI code page, so a UTF-8 path
+    // with any non-ASCII character (an accented user or library folder) never resolves.
+    [LibraryImport("kernel32.dll", EntryPoint = "LoadLibraryW", StringMarshalling = StringMarshalling.Utf16)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
     internal static partial nint LoadLibrary(string lpLibFileName);
 
