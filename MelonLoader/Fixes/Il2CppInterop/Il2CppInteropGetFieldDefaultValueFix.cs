@@ -27,6 +27,9 @@ namespace MelonLoader.Fixes.Il2CppInterop
         private static Array _replacementSignatures;
         private static List<LemonTuple<string, string, int, bool>> _signaturesToAdd = new List<LemonTuple<string, string, int, bool>>
         {
+            ("\x48\x89\x5C\x24\x08\x48\x89\x74\x24\x10\x57\x48\x81\xEC\xCC\xCC\xCC\xCC\x48\x8B\x79\x10\x48\x8B\xD9\x48\x8B\xF2\x48\x2B\x9F",
+             "xxxxxxxxxxxxxx????xxxxxxxxxxxxx",
+             0, false),
         };
 
         internal static void Install()
