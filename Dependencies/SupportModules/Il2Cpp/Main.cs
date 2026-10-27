@@ -11,7 +11,10 @@ using Il2CppInterop.Common;
 using Microsoft.Extensions.Logging;
 using MelonLoader.Utils;
 using System.IO;
+using MelonLoader.Fixes.Dotnet;
+using MelonLoader.Fixes.Il2CppInterop;
 using MelonLoader.InternalUtils;
+using MelonLoader.Resolver;
 
 [assembly: MelonLoader.PatchShield]
 
@@ -35,7 +38,12 @@ namespace MelonLoader.Support
             {
                 try
                 {
-                    Assembly.LoadFrom(file);
+                    Assembly asm = Assembly.LoadFrom(file);
+                    string fileName = Path.GetFileNameWithoutExtension(file);
+                    if (!DotnetSimpleNameValidationFix.Error 
+                        && (fileName == "Il2Cppmscorlib"))
+                        MelonAssemblyResolver.GetAssemblyResolveInfo("Il2CppSystem.Private.CoreLib")
+                            .Override = asm;
                 }
                 catch { }
             }
