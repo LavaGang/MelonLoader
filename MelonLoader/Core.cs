@@ -130,7 +130,7 @@ namespace MelonLoader
             //  NativeStackWalk.LogNativeStackTrace();
 
             Fixes.Dotnet.DotnetAssemblyLoadContextFix.Install();
-            Fixes.Dotnet.DotnetModHandlerRedirectionFix.Install();
+            Fixes.Dotnet.DotnetSimpleNameValidationFix.Install();
 #endif
 
             Fixes.ForcedCultureInfo.Install();
