@@ -29,6 +29,12 @@ internal static class UnixPlayerLogsMirroring
     
     private static readonly StringBuilder LogBuffer = new(2048);
 
+    // Unity logs from several threads; LogBuffer is shared between them.
+    private static readonly object LogBufferLock = new();
+
+    // Most lines fit here. Longer ones are formatted again into a heap buffer of the exact size.
+    private const int StackFormatBufferSize = 1024;
+
     internal static void SetupPlayerLogMirroring()
     {
         PltHook.InstallHooks(
@@ -80,26 +86,65 @@ internal static class UnixPlayerLogsMirroring
     {
         int fd = LibcNative.Fileno(stream);
         bool fdIsStd = fd is LibcNative.Stdout or LibcNative.Stderr;
-        if (fdIsStd || (_foundPlayerLogsStream && stream == _streamPlayerLogs))
+        if (!fdIsStd && !(_foundPlayerLogsStream && stream == _streamPlayerLogs))
+            return LibcNative.Vfprintf(stream, format, vList);
+
+        byte* stackBuffer = stackalloc byte[StackFormatBufferSize];
+        int length = Format(stackBuffer, StackFormatBufferSize, format, vList);
+        if (length < 0)
+            return length;
+
+        if (length < StackFormatBufferSize || !CanFormatTwice)
+            return Mirror(stream, fdIsStd, stackBuffer, Math.Min(length, StackFormatBufferSize - 1));
+
+        byte[] heapBuffer = GC.AllocateUninitializedArray<byte>(length + 1);
+        fixed (byte* heap = heapBuffer)
         {
-            int bufferLength = LogBuffer.Capacity - LogBuffer.Length;
-            byte* bufferSpan = stackalloc byte[bufferLength];
-            int nbrBytesToWrite = LibcNative.Vsnprintf(bufferSpan, bufferLength, format, vList);
-            string originalLog = Encoding.UTF8.GetString(bufferSpan, nbrBytesToWrite);
-            LogBuffer.Append(originalLog);
-            if (LogBuffer[^1] == '\n')
+            length = Format(heap, heapBuffer.Length, format, vList);
+            return length < 0 ? length : Mirror(stream, fdIsStd, heap, length);
+        }
+    }
+
+    private static unsafe int Mirror(nint stream, bool fdIsStd, byte* text, int length)
+    {
+        string? line = null;
+        lock (LogBufferLock)
+        {
+            LogBuffer.Append(Encoding.UTF8.GetString(text, length));
+            if (LogBuffer.Length > 0 && LogBuffer[^1] == '\n')
             {
-                LogBuffer.Remove(LogBuffer.Length - 1, 1);
-                Core.PlayerLogger.Msg(LogBuffer.ToString());
+                line = LogBuffer.ToString(0, LogBuffer.Length - 1);
                 LogBuffer.Clear();
             }
-            if (fdIsStd)
-                return nbrBytesToWrite;
-
-            LibcNative.Fseek(stream, 0, LibcNative.SeekEnd);
-            return LibcNative.Fwrite(bufferSpan, 1, nbrBytesToWrite, stream);
         }
-        return LibcNative.Vfprintf(stream, format, vList);
+        if (line != null)
+            Core.PlayerLogger.Msg(line);
+
+        if (fdIsStd)
+            return length;
+
+        LibcNative.Fseek(stream, 0, LibcNative.SeekEnd);
+        return LibcNative.Fwrite(text, 1, length, stream);
+    }
+
+    // x86-64: a va_list is a 24-byte state block passed by pointer, and vsnprintf advances it, so
+    // Format works on a copy each time (what va_copy does there). x86 and arm64 macOS: it is a
+    // plain pointer passed by value, so the callee only ever advances its own copy.
+    private static bool CanFormatTwice => RuntimeInformation.ProcessArchitecture switch
+    {
+        Architecture.X64 or Architecture.X86 => true,
+        Architecture.Arm64 => OperatingSystem.IsMacOS(),
+        _ => false,
+    };
+
+    private static unsafe int Format(byte* buffer, int size, string format, nint vList)
+    {
+        if (RuntimeInformation.ProcessArchitecture != Architecture.X64)
+            return LibcNative.Vsnprintf(buffer, size, format, vList);
+
+        byte* copy = stackalloc byte[24];
+        Buffer.MemoryCopy((void*)vList, copy, 24, 24);
+        return LibcNative.Vsnprintf(buffer, size, format, (nint)copy);
     }
 }
 #endif
