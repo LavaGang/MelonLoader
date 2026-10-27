@@ -32,18 +32,23 @@ namespace MelonLoader.Support
 
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
-            Interface = interface_from; 
+            Interface = interface_from;
 
+            string coreLibName = "Il2CppSystem.Private.CoreLib";
+            string coreLibPath = Path.Combine(MelonEnvironment.Il2CppAssembliesDirectory, $"{coreLibName}.dll");
+            bool hasCoreLib = File.Exists(coreLibPath);
+            
             foreach (var file in Directory.GetFiles(MelonEnvironment.Il2CppAssembliesDirectory, "*.dll"))
             {
                 try
                 {
                     Assembly asm = Assembly.LoadFrom(file);
+                    
                     string fileName = Path.GetFileNameWithoutExtension(file);
                     if (!DotnetSimpleNameValidationFix.Error 
+                        && !hasCoreLib
                         && (fileName == "Il2Cppmscorlib"))
-                        MelonAssemblyResolver.GetAssemblyResolveInfo("Il2CppSystem.Private.CoreLib")
-                            .Override = asm;
+                        MelonAssemblyResolver.GetAssemblyResolveInfo(coreLibName).Override = asm;
                 }
                 catch { }
             }
