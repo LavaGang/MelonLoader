@@ -27,6 +27,8 @@ namespace MelonLoader
 
         internal static int Initialize()
         {
+            Assertions.LemonAssertMapping.Setup();
+            
             // The config should be set before running anything else due to static constructors depending on it
             // Don't ask me how this works, because I don't know either. -slxdy
             var config = new LoaderConfig();
@@ -35,12 +37,9 @@ namespace MelonLoader
 
             MelonLaunchOptions.Load();
 
-#if NET35
-            // Disabled for now because of issues
-            //Net20Compatibility.TryInstall();
-#endif
-
             MelonUtils.SetupWineCheck();
+            MelonUtils.Setup(AppDomain.CurrentDomain);
+            MelonAssemblyResolver.Setup();
 
             if (MelonUtils.IsUnderWineOrSteamProton())
                 Pastel.ConsoleExtensions.Disable();
@@ -51,7 +50,6 @@ namespace MelonLoader
             Fixes.NetFramework.ServerCertificateValidation.Install();
 #endif
 
-            Assertions.LemonAssertMapping.Setup();
             HarmonyLogger.Setup();
 
 #if OSX && ARM64
@@ -67,16 +65,19 @@ namespace MelonLoader
 
             HarmonyInstance = new HarmonyLib.Harmony(Properties.BuildInfo.Name);
 
-#if !WINDOWS && !NET6_0_OR_GREATER
-            Fixes.NetFramework.XTermFix.Install();
+#if NET35
+            // Disabled for now because of issues
+            //Net20Compatibility.TryInstall();
 #endif
 
 #if OSX
             Fixes.ProcessModulesFix.Install();
 #endif
 
-            MelonUtils.Setup(AppDomain.CurrentDomain);
-            MelonAssemblyResolver.Setup();
+#if !WINDOWS && !NET6_0_OR_GREATER
+            Fixes.NetFramework.XTermFix.Install();
+#endif
+
             BootstrapInterop.SetDefaultConsoleTitleWithGameName(UnityInformationHandler.GameName, 
                 UnityInformationHandler.GameVersion);
 
