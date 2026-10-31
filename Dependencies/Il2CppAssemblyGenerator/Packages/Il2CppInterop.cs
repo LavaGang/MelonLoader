@@ -50,6 +50,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 ObfuscatedNamesRegex = string.IsNullOrEmpty(Core.deobfuscationRegex.Regex) ? null : new Regex(Core.deobfuscationRegex.Regex),
                 Parallel = true,
                 Il2CppPrefixMode = GeneratorOptions.PrefixMode.OptOut,
+#if ARM64
+                // Il2CppInterop's xref scanner only decodes x86 machine code, so on ARM64 builds of
+                // GameAssembly it finds no metadata init call and Pass16 throws. Skipping the xref
+                // cache bypasses that lookup while keeping the rest of Pass16 (GC write barrier detection)
+                NoXrefCache = true,
+#endif
             };
 
             //Inform cecil of the unity base libs

@@ -94,7 +94,7 @@ internal static class DotnetHandler
                 return;
         }
 #endif
-        
+
         // Try to download portable runtime from repository then attempt to use it again
         MelonDebug.Log($"Attempting to download .NET runtime from repository and load hostfxr from: {portableDir}");
         if (DotnetPortable.AttemptInstall()
