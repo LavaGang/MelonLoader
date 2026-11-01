@@ -1,5 +1,9 @@
 # MelonLoader on macOS Apple Silicon (arm64)
 
+> **Disclaimer:** this Apple Silicon port was vibe coded and done for fun. It isn't an official MelonLoader release. Expect rough edges, and back up your game and saves before using it.
+>
+> **Tested hardware:** verified working on a MacBook Pro with an M4 Pro chip and 24 GB of RAM, running BTD6 with the BTD6 Mod Helper, Faster Forward and Time Machine mods. Other Macs, games and mods haven't been tested.
+
 This branch runs MelonLoader **natively on Apple Silicon** for Il2Cpp Unity games, without Rosetta for the game itself. It was developed and tested against **Bloons TD 6** (Steam).
 
 > **Status: experimental.** The loader, mod lifecycle, Harmony patching and class injection work, and BTD6 Mod Helper runs. Other mods may still hit arm64-specific problems; see [Known issues](#known-issues). Contributions are very welcome.
