@@ -125,15 +125,17 @@ These are open problems. The causes marked *suspected* haven't been confirmed, a
 
 1. **Tiered compilation is disabled.** Without that, `InjectorHelpers.Setup` ran its original, unpatched code after many `ClassInjector.RegisterTypeInIl2Cpp` calls, and its x86-only scanner threw `Sequence contains no elements`. Turning tiering off made the errors disappear, which fits tier-1 recompilation replacing Harmony's detour, but the exact mechanism hasn't been confirmed. Startup JIT is slower as a result. A narrower fix would keep the detour across recompilation, or resolve `GetTypeInfoFromTypeDefinitionIndex` by symbol so the original `Setup` is harmless.
 
-2. **Structs larger than 16 bytes returned from patched methods** use a fixed-size struct type created at run time, which Harmony's generated delegate assembly can't reference, so patching such a method fails with `FileLoadException`. Passing structs of any size, and returning ones of up to 16 bytes, works.
+2. **Game methods smaller than 16 bytes can't be patched from game code.** Dobby's arm64 hook writes 16 bytes, so on a smaller function it would overwrite the start of the next one. BTD6 Mod Helper's patch on the 12-byte `Btd6Player.Save` broke `Btd6Player.Sync` this way, and the game died with `SIGILL` at the first round end. MelonLoader now refuses such hooks and logs `Refusing to patch … because it is too small for an ARM64 detour`, so game code calls the unpatched method, while calls from mods still go through the patch. Dobby's near-branch mode (a 4-byte hook) isn't a fix on macOS: it places its trampolines in zero-filled memory inside existing mappings, which corrupted IL2CPP's GC heap in testing. A real fix needs a trampoline allocator that only uses unmapped memory within ±128 MB of GameAssembly.
 
-3. **No xref cache in generated assemblies on arm64.** Il2CppInterop's xref scanner only decodes x86 code, so the generator runs with `NoXrefCache = true`. Mods that use `XrefScanner` at runtime won't work, and names generated for obfuscated methods may differ from Windows builds.
+3. **Structs larger than 16 bytes returned from patched methods** use a fixed-size struct type created at run time, which Harmony's generated delegate assembly can't reference, so patching such a method fails with `FileLoadException`. Passing structs of any size, and returning ones of up to 16 bytes, works.
 
-4. **The ClrMD delegate sanity check is skipped on macOS.** `DataTarget.CreateSnapshotAndAttach` isn't supported on Darwin, so a mod that passes a raw managed method pointer to `NativeHook` isn't caught and wrapped on macOS.
+4. **No xref cache in generated assemblies on arm64.** Il2CppInterop's xref scanner only decodes x86 code, so the generator runs with `NoXrefCache = true`. Mods that use `XrefScanner` at runtime won't work, and names generated for obfuscated methods may differ from Windows builds.
 
-5. **The game version shows as `UNKNOWN`** because AssetsTools hits an `EndOfStreamException` while reading it. This is harmless.
+5. **The ClrMD delegate sanity check is skipped on macOS.** `DataTarget.CreateSnapshotAndAttach` isn't supported on Darwin, so a mod that passes a raw managed method pointer to `NativeHook` isn't caught and wrapped on macOS.
 
-6. **Crashes when the game is killed with `SIGTERM`** (Discord SDK abort, Metal render thread, Il2Cpp thread pool). Seen only when a test harness kills the process, with no MelonLoader frames on the crashing thread.
+6. **The game version shows as `UNKNOWN`** because AssetsTools hits an `EndOfStreamException` while reading it. This is harmless.
+
+7. **Crashes when the game is killed with `SIGTERM`** (Discord SDK abort, Metal render thread, Il2Cpp thread pool). Seen only when a test harness kills the process, with no MelonLoader frames on the crashing thread.
 
 ## How it works (changes in this branch)
 
@@ -145,6 +147,7 @@ These are open problems. The causes marked *suspected* haven't been confirmed, a
   - It computes the ASLR slide from two exports and checks that they agree.
   - It resolves the class-injection hook targets by mangled name (`GenericMethod::GetMethod`, `Class::GetFieldDefaultValue`, `Class::FromIl2CppType`, `Class::FromName`, `Class::Init`).
   - **Branch-thunk hardening:** many il2cpp exports and wrappers are a single `b` instruction, and Dobby's 16-byte arm64 patch would overwrite the functions after them. Targets follow up to 3 unconditional branches and must have at least 16 bytes before the next symbol, or they're refused.
+  - **Short-function guard:** every native hook, including mods' Harmony patches, measures its GameAssembly target first and refuses functions smaller than 16 bytes. The measurement covers all of `__TEXT`'s code sections, since Unity 6 puts IL2CPP's generated game code in its own `__TEXT,il2cpp` section.
 - **ICall injection:** the hook attaches without the ClrMD check on macOS, hooks `InternalCalls::Resolve` rather than the 4-byte `il2cpp_resolve_icall` stub, and keeps its detour delegate alive.
 - **Il2CppInterop struct ABI** (separate Il2CppInterop branch): AAPCS64 passes structs of up to 16 bytes in registers and returns large ones through a buffer in `x8`. The native-to-managed trampolines used the Windows x64 rules (a pointer for every struct, and the return buffer as the first parameter), so a patched `[OnDeserialized]` callback boxed its `StreamingContext` from a null pointer and crashed in `Object::Box`. The trampolines now receive and return these structs by value, using fixed-size struct types compiled into Il2CppInterop.Runtime.
 - **Tiered compilation** is off on osx-arm64 (`System.Runtime.TieredCompilation=false` in the runtimeconfig, and `DOTNET_TieredCompilation=0` in `melonloader-launch.sh`), so Harmony detours stay in place.

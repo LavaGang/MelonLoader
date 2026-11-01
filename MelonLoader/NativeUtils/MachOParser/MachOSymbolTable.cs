@@ -21,6 +21,7 @@ namespace MelonLoader.NativeUtils.MachOParser
         private const byte N_STAB = 0xE0;
         private const byte N_TYPE = 0x0E;
         private const byte N_SECT = 0x0E;
+        private const uint S_ATTR_PURE_INSTRUCTIONS = 0x80000000;
         private const int MachHeader64Size = 32;
         private const int SegmentCommand64Size = 72;
         private const int Section64Size = 80;
@@ -58,30 +59,64 @@ namespace MelonLoader.NativeUtils.MachOParser
             return found;
         }
 
-        // Returns the sorted start addresses of every symbol in __TEXT,__text, ending with the section's end
-        // address, so the distance from any code address to the next function boundary can be measured.
+        // Returns the sorted start addresses of every symbol in __TEXT's code sections, plus each section's start
+        // and end, so the distance from any code address to the next function boundary can be measured. Unity 6
+        // places IL2CPP's generated game code in its own __TEXT,il2cpp section, separate from the runtime's __text.
         internal static unsafe ulong[] GetCodeBoundaries(string imagePath)
         {
             var boundaries = new List<ulong>();
 
             ReadImage(imagePath, (image, symtab) =>
             {
-                if (!TryFindTextSection(image, out byte textOrdinal, out ulong textStart, out ulong textEnd))
+                var codeSections = FindCodeSections(image);
+                if (codeSections.Count == 0)
                     return;
+
+                var codeOrdinals = new bool[256];
+                foreach (var (ordinal, start, end) in codeSections)
+                {
+                    codeOrdinals[ordinal] = true;
+                    boundaries.Add(start);
+                    boundaries.Add(end);
+                }
 
                 for (uint i = 0; i < symtab.Count; i++)
                 {
                     byte* nlist = symtab.Symbols + (i * Nlist64Size);
-                    if (IsDefinedInSection(nlist) && nlist[5] == textOrdinal)
+                    if (IsDefinedInSection(nlist) && codeOrdinals[nlist[5]])
                         boundaries.Add(*(ulong*)(nlist + 8));
                 }
-
-                boundaries.Add(textStart);
-                boundaries.Add(textEnd);
             });
 
             boundaries.Sort();
             return boundaries.ToArray();
+        }
+
+        // Returns the name of a symbol defined at exactly this address, or null. Scans the whole table, so it's
+        // meant for diagnostics rather than hot paths
+        internal static unsafe string FindSymbolName(string imagePath, ulong address)
+        {
+            string found = null;
+
+            ReadImage(imagePath, (image, symtab) =>
+            {
+                for (uint i = 0; i < symtab.Count; i++)
+                {
+                    byte* nlist = symtab.Symbols + (i * Nlist64Size);
+                    if (!IsDefinedInSection(nlist) || *(ulong*)(nlist + 8) != address)
+                        continue;
+
+                    // Skip assembler-local labels such as ltmp0, which can share an address with the function
+                    var name = MemoryMarshal.CreateReadOnlySpanFromNullTerminated(symtab.Strings + *(uint*)nlist);
+                    if (name.Length == 0 || name[0] == (byte)'l')
+                        continue;
+
+                    found = Encoding.ASCII.GetString(name);
+                    return;
+                }
+            });
+
+            return found;
         }
 
         private unsafe struct SymbolTable
@@ -142,11 +177,11 @@ namespace MelonLoader.NativeUtils.MachOParser
             return null;
         }
 
-        // Section ordinals in nlist.n_sect are 1-based and count sections across all segments in load order
-        private static unsafe bool TryFindTextSection(byte* image, out byte ordinal, out ulong start, out ulong end)
+        // Every __TEXT section that holds only instructions (__text, il2cpp, __stubs, ...). Section ordinals in
+        // nlist.n_sect are 1-based and count sections across all segments in load order
+        private static unsafe List<(byte Ordinal, ulong Start, ulong End)> FindCodeSections(byte* image)
         {
-            ordinal = 0;
-            start = end = 0;
+            var sections = new List<(byte, ulong, ulong)>();
 
             uint ncmds = *(uint*)(image + 16);
             byte* cmd = image + MachHeader64Size;
@@ -160,18 +195,17 @@ namespace MelonLoader.NativeUtils.MachOParser
                     {
                         sectionIndex++;
                         byte* section = cmd + SegmentCommand64Size + (s * Section64Size);
-                        if (FixedName(section) == "__text" && FixedName(section + 16) == "__TEXT")
+                        uint flags = *(uint*)(section + 64);
+                        if (FixedName(section + 16) == "__TEXT" && (flags & S_ATTR_PURE_INSTRUCTIONS) != 0 && sectionIndex <= byte.MaxValue)
                         {
-                            ordinal = (byte)sectionIndex;
-                            start = *(ulong*)(section + 32);
-                            end = start + *(ulong*)(section + 40);
-                            return true;
+                            ulong start = *(ulong*)(section + 32);
+                            sections.Add(((byte)sectionIndex, start, start + *(ulong*)(section + 40)));
                         }
                     }
                 }
                 cmd += *(uint*)(cmd + 4);
             }
-            return false;
+            return sections;
         }
 
         private static unsafe string FixedName(byte* name16)

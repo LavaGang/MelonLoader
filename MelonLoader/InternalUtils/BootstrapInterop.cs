@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 #if NET6_0_OR_GREATER
 using MelonLoader.CoreClrUtils;
 #endif
+#if OSX && ARM64 && NET6_0_OR_GREATER
+using MelonLoader.NativeUtils.MachOParser;
+#endif
 
 namespace MelonLoader.InternalUtils;
 
@@ -71,6 +74,20 @@ internal static unsafe class BootstrapInterop
 
     internal static unsafe void NativeHookAttachDirect(nint target, nint detour)
     {
+#if OSX && ARM64 && NET6_0_OR_GREATER
+        // Dobby's ARM64 patch is 16 bytes, so on a smaller GameAssembly function it would overwrite the start of the
+        // next one (Btd6Player.Save, 12 bytes, broke Btd6Player.Sync this way). Such hooks are refused, leaving target
+        // pointing at the unhooked function. Dobby's near-branch mode would patch only 4 bytes, but on macOS it claims
+        // zero-filled memory inside existing mappings (IL2CPP's GC heap) for its trampolines and makes it read-only
+        nint function = *(nint*)target;
+        long space = MelonUtils.IsGameIl2Cpp() ? GameAssemblySymbols.GetSpaceBeforeNextFunction(function) : -1;
+        if (space >= 0 && space < GameAssemblySymbols.MinPatchSize)
+        {
+            MelonLogger.Warning($"Refusing to patch {GameAssemblySymbols.DescribeFunction(function)} because it is too small for an ARM64 detour ({space} bytes, the patch needs {GameAssemblySymbols.MinPatchSize}). Calls from game code will run the unpatched method");
+            return;
+        }
+#endif
+
         Library.NativeHookAttach((nint*)target, detour);
     }
 

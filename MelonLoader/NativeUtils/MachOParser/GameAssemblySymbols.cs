@@ -62,6 +62,39 @@ namespace MelonLoader.NativeUtils.MachOParser
             return address;
         }
 
+        // Bytes from a loaded code address to the next function in GameAssembly, or -1 when the address isn't in
+        // GameAssembly's code (another image, JIT code) or its symbols can't be read
+        internal static long GetSpaceBeforeNextFunction(IntPtr address)
+        {
+            if (!TryGetSlide(out long slide))
+                return -1;
+
+            _codeBoundaries ??= MachOSymbolTable.GetCodeBoundaries(MelonEnvironment.Il2CppGameAssemblyPath);
+            ulong fileAddress = (ulong)((long)address - slide);
+            if (_codeBoundaries.Length == 0 || fileAddress < _codeBoundaries[0] || fileAddress >= _codeBoundaries[^1])
+                return -1;
+
+            return GetBytesToNextSymbol(fileAddress);
+        }
+
+        // A readable name for the function at a loaded address, for log messages
+        internal static string DescribeFunction(IntPtr address)
+        {
+            if (!TryGetSlide(out long slide))
+                return $"0x{address:X}";
+
+            string name = MachOSymbolTable.FindSymbolName(MelonEnvironment.Il2CppGameAssemblyPath, (ulong)((long)address - slide));
+            if (name == null)
+                return $"0x{address:X}";
+
+            // IL2CPP method symbols are _Type_Method_m<40 hex digit hash>
+            name = name.TrimStart('_');
+            int hash = name.LastIndexOf("_m", StringComparison.Ordinal);
+            if (hash > 0 && name.Length - hash == 42)
+                name = name.Substring(0, hash);
+            return $"{name} (0x{address:X})";
+        }
+
         private static long GetBytesToNextSymbol(ulong fileAddress)
         {
             _codeBoundaries ??= MachOSymbolTable.GetCodeBoundaries(MelonEnvironment.Il2CppGameAssemblyPath);
@@ -71,7 +104,7 @@ namespace MelonLoader.NativeUtils.MachOParser
             if (index < 0)
                 index = ~index;
 
-            // Outside __TEXT,__text (or no symbol table): treat as unsafe
+            // Outside __TEXT's code sections (or no symbol table): treat as unsafe
             if (index == 0 || index >= _codeBoundaries.Length)
                 return 0;
 
