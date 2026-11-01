@@ -144,4 +144,9 @@ fi
 
 open_melonloader_terminal
 
+# Keep the JIT from recompiling methods after Harmony has detoured them. Mirrors
+# System.Runtime.TieredCompilation=false in MelonLoader.runtimeconfig.json, and
+# also applies to child .NET processes such as Cpp2IL.
+export DOTNET_TieredCompilation=0
+
 exec "$@"
