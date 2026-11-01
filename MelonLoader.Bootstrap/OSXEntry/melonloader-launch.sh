@@ -149,4 +149,24 @@ open_melonloader_terminal
 # also applies to child .NET processes such as Cpp2IL.
 export DOTNET_TieredCompilation=0
 
+# Start the game as the architecture the bootstrap was built for. Steam runs
+# this script from an x86_64 (Rosetta) process tree, and a plain exec of a
+# universal game binary would then pick its x86_64 slice, which can't load an
+# arm64-only bootstrap (dyld aborts with "incompatible architecture").
+case "$(file -b "$BOOTSTRAP_PATH")" in
+    *universal*) LAUNCH_ARCH="" ;;
+    *arm64*) LAUNCH_ARCH="arm64" ;;
+    *x86_64*) LAUNCH_ARCH="x86_64" ;;
+    *) LAUNCH_ARCH="" ;;
+esac
+
+if [ -n "$LAUNCH_ARCH" ]; then
+    # /usr/bin/arch is SIP-protected, so macOS strips DYLD_* variables from its
+    # environment; pass them with -e so arch sets them for the game itself.
+    exec /usr/bin/arch "-$LAUNCH_ARCH" \
+        -e "DYLD_INSERT_LIBRARIES=$DYLD_INSERT_LIBRARIES" \
+        -e "DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH" \
+        "$@"
+fi
+
 exec "$@"
