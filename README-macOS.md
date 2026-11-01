@@ -2,7 +2,7 @@
 
 This branch runs MelonLoader **natively on Apple Silicon** for Il2Cpp Unity games, without Rosetta for the game itself. It was developed and tested against **Bloons TD 6** (Steam).
 
-> **Status: experimental.** The loader, mod lifecycle, Harmony patching and class injection work. Large mods can still crash; see [Known issues](#known-issues). Contributions are very welcome.
+> **Status: experimental.** The loader, mod lifecycle, Harmony patching and class injection work, and BTD6 Mod Helper runs. Other mods may still hit arm64-specific problems; see [Known issues](#known-issues). Contributions are very welcome.
 
 ## What works
 
@@ -17,7 +17,10 @@ Tested on macOS 26.6.2 (Apple Silicon), BTD6 57.4 (Steam), Unity 6000.3.23f1, Me
 | ICall injection (e.g. Unity 6's renamed `Transform::SetAsLastSibling`) | ✅ |
 | Mod lifecycle: `OnInitializeMelon`, `OnSceneWasLoaded`, `OnUpdate` | ✅ |
 | Harmony patches on game methods (e.g. `TitleScreen.Start`, `MainMenu.Open`) | ✅ |
-| BTD6 Mod Helper 3.6.10 | ⚠️ loads after an AnyCPU patch, then crashes during profile load |
+| Il2Cpp structs passed by value to patched methods (e.g. `StreamingContext`) | ✅ with the patched Il2CppInterop (see below) |
+| BTD6 Mod Helper 3.6.10 (after an AnyCPU patch) | ✅ profile load, main menu, Mods button, mod browser and downloads |
+
+The release zip ships Il2CppInterop.Runtime and Il2CppInterop.HarmonySupport built from the `macos-arm64-abi-fixes` branch of [BepInEx/Il2CppInterop](https://github.com/BepInEx/Il2CppInterop), based on `f03c8f4` (the commit behind MelonLoader's pinned `1.5.1-ci.845`). A source build of this branch still restores the stock package, so copy those two DLLs into `MelonLoader/net6/` yourself.
 
 ## Requirements
 
@@ -114,15 +117,15 @@ module.Write(args[1]);
 
 Pass `MelonLoader/Il2CppAssemblies`, `MelonLoader/net6` and the .NET 6 framework folder (`MelonLoader/Dependencies/dotnet/shared/Microsoft.NETCore.App/<version>`) as reference directories. Cecil needs them to write enum-typed default parameter values. Keep the original file: the patched copy is a rewritten assembly, not a byte-for-byte edit.
 
-BTD6 Mod Helper also downloads `Plugins/UpdaterPlugin.dll` on first run, and that may replace your patched copy with the x64 original. Remove the updater plugin if you've patched Mod Helper.
+BTD6 Mod Helper also downloads `Plugins/UpdaterPlugin.dll` on every launch, and that may replace your patched copy with the x64 original. Remove the updater plugin if you've patched Mod Helper. Mods downloaded through Mod Helper's mod browser are often x64-only too (for example FasterForward and TimeMachine), so check and patch them before the next launch.
 
 ## Known issues
 
 These are open problems. The causes marked *suspected* haven't been confirmed, and investigation or PRs are welcome.
 
-1. **BTD6 Mod Helper crashes while the player profile loads.** `SIGSEGV` in `il2cpp::vm::Object::Box` → `memmove(NULL)`, reached from `JsonContract.InvokeOnDeserialized` → `RuntimeMethodInfo.Invoke` → `Runtime::InvokeWithThrow` → three frames of JIT-generated code. *Suspected:* an Il2CppInterop-generated trampoline handles a value-type argument the x64 way. `[OnDeserialized]` callbacks take a 16-byte `StreamingContext` by value, which AAPCS64 passes in registers rather than by reference. The patched or injected method involved hasn't been identified yet.
+1. **Tiered compilation is disabled.** Without that, `InjectorHelpers.Setup` ran its original, unpatched code after many `ClassInjector.RegisterTypeInIl2Cpp` calls, and its x86-only scanner threw `Sequence contains no elements`. Turning tiering off made the errors disappear, which fits tier-1 recompilation replacing Harmony's detour, but the exact mechanism hasn't been confirmed. Startup JIT is slower as a result. A narrower fix would keep the detour across recompilation, or resolve `GetTypeInfoFromTypeDefinitionIndex` by symbol so the original `Setup` is harmless.
 
-2. **`InjectorHelpers.Setup` sometimes runs unpatched.** After many `ClassInjector.RegisterTypeInIl2Cpp` calls, stack traces show `InjectorHelpers.Setup()` without the `DMD<…>` wrapper. The original method then applies `MetadataCache_GetTypeInfoFromTypeDefinitionIndex_Hook`, which MelonLoader removes on macOS, and its x86 scanner throws `Sequence contains no elements`. This breaks `DelegateSupport.ConvertDelegate` calls (seen in Mod Helper's `LocalizationHelper.Initialize`). *Suspected:* tiered JIT recompiles the method and the Harmony detour is lost. Possible fixes: mark the hook as applied on macOS so the original `Setup` skips it, or resolve its target by symbol (`il2cpp::vm::GlobalMetadata::GetTypeInfoFromTypeDefinitionIndex(int)` exists in BTD6's `GameAssembly.dylib`).
+2. **Structs larger than 16 bytes returned from patched methods** use a fixed-size struct type created at run time, which Harmony's generated delegate assembly can't reference, so patching such a method fails with `FileLoadException`. Passing structs of any size, and returning ones of up to 16 bytes, works.
 
 3. **No xref cache in generated assemblies on arm64.** Il2CppInterop's xref scanner only decodes x86 code, so the generator runs with `NoXrefCache = true`. Mods that use `XrefScanner` at runtime won't work, and names generated for obfuscated methods may differ from Windows builds.
 
@@ -143,3 +146,5 @@ These are open problems. The causes marked *suspected* haven't been confirmed, a
   - It resolves the class-injection hook targets by mangled name (`GenericMethod::GetMethod`, `Class::GetFieldDefaultValue`, `Class::FromIl2CppType`, `Class::FromName`, `Class::Init`).
   - **Branch-thunk hardening:** many il2cpp exports and wrappers are a single `b` instruction, and Dobby's 16-byte arm64 patch would overwrite the functions after them. Targets follow up to 3 unconditional branches and must have at least 16 bytes before the next symbol, or they're refused.
 - **ICall injection:** the hook attaches without the ClrMD check on macOS, hooks `InternalCalls::Resolve` rather than the 4-byte `il2cpp_resolve_icall` stub, and keeps its detour delegate alive.
+- **Il2CppInterop struct ABI** (separate Il2CppInterop branch): AAPCS64 passes structs of up to 16 bytes in registers and returns large ones through a buffer in `x8`. The native-to-managed trampolines used the Windows x64 rules (a pointer for every struct, and the return buffer as the first parameter), so a patched `[OnDeserialized]` callback boxed its `StreamingContext` from a null pointer and crashed in `Object::Box`. The trampolines now receive and return these structs by value, using fixed-size struct types compiled into Il2CppInterop.Runtime.
+- **Tiered compilation** is off on osx-arm64 (`System.Runtime.TieredCompilation=false` in the runtimeconfig, and `DOTNET_TieredCompilation=0` in `melonloader-launch.sh`), so Harmony detours stay in place.
