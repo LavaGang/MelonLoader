@@ -89,14 +89,13 @@ internal static class DotnetPortable
 #if WINDOWS
             ZipFile.ExtractToDirectory(tempPath, dotnetDir);
 #else
-            var fileStream = File.OpenRead(tempPath);
-            var gzipStream = new GZipStream(fileStream, CompressionMode.Decompress);
+            // Disposed even when extraction throws, so the catch below can delete the archive
+            using var fileStream = File.OpenRead(tempPath);
+            using var gzipStream = new GZipStream(fileStream, CompressionMode.Decompress);
             TarFile.ExtractToDirectory(
                 gzipStream,
                 dotnetDir,
                 true);
-            gzipStream.Close();
-            fileStream.Close();
 #endif
         }
         catch (Exception ex)

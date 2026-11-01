@@ -69,9 +69,9 @@ namespace MelonLoader.NativeUtils.MachOParser
             if (!TryGetSlide(out long slide))
                 return -1;
 
-            _codeBoundaries ??= MachOSymbolTable.GetCodeBoundaries(MelonEnvironment.Il2CppGameAssemblyPath);
+            ulong[] boundaries = CodeBoundaries;
             ulong fileAddress = (ulong)((long)address - slide);
-            if (_codeBoundaries.Length == 0 || fileAddress < _codeBoundaries[0] || fileAddress >= _codeBoundaries[^1])
+            if (boundaries.Length == 0 || fileAddress < boundaries[0] || fileAddress >= boundaries[^1])
                 return -1;
 
             return GetBytesToNextSymbol(fileAddress);
@@ -83,7 +83,16 @@ namespace MelonLoader.NativeUtils.MachOParser
             if (!TryGetSlide(out long slide))
                 return $"0x{address:X}";
 
-            string name = MachOSymbolTable.FindSymbolName(MelonEnvironment.Il2CppGameAssemblyPath, (ulong)((long)address - slide));
+            // Only used for messages, so a failed lookup falls back to the address rather than failing the caller
+            string name;
+            try
+            {
+                name = MachOSymbolTable.FindSymbolName(MelonEnvironment.Il2CppGameAssemblyPath, (ulong)((long)address - slide));
+            }
+            catch (Exception)
+            {
+                name = null;
+            }
             if (name == null)
                 return $"0x{address:X}";
 
@@ -97,18 +106,40 @@ namespace MelonLoader.NativeUtils.MachOParser
 
         private static long GetBytesToNextSymbol(ulong fileAddress)
         {
-            _codeBoundaries ??= MachOSymbolTable.GetCodeBoundaries(MelonEnvironment.Il2CppGameAssemblyPath);
+            ulong[] boundaries = CodeBoundaries;
 
             // Index of the first boundary strictly after the address
-            int index = Array.BinarySearch(_codeBoundaries, fileAddress + 1);
+            int index = Array.BinarySearch(boundaries, fileAddress + 1);
             if (index < 0)
                 index = ~index;
 
             // Outside __TEXT's code sections (or no symbol table): treat as unsafe
-            if (index == 0 || index >= _codeBoundaries.Length)
+            if (index == 0 || index >= boundaries.Length)
                 return 0;
 
-            return (long)(_codeBoundaries[index] - fileAddress);
+            return (long)(boundaries[index] - fileAddress);
+        }
+
+        // Read once. Every native hook asks for these, so a failure to read them is logged once and leaves the table
+        // empty, which makes every lookup "unknown" instead of throwing out of each hook attach
+        private static ulong[] CodeBoundaries
+        {
+            get
+            {
+                if (_codeBoundaries != null)
+                    return _codeBoundaries;
+
+                try
+                {
+                    _codeBoundaries = MachOSymbolTable.GetCodeBoundaries(MelonEnvironment.Il2CppGameAssemblyPath);
+                }
+                catch (Exception e)
+                {
+                    MelonLogger.Error("Failed to read function boundaries from GameAssembly's symbol table", e);
+                    _codeBoundaries = Array.Empty<ulong>();
+                }
+                return _codeBoundaries;
+            }
         }
 
         private static bool TryGetSlide(out long slide)
@@ -123,10 +154,12 @@ namespace MelonLoader.NativeUtils.MachOParser
             if (_slideFailed)
                 return false;
 
+            IntPtr handle = IntPtr.Zero;
             try
             {
+                // GameAssembly is already loaded; this only takes a reference for the export lookups, released below
                 string gameAssemblyPath = MelonEnvironment.Il2CppGameAssemblyPath;
-                IntPtr handle = System.Runtime.InteropServices.NativeLibrary.Load(gameAssemblyPath);
+                handle = System.Runtime.InteropServices.NativeLibrary.Load(gameAssemblyPath);
                 Dictionary<string, ulong> fileAddresses = MachOSymbolTable.FindSymbols(gameAssemblyPath,
                     AnchorExports.Select(x => "_" + x).ToList());
 
@@ -155,6 +188,11 @@ namespace MelonLoader.NativeUtils.MachOParser
                 MelonLogger.Error("Failed to compute GameAssembly's slide from its symbol table", e);
                 _slideFailed = true;
                 return false;
+            }
+            finally
+            {
+                if (handle != IntPtr.Zero)
+                    System.Runtime.InteropServices.NativeLibrary.Free(handle);
             }
         }
     }
