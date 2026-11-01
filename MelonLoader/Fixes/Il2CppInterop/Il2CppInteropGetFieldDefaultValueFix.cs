@@ -34,6 +34,15 @@ namespace MelonLoader.Fixes.Il2CppInterop
                 "xxxxxxxxxxxxxx????xxxxxxxxxxxxx", 
                 0,
                 false),
+
+            // Unity 6000.0.58 (Blue Prince)
+            // Il2CppInterop's GTFO signature with the stack allocation size masked
+            // https://github.com/BepInEx/Il2CppInterop/commit/2d06bea2
+            new(
+                "\x48\x89\x5C\x24\x08\x57\x48\x83\xEC\x20\x48\x8B\x41\x10\x48\x8B\xD9\x48\x8B",
+                "xxxxxxxxx?xxxxxxxxx",
+                0,
+                false),
         };
 
         internal static void Install()
