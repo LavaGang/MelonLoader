@@ -1,41 +1,47 @@
-﻿#if (WINDOWS || OSX || LINUX)
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Formats.Tar;
 using System.IO.Compression;
+using MelonLoader.Bootstrap.Logging;
 
 namespace MelonLoader.Bootstrap.RuntimeHandlers.Dotnet;
 
 internal static class DotnetPortable
 {
-    private const string dotnetRuntimeDownload =
-#if LINUX
-#if X64
-        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-linux-x64.tar.gz";
-#elif ARM64
-        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-linux-arm64.tar.gz";
-#elif ARM32
-        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-linux-arm.tar.gz";
+    private static string GetDownloadURL()
+    {
+#if WINDOWS && X86
+        return "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-win-x86.zip";
+        
+#elif WINDOWS && X64
+        return "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-win-x64.zip";
+#elif LINUX && X64
+        return "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-linux-x64.tar.gz";
+#elif OSX && X64
+        return "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-osx-x64.tar.gz"; 
+        
+#elif WINDOWS && ARM64
+        return "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-win-arm64.zip";
+#elif LINUX && ARM64
+        return "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-linux-arm64.tar.gz";
+#elif OSX && ARM64
+        return "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-osx-arm64.tar.gz"; 
+        
+#else
+        return null;
 #endif
-#elif OSX
-#if X64
-        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-osx-x64.tar.gz"; 
-#elif ARM64
-        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-osx-arm64.tar.gz"; 
-#endif
-#elif WINDOWS
-#if X64
-        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-win-x64.zip";
-#elif X86
-        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-win-x86.zip";
-#elif ARM64
-        "https://builds.dotnet.microsoft.com/dotnet/Runtime/6.0.36/dotnet-runtime-6.0.36-win-arm64.zip";
-#endif
-#endif
+    }
     
-    private static readonly FileDownload downloadRequest = new(dotnetRuntimeDownload);
-
     public static bool AttemptInstall()
     {
+        string dotnetRuntimeDownload = GetDownloadURL();
+        if (string.IsNullOrEmpty(dotnetRuntimeDownload))
+        {
+            Core.Logger.Error("No Portable .NET Runtime package exists for this Platform!");
+            return false;
+        }
+
+        FileDownload downloadRequest = new(dotnetRuntimeDownload);
+        
         Core.Logger.Msg($"Downloading the Portable .NET Runtime from: {dotnetRuntimeDownload}");
         var tempPath = Path.GetTempFileName() + ".tmp";
         (bool, HttpResponseMessage?)? resp = null;
@@ -108,4 +114,3 @@ internal static class DotnetPortable
         return true;
     }
 }
-#endif
