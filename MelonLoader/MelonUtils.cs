@@ -32,8 +32,6 @@ namespace MelonLoader
             using (var sha = SHA256.Create()) 
                 HashCode = ComputeSimpleSHA256Hash(Assembly.GetExecutingAssembly().Location);
 
-            Core.WelcomeMessage();
-
             if (MelonEnvironment.IsMonoRuntime)
                 SetCurrentDomainBaseDirectory(MelonEnvironment.GameRootDirectory, domain);
 

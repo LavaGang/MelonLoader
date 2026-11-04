@@ -57,7 +57,7 @@ public class MelonAssemblyResolver
 #if NET6_0_OR_GREATER
                 assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(filePath);
 #else
-                    assembly = Assembly.LoadFrom(filePath);
+                assembly = Assembly.LoadFrom(filePath);
 #endif
             }
             catch { assembly = null; }
@@ -65,7 +65,11 @@ public class MelonAssemblyResolver
             if (assembly == null)
                 return;
 
-            GetAssemblyResolveInfo(Path.GetFileNameWithoutExtension(fileName)).Override = assembly;
+            string assemblyName = assembly.GetName().Name;
+            if (string.IsNullOrEmpty(assemblyName))
+                assemblyName = Path.GetFileNameWithoutExtension(fileName);
+
+            GetAssemblyResolveInfo(assemblyName).Override = assembly;
         }
     }
 

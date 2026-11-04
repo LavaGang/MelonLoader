@@ -27,6 +27,7 @@ namespace MelonLoader
 
         internal static int Initialize()
         {
+            Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
             Assertions.LemonAssertMapping.Setup();
             
             // The config should be set before running anything else due to static constructors depending on it
@@ -43,9 +44,7 @@ namespace MelonLoader
 
             if (MelonUtils.IsUnderWineOrSteamProton())
                 Pastel.ConsoleExtensions.Disable();
-
-            Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
-
+            
 #if NET35
             Fixes.NetFramework.ServerCertificateValidation.Install();
 #endif
@@ -172,6 +171,7 @@ namespace MelonLoader
             MelonCompatibilityLayer.LoadModules();
 
             bHapticsManager.Connect(Properties.BuildInfo.Name, UnityInformationHandler.GameName);
+            WelcomeMessage();
 
             MelonFolderHandler.ScanForFolders();
             MelonFolderHandler.LoadMelons(MelonFolderHandler.ScanType.UserLibs);
