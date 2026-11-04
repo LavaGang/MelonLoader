@@ -143,8 +143,10 @@ These are open problems. The causes marked *suspected* haven't been confirmed, a
 
 ## How it works (changes in this branch)
 
-- **Bootstrap:** the arm64 portable .NET 6 runtime download is enabled. `DYLD_INSERT_LIBRARIES` and `DYLD_LIBRARY_PATH` are cleaned by file name, and unset when empty, so child processes such as the x86_64 Cpp2IL don't inherit the arm64-only dylib.
-- **MonoMod:** `MacOSArm64NativeDetourPlatform` is used under .NET 6 as well as Mono. MonoMod's own detection left `ILHook` throwing `NullReferenceException`.
+This builds on the macOS arm64 work already in `alpha-development`: the protected arm64 detour platform under .NET 6, skipping ClrMD's detour check on macOS, and stripping the bootstrap from child processes' `DYLD_INSERT_LIBRARIES`.
+
+- **Bootstrap:** the arm64 portable .NET 6 runtime download is enabled.
+- **Launcher:** `melonloader-launch.sh` starts the game as the bootstrap's architecture with `arch -arm64`. Steam runs launch options from an x86_64 (Rosetta) process tree, and a plain `exec` would start the universal game binary's x86_64 slice, which can't load the arm64 bootstrap. `arch` is SIP-protected, so the `DYLD_*` variables are passed with `arch -e`.
 - **Il2CppAssemblyGenerator:** `NoXrefCache = true` on arm64, which skips the x86-only metadata-init scan in Pass 16 while keeping its GC write-barrier check.
 - **Mach-O symbol resolver** (`NativeUtils/MachOParser`):
   - It reads `LC_SYMTAB` from `GameAssembly.dylib`, including local symbols.
@@ -152,6 +154,6 @@ These are open problems. The causes marked *suspected* haven't been confirmed, a
   - It resolves the class-injection hook targets by mangled name (`GenericMethod::GetMethod`, `Class::GetFieldDefaultValue`, `Class::FromIl2CppType`, `Class::FromName`, `Class::Init`).
   - **Branch-thunk hardening:** many il2cpp exports and wrappers are a single `b` instruction, and Dobby's 16-byte arm64 patch would overwrite the functions after them. Targets follow up to 3 unconditional branches and must have at least 16 bytes before the next symbol, or they're refused.
   - **Short-function guard:** every native hook, including mods' Harmony patches, measures its GameAssembly target first and refuses functions smaller than 16 bytes. The measurement covers all of `__TEXT`'s code sections, since Unity 6 puts IL2CPP's generated game code in its own `__TEXT,il2cpp` section.
-- **ICall injection:** the hook attaches without the ClrMD check on macOS, hooks `InternalCalls::Resolve` rather than the 4-byte `il2cpp_resolve_icall` stub, and keeps its detour delegate alive.
-- **Il2CppInterop struct ABI** (separate Il2CppInterop branch): AAPCS64 passes structs of up to 16 bytes in registers and returns large ones through a buffer in `x8`. The native-to-managed trampolines used the Windows x64 rules (a pointer for every struct, and the return buffer as the first parameter), so a patched `[OnDeserialized]` callback boxed its `StreamingContext` from a null pointer and crashed in `Object::Box`. The trampolines now receive and return these structs by value, using fixed-size struct types compiled into Il2CppInterop.Runtime.
+- **ICall injection:** the hook goes on `InternalCalls::Resolve` rather than the 4-byte `il2cpp_resolve_icall` stub, and keeps its detour delegate alive.
+- **Il2CppInterop struct ABI** (separate change, [BepInEx/Il2CppInterop#294](https://github.com/BepInEx/Il2CppInterop/pull/294)): AAPCS64 passes structs of up to 16 bytes in registers and returns large ones through a buffer in `x8`. The native-to-managed trampolines used the Windows x64 rules (a pointer for every struct, and the return buffer as the first parameter), so a patched `[OnDeserialized]` callback boxed its `StreamingContext` from a null pointer and crashed in `Object::Box`. The trampolines now receive and return these structs by value, using fixed-size struct types compiled into Il2CppInterop.Runtime.
 - **Tiered compilation** is off on osx-arm64 (`System.Runtime.TieredCompilation=false` in the runtimeconfig, and `DOTNET_TieredCompilation=0` in `melonloader-launch.sh`), so Harmony detours stay in place.
