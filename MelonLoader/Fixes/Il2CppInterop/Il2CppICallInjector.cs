@@ -26,6 +26,9 @@ namespace MelonLoader.Fixes.Il2CppInterop
         private delegate IntPtr dil2cpp_resolve_icall(IntPtr signature);
         private static NativeHook<dil2cpp_resolve_icall> il2cpp_resolve_icall_hook;
 
+        // Kept alive for as long as the hook exists: collecting it would free the native thunk the hook jumps to
+        private static dil2cpp_resolve_icall il2cpp_resolve_icall_detour;
+
         private delegate void dil2cpp_add_internal_call(IntPtr signature, IntPtr funcPtr);
         private static dil2cpp_add_internal_call il2cpp_add_internal_call;
 
@@ -58,8 +61,20 @@ namespace MelonLoader.Fixes.Il2CppInterop
                 if (il2cpp_add_internal_call == null)
                     throw new Exception($"Failed to get {nameof(il2cpp_add_internal_call)} Native Export");
 
+#if OSX && ARM64
+                // The il2cpp_resolve_icall export is a single branch to InternalCalls::Resolve, sitting between other
+                // one-instruction exports, so it's too small to patch; hook the function it branches to instead
+                IntPtr resolveTarget = MelonLoader.NativeUtils.MachOParser.GameAssemblySymbols.GetPatchableTarget(il2cpp_resolve_icall);
+                if (resolveTarget == IntPtr.Zero)
+                    throw new Exception($"No patchable function found for {nameof(il2cpp_resolve_icall)}");
+                if (resolveTarget != il2cpp_resolve_icall)
+                    MelonDebug.Msg($"{nameof(il2cpp_resolve_icall)} is a branch thunk, hooking its target 0x{resolveTarget:X}");
+                il2cpp_resolve_icall = resolveTarget;
+#endif
+
                 MelonDebug.Msg("Patching il2cpp_resolve_icall...");
-                IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate((dil2cpp_resolve_icall)il2cpp_resolve_icall_Detour);
+                il2cpp_resolve_icall_detour = il2cpp_resolve_icall_Detour;
+                IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate(il2cpp_resolve_icall_detour);
                 il2cpp_resolve_icall_hook = new NativeHook<dil2cpp_resolve_icall>(il2cpp_resolve_icall, detourPtr);
                 il2cpp_resolve_icall_hook.Attach();
             }

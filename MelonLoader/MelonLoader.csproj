@@ -13,6 +13,12 @@
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
     </PropertyGroup>
+    <!-- On osx-arm64, methods that Harmony has detoured (such as Il2CppInterop's InjectorHelpers.Setup) were seen running
+         their original code after being called many times, consistent with tier-1 recompilation replacing the detoured
+         code. Writes System.Runtime.TieredCompilation=false to MelonLoader.runtimeconfig.json -->
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx-arm64' And '$(TargetFramework)' == '$(DotNetTarget)'">
+        <TieredCompilation>false</TieredCompilation>
+    </PropertyGroup>
     <ItemDefinitionGroup Condition="$(IsNuGetPack) != 'true'">
         <PackageReference>
             <PrivateAssets>all</PrivateAssets>
