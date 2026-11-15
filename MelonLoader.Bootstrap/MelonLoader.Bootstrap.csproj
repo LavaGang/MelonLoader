@@ -9,7 +9,7 @@
         <PublishDir>$(MLOutDir)</PublishDir>
         <DefineConstants>$(DefineConstants);BOOTSTRAP</DefineConstants>
         <AcceptVSBuildToolsLicense>true</AcceptVSBuildToolsLicense>
-        <XwinArches Condition="'$(XWinArches)' == ''">x86,x86_64</XwinArches>
+        <XwinArches Condition="'$(XWinArches)' == ''">x86,x86_64,aarch64</XwinArches>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'">
