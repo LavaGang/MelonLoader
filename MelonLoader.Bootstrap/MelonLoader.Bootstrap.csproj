@@ -136,6 +136,6 @@
     </Target>
 
     <Target Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'" Name="RenameBinary" AfterTargets="Build">
-        <Move SourceFiles="$(PublishDir)$(TargetName).dll" DestinationFiles="$(MLOutDir)/version.dll" Condition="Exists('$(PublishDir)$(TargetName).dll')" />
+        <Move SourceFiles="$(PublishDir)$(TargetName).dll" DestinationFiles="$(MLOutDir)/$(ProxyFileName).dll" Condition="Exists('$(PublishDir)$(TargetName).dll')" />
     </Target>
 </Project>

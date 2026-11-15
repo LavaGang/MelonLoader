@@ -104,6 +104,7 @@
     <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'">
         <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
         <LibExt>.lib</LibExt>
+        <ProxyFileName>winhttp</ProxyFileName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RuntimeIdentifier.EndsWith(`-x64`))' == 'true'">
