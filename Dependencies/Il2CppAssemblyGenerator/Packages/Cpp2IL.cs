@@ -82,10 +82,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                     downloadPackage += "osx-";
                 else
                     downloadPackage += "linux-";
-#if X64
-                downloadPackage += "x64"; 
-#elif ARM64
+#if ARM64
                 downloadPackage += "arm64";
+#else
+                downloadPackage += "x64";
 #endif
                 downloadPackage += ".zip";
                 URL =
