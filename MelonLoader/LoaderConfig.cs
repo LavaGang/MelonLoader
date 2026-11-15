@@ -152,6 +152,9 @@ public class LoaderConfig
             string? hostfxrPath = ArgParser.GetValue("melonloader.hostfxr");
             if (hostfxrPath != null)
                 Current.Loader.HostFXRPathOverride = hostfxrPath;
+
+            if (bool.TryParse(ArgParser.GetValue("melonloader.forced_invariant_culture"), out var valuebool))
+                Current.Loader.ForcedInvariantCulture = valuebool;
         }
 #endif
 
@@ -202,7 +205,11 @@ public class LoaderConfig
         [TomlProperty("hostfxr_path_override")]
         [TomlPrecedingComment("Manually defines the HostFXR path to use for DotNet Initialization. Equivalent to the '--melonloader.hostfxr' launch option")]
         public string HostFXRPathOverride { get; internal set; } = "";
-
+        
+        [TomlProperty("forced_invariant_culture")]
+        [TomlPrecedingComment("Forces all CultureInfo to be InvariantCulture instead. Equivalent to the '--melonloader.forced_invariant_culture' launch option")]
+        public bool ForcedInvariantCulture { get; internal set; } = true;
+        
         public enum LoaderTheme
         {
             Normal,

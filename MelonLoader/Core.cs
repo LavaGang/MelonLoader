@@ -133,7 +133,9 @@ namespace MelonLoader
             Fixes.Dotnet.DotnetSimpleNameValidationFix.Install();
 #endif
 
-            Fixes.ForcedCultureInfo.Install();
+            if (LoaderConfig.Current.Loader.ForcedInvariantCulture)
+                Fixes.ForcedCultureInfo.Install();
+            
             Fixes.MonoMod.InstancePatchFix.Install();
 
 #if WINDOWS
