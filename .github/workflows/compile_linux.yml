@@ -40,3 +40,23 @@ jobs:
         with:
           name: MelonLoader.Linux.x64.CI.Release
           path: Output/Release/linux-x64
+
+      - name: Build Debug for linux-arm64
+        if: inputs.SKIP_DEBUG != true
+        run: dotnet build --no-restore -c Debug -p:Platform="arm64" -p:Version="${{ inputs.VERSION }}"
+
+      - name: Upload Debug for linux-arm64
+        if: inputs.SKIP_DEBUG != true
+        uses: actions/upload-artifact@v7
+        with:
+          name: MelonLoader.Linux.arm64.CI.Debug
+          path: Output/Debug/linux-arm64
+
+      - name: Build Release for linux-arm64
+        run: dotnet build --no-restore -c Release -p:Platform="arm64" -p:Version="${{ inputs.VERSION }}"
+
+      - name: Upload Release for linux-arm64
+        uses: actions/upload-artifact@v7
+        with:
+          name: MelonLoader.Linux.arm64.CI.Release
+          path: Output/Release/linux-arm64

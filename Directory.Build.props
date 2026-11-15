@@ -28,7 +28,7 @@
         <Configurations>Debug;Release</Configurations>
 		
         <Platforms>x86;x64;arm64</Platforms>
-        <RuntimeIdentifiers>win-x86;win-x64;linux-x64;osx-x64;osx-arm64</RuntimeIdentifiers>
+        <RuntimeIdentifiers>win-x86;win-x64;linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>
 		
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
