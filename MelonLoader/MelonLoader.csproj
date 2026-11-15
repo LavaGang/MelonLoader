@@ -18,6 +18,9 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemDefinitionGroup>
+    <PropertyGroup Condition="'$(RuntimeIdentifier.EndsWith(`-arm64`))' == 'true' And '$(TargetFramework)' == '$(DotNetTarget)'">
+        <TieredCompilation>false</TieredCompilation>
+    </PropertyGroup>
     <ItemGroup>
         <InternalsVisibleTo Include="MelonLoader.NativeHost" />
         <InternalsVisibleTo Include="Il2CppAssemblyGenerator" />
