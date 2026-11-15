@@ -29,24 +29,22 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo dpkg --add-architecture arm64
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            libc6-dev-arm64-cross \
-            linux-libc-dev-arm64-cross \
+          sudo apt install -y \
+            clang \
+            llvm \
+            binutils-aarch64-linux-gnu \
             gcc-aarch64-linux-gnu \
-            g++-aarch64-linux-gnu
-          sudo dpkg --add-architecture i386
-          sudo apt-get install -y \
-            gcc-multilib \
-            g++-multilib \
-            libc6-dev-i386
+            g++-aarch64-linux-gnu \
+            zlib1g-dev:arm64
 
       - name: Restore Dependencies
         run: dotnet restore -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}"
 
       - name: Build Debug for ${{ matrix.rid }}
         if: inputs.SKIP_DEBUG != true
-        run: dotnet build --no-restore -c Debug -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}" -p:Version="${{ inputs.VERSION }}"
+        run: dotnet build --no-restore -c Debug -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}" -p:Version="${{ inputs.VERSION }}" -p:ObjCopyName="${{ matrix.arch == 'arm64' && 'aarch64-linux-gnu-objcopy' || 'objcopy' }}"
 
       - name: Upload Debug for ${{ matrix.rid }}
         if: inputs.SKIP_DEBUG != true
@@ -56,7 +54,7 @@ jobs:
           path: Output/Debug/${{ matrix.rid }}
 
       - name: Build Release for ${{ matrix.rid }}
-        run: dotnet build --no-restore -c Release -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}" -p:Version="${{ inputs.VERSION }}"
+        run: dotnet build --no-restore -c Release -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}" -p:Version="${{ inputs.VERSION }}" -p:ObjCopyName="${{ matrix.arch == 'arm64' && 'aarch64-linux-gnu-objcopy' || 'objcopy' }}"
 
       - name: Upload Release for ${{ matrix.rid }}
         uses: actions/upload-artifact@v7
