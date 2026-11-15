@@ -105,6 +105,9 @@
         <ProxyFileName>winhttp</ProxyFileName>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(RuntimeIdentifier.EndsWith(`-x86`))' == 'true'">
+        <DefineConstants>$(DefineConstants);X86</DefineConstants>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(RuntimeIdentifier.EndsWith(`-x64`))' == 'true'">
         <DefineConstants>$(DefineConstants);X64</DefineConstants>
     </PropertyGroup>
