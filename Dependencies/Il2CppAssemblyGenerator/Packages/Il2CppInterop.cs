@@ -50,6 +50,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 ObfuscatedNamesRegex = string.IsNullOrEmpty(Core.deobfuscationRegex.Regex) ? null : new Regex(Core.deobfuscationRegex.Regex),
                 Parallel = true,
                 Il2CppPrefixMode = GeneratorOptions.PrefixMode.OptOut,
+                
+#if ARM64
+                NoXrefCache = true,
+#endif
             };
 
             //Inform cecil of the unity base libs
