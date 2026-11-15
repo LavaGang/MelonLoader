@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using MelonLoader.Utils;
 using Semver;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
@@ -9,10 +10,17 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
     {
         internal static SemVersion NetCoreMinVersion = SemVersion.Parse("2022.1.0-pre-release.18");
         internal SemVersion VersionSem;
-        private string BaseFolder;
+
+        internal static string _latestVersion = "2022.1.0-pre-release.21";
+
+        private static bool _shouldUseNightly = true;
+        private static string _nightlyVersion = "2022.1.0-pre-release.22";
+        private static string _nightlyRunId = "34694167702";
 
         private static string ReleaseName =>
             MelonUtils.IsWindows ? "Windows" : MelonUtils.IsUnix ? "Linux" : "OSX";
+        
+        internal readonly bool IsUsingNightly;
 		
         internal Cpp2IL()
         {
@@ -24,30 +32,72 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                     Config.Values.DumperVersion);
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = $"2022.1.0-pre-release.21";
+            {
+                if (!_shouldUseNightly)
+                    Version = _latestVersion;
+                else
+                {
+                    Version = _nightlyVersion;
+                    IsUsingNightly = true;
+                }
+            }
+
             VersionSem = SemVersion.Parse(Version);
 
             Name = nameof(Cpp2IL);
             
             var filename = Name;
-#if WINDOWS
-            filename += ".exe";
+            if (MelonUtils.IsWindows)
+                filename += ".exe";
+
+            var baseFolder = Path.Combine(Core.BasePath, Name);
+            Directory.CreateDirectory(baseFolder);
+            
+            if (IsUsingNightly)
+            {
+                Destination = baseFolder;
+                
+                ExeFilePath = Path.Combine(Destination, Name);
+                if (MelonUtils.IsWindows)
+                    ExeFilePath += ".exe";
+                
+                FilePath = Path.Combine(Core.BasePath, $"{Name}_{Version}.zip");
+            }
+            else
+            {
+                FilePath =
+                    ExeFilePath =
+                        Destination =
+                            Path.Combine(baseFolder, filename);
+            }
+
+            OutputFolder = Path.Combine(baseFolder, "cpp2il_out");
+
+            if (IsUsingNightly)
+            {
+                string downloadPackage = "Cpp2IL-net9-";
+                if (MelonUtils.IsWindows)
+                    downloadPackage += "win-";
+                else if (MelonUtils.IsMac)
+                    downloadPackage += "osx-";
+                else
+                    downloadPackage += "linux-";
+#if X64
+                downloadPackage += "x64"; 
+#elif ARM64
+                downloadPackage += "arm64";
 #endif
-
-            BaseFolder = Path.Combine(Core.BasePath, Name);
-            Directory.CreateDirectory(BaseFolder);
-
-            FilePath =
-                ExeFilePath =
-                Destination =
-                Path.Combine(BaseFolder, filename);
-
-            OutputFolder = Path.Combine(BaseFolder, "cpp2il_out");
-
-            URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}";
-#if WINDOWS
-            URL += ".exe";
-#endif
+                downloadPackage += ".zip";
+                URL =
+                    $"https://nightly.link/SamboyCoding/{Name}/actions/runs/{_nightlyRunId}/{downloadPackage}";
+            }
+            else
+            {
+                URL =
+                    $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}";
+                if (MelonUtils.IsWindows)
+                    URL += ".exe";
+            }
         }
 
         internal override bool ShouldSetup()

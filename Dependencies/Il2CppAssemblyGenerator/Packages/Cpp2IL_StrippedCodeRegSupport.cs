@@ -13,7 +13,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         internal Cpp2IL_StrippedCodeRegSupport(ExecutablePackage cpp2IL)
         {
             Name = $"{cpp2IL.Name}.Plugin.StrippedCodeRegSupport";
-            Version = cpp2IL.Version;
+            Version = Cpp2IL._latestVersion;
             VersionSem = SemVersion.Parse(Version);
 
             string folderpath = Path.Combine(Core.BasePath, cpp2IL.Name);
@@ -24,7 +24,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Destination =
                 Path.Combine(_pluginsFolder, fileName);
 
-            URL = $"https://github.com/SamboyCoding/{cpp2IL.Name}/releases/download/{cpp2IL.Version}/{fileName}";
+            URL = $"https://github.com/SamboyCoding/{cpp2IL.Name}/releases/download/{Version}/{fileName}";
         }
 
         internal override bool ShouldSetup()
