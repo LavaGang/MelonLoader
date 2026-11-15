@@ -76,13 +76,11 @@
     </PropertyGroup>
 	
 	<PropertyGroup Condition="'$(RuntimeIdentifier)' == '' And '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">
-		<!-- <RuntimeIdentifier>linux-$(Platform)</RuntimeIdentifier> -->
-		<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+		<RuntimeIdentifier>linux-$(Platform)</RuntimeIdentifier>
     </PropertyGroup>
 	
 	<PropertyGroup Condition="'$(RuntimeIdentifier)' == '' And '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
-		<!-- <RuntimeIdentifier>osx-$(Platform)</RuntimeIdentifier> -->
-		<RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+		<RuntimeIdentifier>osx-$(Platform)</RuntimeIdentifier>
     </PropertyGroup>
 	
 	<!--
