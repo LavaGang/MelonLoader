@@ -27,14 +27,14 @@ namespace MelonLoader
 
         internal static int Initialize()
         {
-            Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
-            Assertions.LemonAssertMapping.Setup();
-            
             // The config should be set before running anything else due to static constructors depending on it
             // Don't ask me how this works, because I don't know either. -slxdy
             var config = new LoaderConfig();
             BootstrapInterop.Library.GetLoaderConfig(ref config);
             LoaderConfig.Current = config;
+            
+            Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
+            Assertions.LemonAssertMapping.Setup();
 
             MelonLaunchOptions.Load();
 
