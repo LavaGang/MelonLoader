@@ -23,7 +23,7 @@ internal static class DotnetInstaller
         Core.Logger.Msg($"Downloading the .NET Runtime Installer from: {dotnetRuntimeDownload}");
         
         var tempPath = Path.GetTempFileName() + ".exe";
-        (bool, HttpResponseMessage?)? resp = null;
+        (bool, string?)? resp = null;
         try
         {
             resp = downloadRequest.Attempt(tempPath);
@@ -32,7 +32,7 @@ internal static class DotnetInstaller
                 Core.Logger.Error("Failed to download the .NET Runtime Installer. Check your internet connection.");
                 
                 if (resp.Value.Item2 != null)
-                    Core.Logger.Error(resp.Value.Item2.ReasonPhrase!);
+                    Core.Logger.Error(resp.Value.Item2!);
                 
                 if (File.Exists(tempPath))
                     File.Delete(tempPath);
@@ -45,7 +45,7 @@ internal static class DotnetInstaller
             
             if (resp.HasValue
                 && (resp.Value.Item2 != null))
-                Core.Logger.Error(resp.Value.Item2.ReasonPhrase!);
+                Core.Logger.Error(resp.Value.Item2!);
             
             Core.Logger.Error(ex.ToString());
             
