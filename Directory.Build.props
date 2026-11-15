@@ -115,6 +115,13 @@
         <DefineConstants>$(DefineConstants);ARM64</DefineConstants>
     </PropertyGroup>
 
+	<!--
+		Linux ObjCopy Retarget
+	-->
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">
+        <ObjCopyName>aarch64-linux-gnu-objcopy</ObjCopyName>
+    </PropertyGroup>
+
     <PropertyGroup>
         <MLOutDir>$(SolutionDir)Output/$(Configuration)/$(RuntimeIdentifier)</MLOutDir>
     </PropertyGroup>

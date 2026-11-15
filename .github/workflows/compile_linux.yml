@@ -44,7 +44,7 @@ jobs:
 
       - name: Build Debug for ${{ matrix.rid }}
         if: inputs.SKIP_DEBUG != true
-        run: dotnet build --no-restore -c Debug -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}" -p:Version="${{ inputs.VERSION }}" -p:ObjCopyName="${{ matrix.arch == 'arm64' && 'aarch64-linux-gnu-objcopy' || 'objcopy' }}"
+        run: dotnet build --no-restore -c Debug -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}" -p:Version="${{ inputs.VERSION }}"
 
       - name: Upload Debug for ${{ matrix.rid }}
         if: inputs.SKIP_DEBUG != true
@@ -54,7 +54,7 @@ jobs:
           path: Output/Debug/${{ matrix.rid }}
 
       - name: Build Release for ${{ matrix.rid }}
-        run: dotnet build --no-restore -c Release -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}" -p:Version="${{ inputs.VERSION }}" -p:ObjCopyName="${{ matrix.arch == 'arm64' && 'aarch64-linux-gnu-objcopy' || 'objcopy' }}"
+        run: dotnet build --no-restore -c Release -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}" -p:Version="${{ inputs.VERSION }}"
 
       - name: Upload Release for ${{ matrix.rid }}
         uses: actions/upload-artifact@v7
