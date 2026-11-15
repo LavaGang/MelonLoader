@@ -36,6 +36,16 @@ jobs:
         run: |
           cd compiled_release/windows_x64
           zip -r ../MelonLoader.x64.zip ./
+
+      - name: Download Windows arm64 Artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: MelonLoader.Windows.arm64.CI.Release
+          path: ./compiled_release/windows_arm64
+      - name: Package Windows arm64 into Zip Archive
+        run: |
+          cd compiled_release/windows_arm64
+          zip -r ../MelonLoader.arm64.zip  ./
         
       - name: Download Linux x64 Artifact
         uses: actions/download-artifact@v8
@@ -46,31 +56,43 @@ jobs:
         run: |
           cd compiled_release/linux_x64
           zip -r ../MelonLoader.Linux.x64.zip  ./
+
+      - name: Download Linux arm64 Artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: MelonLoader.Linux.arm64.CI.Release
+          path: ./compiled_release/linux_arm64
+      - name: Package Linux arm64 into Zip Archive
+        run: |
+          cd compiled_release/linux_arm64
+          zip -r ../MelonLoader.Linux.arm64.zip  ./
         
       - name: Download MacOS x64 Artifact
         uses: actions/download-artifact@v8
         with:
-          name: MelonLoader.macOS.x64.CI.Release
+          name: MelonLoader.MacOS.x64.CI.Release
           path: ./compiled_release/macos_x64
       - name: Package MacOS x64 into Zip Archive
         run: |
           cd compiled_release/macos_x64
-          zip -r ../MelonLoader.macOS.x64.zip  ./
+          zip -r ../MelonLoader.MacOS.x64.zip  ./
 
       - name: Download MacOS arm64 Artifact
         uses: actions/download-artifact@v8
         with:
-          name: MelonLoader.macOS.arm64.CI.Release
+          name: MelonLoader.MacOS.arm64.CI.Release
           path: ./compiled_release/macos_arm64
       - name: Package MacOS arm64 into Zip Archive
         run: |
           cd compiled_release/macos_arm64
-          zip -r ../MelonLoader.macOS.arm64.zip  ./
+          zip -r ../MelonLoader.MacOS.arm64.zip  ./
           
       - name: Download MelonLoader Installer
         run: |
           curl -L https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.exe -o compiled_release/MelonLoader.Installer.exe
+          curl -L https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.arm64.exe -o compiled_release/MelonLoader.Installer.arm64.exe
           curl -L https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.Linux -o compiled_release/MelonLoader.Installer.Linux
+          curl -L https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.Linux.arm64 -o compiled_release/MelonLoader.Installer.Linux.arm64
           curl -L https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.MacOS.dmg -o compiled_release/MelonLoader.Installer.MacOS.dmg
 
       - name: Create Release
@@ -83,9 +105,13 @@ jobs:
           files: |
             compiled_release/MelonLoader.x86.zip
             compiled_release/MelonLoader.x64.zip
+            compiled_release/MelonLoader.arm64.zip
             compiled_release/MelonLoader.Linux.x64.zip
-            compiled_release/MelonLoader.macOS.x64.zip
-            compiled_release/MelonLoader.macOS.arm64.zip
+            compiled_release/MelonLoader.Linux.arm64.zip
+            compiled_release/MelonLoader.MacOS.x64.zip
+            compiled_release/MelonLoader.MacOS.arm64.zip
             compiled_release/MelonLoader.Installer.exe
+            compiled_release/MelonLoader.Installer.arm64.exe
             compiled_release/MelonLoader.Installer.Linux
+            compiled_release/MelonLoader.Installer.Linux.arm64
             compiled_release/MelonLoader.Installer.MacOS.dmg

@@ -38,7 +38,7 @@ jobs:
         if: inputs.SKIP_DEBUG != true
         uses: actions/upload-artifact@v7
         with:
-          name: MelonLoader.macOS.${{ matrix.arch }}.CI.Debug
+          name: MelonLoader.MacOS.${{ matrix.arch }}.CI.Debug
           path: Output/Debug/${{ matrix.rid }}
 
       - name: Build Release for ${{ matrix.rid }}
@@ -47,5 +47,5 @@ jobs:
       - name: Upload Release for ${{ matrix.rid }}
         uses: actions/upload-artifact@v7
         with:
-          name: MelonLoader.macOS.${{ matrix.arch }}.CI.Release
+          name: MelonLoader.MacOS.${{ matrix.arch }}.CI.Release
           path: Output/Release/${{ matrix.rid }}
