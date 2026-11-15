@@ -30,15 +30,16 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo dpkg --add-architecture i386
-          sudo apt-get install -y \
-            gcc-multilib \
-            g++-multilib \
-            libc6-dev-i386 \
+          sudo apt-get install -y --no-install-recommends \
             libc6-dev-arm64-cross \
             linux-libc-dev-arm64-cross \
             gcc-aarch64-linux-gnu \
             g++-aarch64-linux-gnu
+          sudo dpkg --add-architecture i386
+          sudo apt-get install -y \
+            gcc-multilib \
+            g++-multilib \
+            libc6-dev-i386
 
       - name: Restore Dependencies
         run: dotnet restore -p:Platform="${{ matrix.arch }}" -p:ForceRID="${{ matrix.rid }}"
