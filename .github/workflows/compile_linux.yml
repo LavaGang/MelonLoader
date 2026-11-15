@@ -14,16 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+
       - name: Setup dotnet
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.x
-      - name: Restore Dependencies
-        run: dotnet restore
 
       - name: Build Debug for linux-x64
         if: inputs.SKIP_DEBUG != true
-        run: dotnet build --no-restore -c Debug -p:Platform="x64" -p:ForceRID="linux-x64" -p:Version="${{ inputs.VERSION }}"
+        run: dotnet build -c Debug -p:Platform="x64" -p:ForceRID="linux-x64" -p:Version="${{ inputs.VERSION }}"
 
       - name: Upload Debug for linux-x64
         if: inputs.SKIP_DEBUG != true
@@ -33,7 +32,7 @@ jobs:
           path: Output/Debug/linux-x64
 
       - name: Build Release for linux-x64
-        run: dotnet build --no-restore -c Release -p:Platform="x64" -p:ForceRID="linux-x64" -p:Version="${{ inputs.VERSION }}"
+        run: dotnet build -c Release -p:Platform="x64" -p:ForceRID="linux-x64" -p:Version="${{ inputs.VERSION }}"
 
       - name: Upload Release for linux-x64
         uses: actions/upload-artifact@v7
@@ -43,7 +42,7 @@ jobs:
 
       - name: Build Debug for linux-arm64
         if: inputs.SKIP_DEBUG != true
-        run: dotnet build --no-restore -c Debug -p:Platform="arm64" -p:ForceRID="linux-arm64" -p:Version="${{ inputs.VERSION }}"
+        run: dotnet build -c Debug -p:Platform="arm64" -p:ForceRID="linux-arm64" -p:Version="${{ inputs.VERSION }}"
 
       - name: Upload Debug for linux-arm64
         if: inputs.SKIP_DEBUG != true
@@ -53,7 +52,7 @@ jobs:
           path: Output/Debug/linux-arm64
 
       - name: Build Release for linux-arm64
-        run: dotnet build --no-restore -c Release -p:Platform="arm64" -p:ForceRID="linux-arm64" -p:Version="${{ inputs.VERSION }}"
+        run: dotnet build -c Release -p:Platform="arm64" -p:ForceRID="linux-arm64" -p:Version="${{ inputs.VERSION }}"
 
       - name: Upload Release for linux-arm64
         uses: actions/upload-artifact@v7
