@@ -24,6 +24,7 @@ namespace MelonLoader.Fixes.Il2CppInterop
         private static Dictionary<string, (object, DynamicMethodDefinition, MethodInfo, IntPtr)> _lookup = new();
 
         private delegate IntPtr dil2cpp_resolve_icall(IntPtr signature);
+        private static dil2cpp_resolve_icall il2cpp_resolve_icall_detour;
         private static NativeHook<dil2cpp_resolve_icall> il2cpp_resolve_icall_hook;
 
         private delegate void dil2cpp_add_internal_call(IntPtr signature, IntPtr funcPtr);
@@ -59,7 +60,8 @@ namespace MelonLoader.Fixes.Il2CppInterop
                     throw new Exception($"Failed to get {nameof(il2cpp_add_internal_call)} Native Export");
 
                 MelonDebug.Msg("Patching il2cpp_resolve_icall...");
-                IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate((dil2cpp_resolve_icall)il2cpp_resolve_icall_Detour);
+                il2cpp_resolve_icall_detour = il2cpp_resolve_icall_Detour;
+                IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate(il2cpp_resolve_icall_detour);
                 il2cpp_resolve_icall_hook = new NativeHook<dil2cpp_resolve_icall>(il2cpp_resolve_icall, detourPtr);
                 il2cpp_resolve_icall_hook.Attach();
             }
