@@ -43,18 +43,19 @@ namespace MelonLoader
                         MelonDebug.Msg($"MelonAssembly '{a.melonAssembly.Assembly.GetName().Name}' subscribed with {a.del.Method.Name}");
                         a.melonAssembly.OnUnregister.Subscribe(() => Unsubscribe(a.del), unsubscribeOnFirstInvocation: true);
                     }
-                    
-                    int priorityPlusOne = -1;
+
                     for (var b = 0; b < actions.Count; b++)
                     {
                         var act = actions[b];
                         if (a.priority < act.priority)
-                            priorityPlusOne = b;
+                        {
+                            actions.Insert(b, a);
+                            UpdateEnumerator();
+                            return;
+                        }
                     }
-                    if (priorityPlusOne >= 0)
-                        actions.Insert(priorityPlusOne, a);
-                    else
-                        actions.Add(a);
+
+                    actions.Add(a);
                     UpdateEnumerator();
                 }
             }
