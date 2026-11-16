@@ -25,11 +25,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         private static string ReleaseName =>
             MelonUtils.IsWindows ? "Windows" : MelonUtils.IsUnix ? "Linux" : "OSX";
-        
-        internal readonly bool IsUsingNightly;
 		
         internal Cpp2IL()
         {
+            bool IsUsingNightly = false;
             Version = LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion;
 #if !DEBUG
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
