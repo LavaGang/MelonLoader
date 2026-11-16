@@ -13,7 +13,13 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         internal static string _latestVersion = "2022.1.0-pre-release.21";
 
-        private static bool _shouldUseNightly = true;
+        private static bool _shouldUseNightly = 
+#if ARM64
+            true;
+#else
+            false;
+#endif
+        
         private static string _nightlyVersion = "2022.1.0-pre-release.22";
         private static string _nightlyRunId = "34694167702";
 
