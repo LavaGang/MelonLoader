@@ -117,6 +117,8 @@ namespace MelonLoader
             {
                 foreach (MelonPreferences_Category category in Categories)
                 {
+                    if (!category.ShouldSave)
+                        continue;
                     Preferences.IO.File currentFile = category.File;
                     if (currentFile == null)
                         currentFile = DefaultFile;
@@ -177,7 +179,7 @@ namespace MelonLoader
             MelonPreferences_Category category = GetCategory(identifier);
             if (category != null)
                 return category;
-            return new MelonPreferences_Category(identifier, display_name, is_hidden);
+            return new MelonPreferences_Category(identifier, display_name, is_hidden, should_save: should_save);
         }
 
         public static MelonPreferences_ReflectiveCategory CreateCategory<T>(string identifier, string display_name = null) where T : new() => MelonPreferences_ReflectiveCategory.Create<T>(identifier, display_name);
