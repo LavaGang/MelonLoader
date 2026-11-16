@@ -32,23 +32,26 @@ namespace MelonLoader
             var config = new LoaderConfig();
             BootstrapInterop.Library.GetLoaderConfig(ref config);
             LoaderConfig.Current = config;
-            
-            Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
-            Assertions.LemonAssertMapping.Setup();
 
             MelonLaunchOptions.Load();
 
+#if NET35
+            // Disabled for now because of issues
+            //Net20Compatibility.TryInstall();
+#endif
+
             MelonUtils.SetupWineCheck();
-            MelonUtils.Setup(AppDomain.CurrentDomain);
-            MelonAssemblyResolver.Setup();
 
             if (MelonUtils.IsUnderWineOrSteamProton())
                 Pastel.ConsoleExtensions.Disable();
-            
+
+            Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
+
 #if NET35
             Fixes.NetFramework.ServerCertificateValidation.Install();
 #endif
 
+            Assertions.LemonAssertMapping.Setup();
             HarmonyLogger.Setup();
 
 #if OSX && ARM64
@@ -64,19 +67,19 @@ namespace MelonLoader
 
             HarmonyInstance = new HarmonyLib.Harmony(Properties.BuildInfo.Name);
 
-#if NET35
-            // Disabled for now because of issues
-            //Net20Compatibility.TryInstall();
+#if !WINDOWS && !NET6_0_OR_GREATER
+            Fixes.NetFramework.XTermFix.Install();
 #endif
 
 #if OSX
             Fixes.ProcessModulesFix.Install();
 #endif
+            
+            if (LoaderConfig.Current.Loader.ForcedInvariantCulture)
+                Fixes.ForcedCultureInfo.Install();
 
-#if !WINDOWS && !NET6_0_OR_GREATER
-            Fixes.NetFramework.XTermFix.Install();
-#endif
-
+            MelonUtils.Setup(AppDomain.CurrentDomain);
+            MelonAssemblyResolver.Setup();
             BootstrapInterop.SetDefaultConsoleTitleWithGameName(UnityInformationHandler.GameName, 
                 UnityInformationHandler.GameVersion);
 
@@ -132,9 +135,6 @@ namespace MelonLoader
             Fixes.Dotnet.DotnetAssemblyLoadContextFix.Install();
             Fixes.Dotnet.DotnetSimpleNameValidationFix.Install();
 #endif
-
-            if (LoaderConfig.Current.Loader.ForcedInvariantCulture)
-                Fixes.ForcedCultureInfo.Install();
             
             Fixes.MonoMod.InstancePatchFix.Install();
 
@@ -173,7 +173,6 @@ namespace MelonLoader
             MelonCompatibilityLayer.LoadModules();
 
             bHapticsManager.Connect(Properties.BuildInfo.Name, UnityInformationHandler.GameName);
-            WelcomeMessage();
 
             MelonFolderHandler.ScanForFolders();
             MelonFolderHandler.LoadMelons(MelonFolderHandler.ScanType.UserLibs);
