@@ -3,7 +3,6 @@ using HarmonyLib;
 using System;
 using System.Reflection;
 using System.Runtime.Loader;
-using MelonLoader.Resolver;
 
 namespace MelonLoader.Fixes.Dotnet
 {
@@ -29,22 +28,13 @@ namespace MelonLoader.Fixes.Dotnet
 
         public static bool PreValidateAssembly(Assembly assembly, string requestedSimpleName, ref Assembly __result)
         {
-            var info = MelonAssemblyResolver.GetAssemblyResolveInfo(requestedSimpleName);
-            if ((info.Override == assembly)
-                || (info.Fallback == assembly))
+            if((requestedSimpleName == "MelonLoader.ModHandler")
+               || (requestedSimpleName == "MelonLoader")
+               || (requestedSimpleName == "Il2CppSystem.Private.CoreLib"))
             {
                 __result = assembly;
-                return false;
+                return false; //Don't validate the name. What could go wrong?
             }
-
-            if ((info.Versions != null)
-                && (info.Versions.Count > 0))
-                foreach (var version in info.Versions)
-                    if (version.Value == assembly)
-                    {
-                        __result = assembly;
-                        return false;
-                    }
 
             return true;
         }
