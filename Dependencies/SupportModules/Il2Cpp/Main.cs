@@ -44,11 +44,11 @@ namespace MelonLoader.Support
                 {
                     Assembly asm = Assembly.LoadFrom(file);
                     
-                    string fileName = Path.GetFileNameWithoutExtension(file);
-                    if (!DotnetSimpleNameValidationFix.Error 
-                        && !hasCoreLib
-                        && (fileName == "Il2Cppmscorlib"))
-                        MelonAssemblyResolver.GetAssemblyResolveInfo(coreLibName).Override = asm;
+                    //string fileName = Path.GetFileNameWithoutExtension(file);
+                    //if (!DotnetSimpleNameValidationFix.Error
+                    //    && !hasCoreLib
+                    //    && (fileName == "Il2Cppmscorlib"))
+                    //    MelonAssemblyResolver.GetAssemblyResolveInfo(coreLibName).Override = asm;
                 }
                 catch { }
             }
