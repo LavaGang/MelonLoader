@@ -22,7 +22,7 @@ namespace MelonLoader.Fixes
 	            HarmonyMethod PatchMethod_Get = PatchType.GetMethod("GetMethod", BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod();
 	            HarmonyMethod PatchMethod_Set = PatchType.GetMethod("SetMethod", BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod();
 
-	            FixAllForType(CultureInfoType, PatchMethod_Get, PatchMethod_Set);
+	            //FixAllForType(CultureInfoType, PatchMethod_Get, PatchMethod_Set);
 	            FixAllForType(ThreadType, PatchMethod_Get, PatchMethod_Set);
             }
             catch (Exception ex) { MelonLogger.Warning(ex); }

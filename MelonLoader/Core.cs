@@ -54,14 +54,14 @@ namespace MelonLoader
             Assertions.LemonAssertMapping.Setup();
             HarmonyLogger.Setup();
 
-#if OSX && ARM64
-            DetourHelper.Native = new Fixes.MonoMod.MacOSArm64NativeDetourPlatform(
-                new DetourNativeARMPlatform());
-#elif !WINDOWS && !NET6_0_OR_GREATER
             // Using Process.Start can run Console..cctor
             // Since MonoMod's PlatformHelper (used by DetourHelper.Native) runs Process.Start to determine ARM/x86
             // platform, this causes the unpatched TermInfoReader to kick in before it can be patched and fixed when
             // installing the XTermFix below. To work around this, we can force the platform directly
+#if OSX && ARM64
+            DetourHelper.Native = new Fixes.MonoMod.MacOSArm64NativeDetourPlatform(
+                new DetourNativeARMPlatform());
+#elif !WINDOWS && !NET6_0_OR_GREATER
             DetourHelper.Native = new DetourNativeMonoPosixPlatform(new DetourNativeX86Platform());
 #endif
 
@@ -69,19 +69,18 @@ namespace MelonLoader
 
 #if !WINDOWS && !NET6_0_OR_GREATER
             Fixes.NetFramework.XTermFix.Install();
+
 #endif
 
 #if OSX
             Fixes.ProcessModulesFix.Install();
 #endif
-            
-            if (LoaderConfig.Current.Loader.ForcedInvariantCulture)
-                Fixes.ForcedCultureInfo.Install();
 
             MelonUtils.Setup(AppDomain.CurrentDomain);
             MelonAssemblyResolver.Setup();
-            BootstrapInterop.SetDefaultConsoleTitleWithGameName(UnityInformationHandler.GameName, 
-                UnityInformationHandler.GameVersion);
+
+            BootstrapInterop.SetDefaultConsoleTitleWithGameName(UnityInformationHandler.GameName,
+                                                                UnityInformationHandler.GameVersion);
 
 #if NET6_0_OR_GREATER
 
@@ -135,7 +134,10 @@ namespace MelonLoader
             Fixes.Dotnet.DotnetAssemblyLoadContextFix.Install();
             Fixes.Dotnet.DotnetSimpleNameValidationFix.Install();
 #endif
-            
+
+            if (LoaderConfig.Current.Loader.ForcedInvariantCulture)
+                Fixes.ForcedCultureInfo.Install();
+
             Fixes.MonoMod.InstancePatchFix.Install();
 
 #if WINDOWS
@@ -207,7 +209,7 @@ namespace MelonLoader
 
             if (!_success)
                 return false;
-                
+
             MelonEvents.OnPreModsLoaded.Invoke();
             MelonFolderHandler.LoadMelons(MelonFolderHandler.ScanType.Mods);
 
@@ -231,20 +233,20 @@ namespace MelonLoader
 
             return true;
         }
-        
+
         internal static string GetVersionString()
         {
             var lemon = LoaderConfig.Current.Loader.Theme == LoaderConfig.CoreConfig.LoaderTheme.Lemon;
             var versionStr = $"{(lemon ? "Lemon" : "Melon")}Loader " +
-                             $"v{Properties.BuildInfo.Version} " +
-                             $"{(Is_ALPHA_PreRelease ? "ALPHA Pre-Release" : "Open-Beta")}";
+                $"v{Properties.BuildInfo.Version} " +
+                $"{(Is_ALPHA_PreRelease ? "ALPHA Pre-Release" : "Open-Beta")}";
             return versionStr;
         }
-        
+
         internal static void WelcomeMessage()
         {
             //if (MelonDebug.IsEnabled())
-                MelonLogger.WriteSpacer();
+            MelonLogger.WriteSpacer();
 
             MelonLogger.MsgDirect("------------------------------");
             MelonLogger.MsgDirect(GetVersionString());
