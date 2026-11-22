@@ -103,7 +103,7 @@ Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
 ### UN-INSTALL:
 
 1. Make sure the Game is Closed and Not Running before attempting to UN-INSTALL.
-2. Remove the version.dll file from the Game's Installation Folder.
+2. Remove the proxy DLL from the Game's Installation Folder (`version.dll` by default, or the compatible filename you renamed it to), and remove `dobby.dll` if you installed it manually.
 3. Remove the MelonLoader folder from the Game's Installation Folder.
 
 These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
