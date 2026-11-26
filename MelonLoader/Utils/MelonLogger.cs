@@ -80,7 +80,7 @@ namespace MelonLoader
 
         private static void NativeMsg(ColorARGB namesection_color, ColorARGB txt_color, string namesection, string txt, bool skipStackWalk = false)
         {
-            if (namesection == null)
+            if (!skipStackWalk && namesection == null)
             {
                 var melon = MelonUtils.GetMelonFromStackTrace();
                 if (melon != null && melon.Info?.Name != null)
@@ -96,7 +96,7 @@ namespace MelonLoader
 
         private static void NativePastelMsg(ColorARGB namesection_color, ColorARGB txt_color, string namesection, string txt, bool skipStackWalk = false)
         {
-            if (namesection == null)
+            if (!skipStackWalk && namesection == null)
             {
                 var melon = MelonUtils.GetMelonFromStackTrace();
                 if (melon != null && melon.Info != null)
