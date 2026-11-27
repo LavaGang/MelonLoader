@@ -79,19 +79,11 @@ namespace MelonLoader.Fixes.Il2CppInterop
                 instructions);
 #endif
             
-            if (!ShouldUseNewHook())
-                return instructions;
-            
-            instructions = ReplaceField(
-                "GenericMethodGetMethodHook", _injectorType, 
-                "GenericMethodGetMethodHook_Unity6", _injectorType, 
-                instructions);
-            
-#if LINUX
-            instructions = RemoveField(
-                "GetFieldDefaultValueHook", _injectorType,
-                instructions);
-#endif
+            if (ShouldUseNewHook())
+                instructions = ReplaceField(
+                    "GenericMethodGetMethodHook", _injectorType, 
+                    "GenericMethodGetMethodHook_Unity6", _injectorType, 
+                    instructions);
 
             return instructions;
         }
