@@ -69,16 +69,6 @@ namespace MelonLoader.Fixes.Il2CppInterop
 
         private static IEnumerable<CodeInstruction> Setup_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-#if OSX
-            // This hook isn't reliable on macOS due to potential inlining by the player's compiler resulting in il2cppinterop
-            // thinking it found the right function, but it actually found one that takes a pointer which it would then incorrectly hook
-            // resulting in a crash. While it can hinder class injection functionality, it isn't needed for the game to boot,
-            // and it didn't prevent UnityExplorer to function
-            instructions = RemoveField(
-                "GetTypeInfoFromTypeDefinitionIndexHook", _injectorType,
-                instructions);
-#endif
-            
             if (ShouldUseNewHook())
                 instructions = ReplaceField(
                     "GenericMethodGetMethodHook", _injectorType, 
@@ -100,38 +90,6 @@ namespace MelonLoader.Fixes.Il2CppInterop
                 new(i => i.LoadsField(AccessTools.Field(targetContainingType, targetFieldName)))
             ]).Operand = AccessTools.Field(replacementContainingType, replacementFieldName);
             return codeMatcher.InstructionEnumeration();
-        }
-        
-        private static IEnumerable<CodeInstruction> RemoveField(
-            string targetFieldName,
-            Type targetContainingType,
-            IEnumerable<CodeInstruction> instructions)
-        {
-            var field = AccessTools.Field(targetContainingType, targetFieldName);
-
-            var matcher = new CodeMatcher(instructions);
-
-            matcher.MatchStartForward(
-                new CodeMatch(i => i.LoadsField(field))
-            );
-
-            if (!matcher.IsValid)
-                return instructions;
-
-            // Capture labels from the first instruction being removed
-            var labels = matcher.Instruction.labels;
-
-            // Move to next instruction AFTER the removed block
-            matcher.Advance(2);
-
-            // Reattach labels so branches still work
-            matcher.Instruction.labels.AddRange(labels);
-
-            // Go back and remove the original instructions
-            matcher.Advance(-2);
-            matcher.RemoveInstructions(2);
-
-            return matcher.InstructionEnumeration();
         }
     }
 }
